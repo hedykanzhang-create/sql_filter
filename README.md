@@ -136,7 +136,9 @@ token，那这次调用本身就是一次数据外泄 —— 为了检查有没�
 ## 用法
 
 ```bash
+# key 二选一：环境变量，或写入文件（文件方式不依赖 shell 配置，别的程序调用也读得到）
 export OPENROUTER_API_KEY=sk-or-v1-...
+#   或： mkdir -p ~/.config/sql_filter && printf %s 'sk-or-v1-...' > ~/.config/sql_filter/key && chmod 600 ~/.config/sql_filter/key
 
 go build -o sql_filter .
 
