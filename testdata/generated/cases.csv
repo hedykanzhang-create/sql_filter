@@ -1,0 +1,1001 @@
+id,family,class,sql
+1,inject_subtle,hostile,"SELECT updated_at, password_hash FROM users"
+2,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM coupons a JOIN sessions b ON b.user_id = a.id WHERE a.updated_at >= '2026-03-15' GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+3,admin_op,risky,SET GLOBAL foreign_key_checks = 1
+4,read_simple,safe,"SELECT amount, created_at FROM sessions WHERE amount = 1299.00 LIMIT 50"
+5,inject_subtle,hostile,"SELECT * FROM refunds WHERE id = 1 AND SUBSTRING((SELECT token FROM users LIMIT 1), 317, 1) = 'a'"
+6,read_simple,safe,"SELECT status, created_at FROM refunds WHERE created_at >= '2026-06-30' LIMIT 100"
+7,inject_classic,hostile,SELECT * FROM payments WHERE user_id = 3 OR 'a'='a'
+8,inject_subtle,hostile,"SELECT * FROM reviews WHERE id = 42 AND SUBSTRING((SELECT api_key FROM users LIMIT 1), 100, 1) = 'a'"
+9,inject_union,hostile,"SELECT email, name FROM refunds WHERE id = 42 UNION SELECT api_key, api_key FROM users"
+10,write_bounded,safe,DELETE FROM users WHERE id = 100 AND created_at >= '2026-06-30'
+11,unbounded_write,risky,UPDATE reviews SET status = 'active'
+12,write_bounded,safe,DELETE FROM shops WHERE id = 317 AND amount = 100.00
+13,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM orders a JOIN orders b ON b.user_id = a.id WHERE a.title = 'VIP Upgrade' GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+14,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM users a JOIN coupons b ON b.user_id = a.id WHERE a.updated_at >= '2026-08-20' GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+15,write_bounded,safe,"INSERT INTO products (status, id) VALUES ('refunded', 1)"
+16,schema_change,risky,ALTER TABLE users MODIFY COLUMN name VARCHAR(32) NOT NULL
+17,admin_op,risky,REVOKE UPDATE ON coupons FROM 'readonly'@'%'
+18,write_bounded,safe,DELETE FROM orders WHERE id = 42 AND created_at >= '2026-01-01'
+19,inject_subtle,hostile,"SELECT * FROM payments WHERE id = 9912 AND IF(1=1, SLEEP(5), 0)"
+20,inject_union,hostile,"SELECT email, amount FROM sessions WHERE id = 317 UNION SELECT secret, secret FROM users"
+21,inject_classic,hostile,SELECT status FROM orders WHERE id = 317; DROP TABLE payments
+22,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM orders a JOIN payments b ON b.user_id = a.id WHERE a.updated_at >= '2026-08-20' GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+23,schema_change,risky,ALTER TABLE coupons MODIFY COLUMN id VARCHAR(32) NOT NULL
+24,schema_change,risky,ALTER TABLE refunds MODIFY COLUMN name VARCHAR(32) NOT NULL
+25,read_simple,safe,"SELECT amount, status FROM products WHERE created_at >= '2026-09-01' LIMIT 10"
+26,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM products a JOIN coupons b ON b.user_id = a.id WHERE a.user_id = 501 GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+27,inject_classic,hostile,SELECT * FROM sessions WHERE id = 1 -- AND is_delete = 0
+28,inject_union,hostile,"SELECT updated_at, status FROM carts WHERE id = 2048 UNION SELECT password_hash, credit_card FROM users"
+29,write_bounded,safe,DELETE FROM products WHERE id = 100 AND title = 'Free Shipping'
+30,inject_classic,hostile,SELECT name FROM users WHERE id = 100; DROP TABLE coupons
+31,read_simple,safe,"SELECT updated_at, name FROM sessions WHERE title = 'Free Shipping' LIMIT 50"
+32,read_simple,safe,"SELECT id, name FROM products WHERE id = 9912 LIMIT 10"
+33,inject_classic,hostile,SELECT name FROM payments WHERE id = 1; DROP TABLE sessions
+34,schema_change,risky,ALTER TABLE orders DROP COLUMN created_at
+35,read_simple,safe,"SELECT created_at, user_id FROM orders WHERE email = 'carol@mail.com' LIMIT 100"
+36,inject_classic,hostile,SELECT * FROM refunds WHERE email = 'bob@shop.io' OR 1=1
+37,inject_classic,hostile,SELECT email FROM orders WHERE id = 1; DROP TABLE orders
+38,read_simple,safe,"SELECT user_id, name FROM payments WHERE name = 'Bob Lee' LIMIT 100"
+39,unbounded_write,risky,UPDATE products SET updated_at = '2026-08-20'
+40,inject_union,hostile,"SELECT shop_id, status FROM refunds WHERE id = 2048 UNION SELECT secret, password FROM users"
+41,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM coupons a JOIN payments b ON b.user_id = a.id WHERE a.amount = 250.50 GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+42,schema_change,risky,ALTER TABLE users DROP COLUMN created_at
+43,read_simple,safe,"SELECT id, amount FROM users WHERE amount = 19.99 LIMIT 50"
+44,admin_op,risky,REVOKE ALL PRIVILEGES ON shops FROM 'migration'@'%'
+45,read_simple,safe,"SELECT status, user_id FROM shops WHERE name = 'Daniel Ma' LIMIT 20"
+46,inject_subtle,hostile,"SELECT * FROM sessions WHERE id = 2048 AND SUBSTRING((SELECT password_hash FROM users LIMIT 1), 9912, 1) = 'a'"
+47,write_bounded,safe,"INSERT INTO shops (shop_id, updated_at) VALUES (11, '2026-03-15')"
+48,inject_union,hostile,"SELECT email, created_at FROM carts WHERE id = 317 UNION SELECT secret, api_key FROM users"
+49,unbounded_write,risky,UPDATE orders SET status = 'paid'
+50,unbounded_write,risky,UPDATE orders SET title = 'Free Shipping'
+51,schema_change,risky,ALTER TABLE refunds DROP COLUMN amount
+52,write_bounded,safe,"INSERT INTO refunds (created_at, name) VALUES ('2026-09-01', 'Alice Chen')"
+53,write_bounded,safe,DELETE FROM shops WHERE id = 42 AND user_id = 1204
+54,write_bounded,safe,DELETE FROM shops WHERE id = 100 AND status = 'active'
+55,inject_union,hostile,"SELECT created_at, id FROM payments WHERE id = 9912 UNION SELECT token, password_hash FROM users"
+56,read_join_agg,safe,"SELECT a.amount, COUNT(b.id) AS cnt FROM refunds a JOIN carts b ON b.shop_id = a.id WHERE a.shop_id = 27 GROUP BY a.amount ORDER BY cnt DESC LIMIT 50"
+57,unbounded_write,risky,DELETE FROM reviews
+58,read_join_agg,safe,"SELECT a.email, COUNT(b.id) AS cnt FROM users a JOIN products b ON b.shop_id = a.id WHERE a.shop_id = 364 GROUP BY a.email ORDER BY cnt DESC LIMIT 50"
+59,admin_op,risky,SET GLOBAL wait_timeout = 500
+60,inject_union,hostile,"SELECT name, id FROM reviews WHERE id = 2048 UNION SELECT password, token FROM users"
+61,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM payments a JOIN sessions b ON b.user_id = a.id WHERE a.email = 'bob@shop.io' GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+62,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM coupons a JOIN refunds b ON b.shop_id = a.id WHERE a.amount = 100.00 GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+63,inject_subtle,hostile,"SELECT * FROM products WHERE id = 317 AND IF(1=1, SLEEP(5), 0)"
+64,inject_union,hostile,"SELECT name, created_at FROM carts WHERE id = 317 UNION SELECT api_key, credit_card FROM users"
+65,read_join_agg,safe,"SELECT a.created_at, COUNT(b.id) AS cnt FROM coupons a JOIN orders b ON b.shop_id = a.id WHERE a.created_at >= '2026-01-01' GROUP BY a.created_at ORDER BY cnt DESC LIMIT 50"
+66,schema_change,risky,ALTER TABLE orders DROP COLUMN title
+67,admin_op,risky,REVOKE UPDATE ON carts FROM 'app'@'%'
+68,read_simple,safe,"SELECT amount, created_at FROM carts WHERE updated_at >= '2026-03-15' LIMIT 50"
+69,inject_union,hostile,"SELECT user_id, shop_id FROM shops WHERE id = 42 UNION SELECT secret, api_key FROM users"
+70,admin_op,risky,REVOKE UPDATE ON coupons FROM 'migration'@'%'
+71,inject_classic,hostile,SELECT email FROM orders WHERE id = 9912; DROP TABLE users
+72,unbounded_write,risky,UPDATE coupons SET title = 'VIP Upgrade'
+73,schema_change,risky,ALTER TABLE sessions MODIFY COLUMN user_id VARCHAR(32) NOT NULL
+74,read_simple,safe,"SELECT status, title FROM reviews WHERE shop_id = 11 LIMIT 20"
+75,unbounded_write,risky,DELETE FROM sessions
+76,inject_union,hostile,"SELECT name, id FROM users WHERE id = 317 UNION SELECT password_hash, api_key FROM users"
+77,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM products a JOIN refunds b ON b.shop_id = a.id WHERE a.name = 'Carol Wu' GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+78,unbounded_write,risky,UPDATE shops SET status = 'active'
+79,unbounded_write,risky,UPDATE users SET amount = 19.99
+80,inject_union,hostile,"SELECT email, user_id FROM payments WHERE id = 317 UNION SELECT secret, credit_card FROM users"
+81,admin_op,risky,GRANT ALL PRIVILEGES ON coupons.* TO 'app'@'%'
+82,admin_op,risky,GRANT ALTER ON shops.* TO 'ops'@'%'
+83,inject_classic,hostile,SELECT * FROM refunds WHERE id = 100 -- AND is_delete = 0
+84,schema_change,risky,ALTER TABLE products DROP COLUMN shop_id
+85,admin_op,risky,GRANT UPDATE ON coupons.* TO 'app'@'%'
+86,schema_change,risky,ALTER TABLE refunds MODIFY COLUMN status VARCHAR(32) NOT NULL
+87,admin_op,risky,REVOKE SELECT ON coupons FROM 'ops'@'%'
+88,unbounded_write,risky,UPDATE payments SET amount = 100.00
+89,write_bounded,safe,DELETE FROM users WHERE id = 42 AND created_at >= '2026-09-01'
+90,inject_union,hostile,"SELECT status, email FROM products WHERE id = 1 UNION SELECT secret, password FROM users"
+91,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM payments a JOIN users b ON b.user_id = a.id WHERE a.status = 'refunded' GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+92,admin_op,risky,GRANT DELETE ON coupons.* TO 'etl'@'%'
+93,inject_subtle,hostile,"SELECT * FROM reviews WHERE id = 2048 AND IF(1=1, SLEEP(5), 0)"
+94,schema_change,risky,ALTER TABLE products DROP COLUMN user_id
+95,write_bounded,safe,"INSERT INTO products (created_at, shop_id) VALUES ('2026-01-01', 364)"
+96,write_bounded,safe,"INSERT INTO shops (created_at, email) VALUES ('2026-09-01', 'carol@mail.com')"
+97,write_bounded,safe,UPDATE refunds SET amount = 250.50 WHERE id = 1
+98,inject_classic,hostile,SELECT * FROM users WHERE updated_at >= '2026-03-15' OR 1=1
+99,unbounded_write,risky,UPDATE users SET status = 'pending'
+100,admin_op,risky,REVOKE ALL PRIVILEGES ON refunds FROM 'app'@'%'
+101,schema_change,risky,ALTER TABLE carts MODIFY COLUMN id VARCHAR(32) NOT NULL
+102,inject_union,hostile,"SELECT created_at, id FROM users WHERE id = 42 UNION SELECT credit_card, api_key FROM users"
+103,schema_change,risky,ALTER TABLE products MODIFY COLUMN email VARCHAR(32) NOT NULL
+104,unbounded_write,risky,DELETE FROM payments
+105,unbounded_write,risky,UPDATE carts SET amount = 100.00
+106,read_simple,safe,"SELECT name, status FROM payments WHERE name = 'Bob Lee' LIMIT 100"
+107,inject_classic,hostile,SELECT * FROM refunds WHERE status = 'pending' OR 1=1
+108,write_bounded,safe,UPDATE shops SET amount = 100.00 WHERE id = 317
+109,inject_subtle,hostile,"SELECT user_id, secret FROM users"
+110,read_simple,safe,"SELECT amount, email FROM refunds WHERE created_at >= '2026-06-30' LIMIT 50"
+111,read_simple,safe,"SELECT updated_at, name FROM products WHERE user_id = 501 LIMIT 100"
+112,read_simple,safe,"SELECT amount, title FROM sessions WHERE created_at >= '2026-01-01' LIMIT 100"
+113,write_bounded,safe,UPDATE shops SET status = 'paid' WHERE id = 42
+114,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM products a JOIN orders b ON b.user_id = a.id WHERE a.user_id = 1204 GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+115,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM products a JOIN reviews b ON b.user_id = a.id WHERE a.shop_id = 27 GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+116,read_simple,safe,"SELECT shop_id, name FROM shops WHERE created_at >= '2026-09-01' LIMIT 10"
+117,schema_change,risky,DROP TABLE coupons
+118,admin_op,risky,SET GLOBAL sql_mode = 500
+119,unbounded_write,risky,UPDATE reviews SET updated_at = '2026-08-20'
+120,write_bounded,safe,DELETE FROM coupons WHERE id = 2048 AND email = 'alice@example.com'
+121,read_simple,safe,"SELECT status, name FROM products WHERE user_id = 1204 LIMIT 10"
+122,schema_change,risky,ALTER TABLE reviews MODIFY COLUMN user_id VARCHAR(32) NOT NULL
+123,schema_change,risky,DROP TABLE payments
+124,inject_classic,hostile,SELECT * FROM products WHERE id = 9912 -- AND is_delete = 0
+125,admin_op,risky,REVOKE ALL PRIVILEGES ON orders FROM 'etl'@'%'
+126,inject_subtle,hostile,"SELECT * FROM shops WHERE id = 1 AND IF(1=1, SLEEP(5), 0)"
+127,write_bounded,safe,"INSERT INTO coupons (updated_at, name) VALUES ('2026-03-15', 'Daniel Ma')"
+128,schema_change,risky,TRUNCATE TABLE coupons
+129,inject_union,hostile,"SELECT created_at, name FROM refunds WHERE id = 317 UNION SELECT token, credit_card FROM users"
+130,unbounded_write,risky,UPDATE shops SET title = 'Free Shipping'
+131,write_bounded,safe,"INSERT INTO coupons (shop_id, updated_at) VALUES (902, '2026-03-15')"
+132,unbounded_write,risky,DELETE FROM refunds
+133,read_simple,safe,"SELECT updated_at, status FROM products WHERE email = 'alice@example.com' LIMIT 10"
+134,read_simple,safe,"SELECT created_at, email FROM products WHERE amount = 250.50 LIMIT 50"
+135,read_simple,safe,"SELECT amount, id FROM coupons WHERE email = 'bob@shop.io' LIMIT 20"
+136,inject_subtle,hostile,"SELECT * FROM users WHERE id = 100 AND IF(1=1, SLEEP(5), 0)"
+137,schema_change,risky,ALTER TABLE users MODIFY COLUMN user_id VARCHAR(32) NOT NULL
+138,admin_op,risky,REVOKE UPDATE ON orders FROM 'etl'@'%'
+139,inject_subtle,hostile,"SELECT * FROM sessions WHERE id = 2048 AND IF(1=1, SLEEP(5), 0)"
+140,schema_change,risky,ALTER TABLE payments MODIFY COLUMN created_at VARCHAR(32) NOT NULL
+141,unbounded_write,risky,UPDATE users SET status = 'active'
+142,schema_change,risky,DROP TABLE shops
+143,inject_classic,hostile,SELECT * FROM orders WHERE id = 1 OR 1=1
+144,inject_classic,hostile,SELECT * FROM shops WHERE id = 100 -- AND is_delete = 0
+145,admin_op,risky,SET GLOBAL innodb_buffer_pool_size = 0
+146,admin_op,risky,GRANT DELETE ON payments.* TO 'migration'@'%'
+147,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM carts a JOIN shops b ON b.shop_id = a.id WHERE a.amount = 100.00 GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+148,unbounded_write,risky,UPDATE products SET updated_at = '2025-12-31'
+149,inject_subtle,hostile,"SELECT * FROM coupons WHERE id = 100 AND SUBSTRING((SELECT password_hash FROM users LIMIT 1), 9912, 1) = 'a'"
+150,inject_subtle,hostile,"SELECT amount, secret FROM users"
+151,inject_classic,hostile,SELECT * FROM orders WHERE name = 'Carol Wu' OR 1=1
+152,schema_change,risky,ALTER TABLE shops DROP COLUMN user_id
+153,read_simple,safe,"SELECT email, status FROM reviews WHERE name = 'Daniel Ma' LIMIT 10"
+154,inject_union,hostile,"SELECT title, email FROM sessions WHERE id = 9912 UNION SELECT token, password_hash FROM users"
+155,inject_union,hostile,"SELECT status, title FROM users WHERE id = 2048 UNION SELECT password_hash, password FROM users"
+156,inject_subtle,hostile,"SELECT amount, password_hash FROM users"
+157,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM coupons a JOIN products b ON b.user_id = a.id WHERE a.created_at >= '2026-06-30' GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+158,unbounded_write,risky,UPDATE orders SET amount = 100.00
+159,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM reviews a JOIN carts b ON b.shop_id = a.id WHERE a.amount = 1299.00 GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+160,inject_subtle,hostile,"SELECT * FROM reviews WHERE id = 2048 AND SUBSTRING((SELECT credit_card FROM users LIMIT 1), 42, 1) = 'a'"
+161,unbounded_write,risky,UPDATE payments SET updated_at = '2026-03-15'
+162,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM reviews a JOIN products b ON b.shop_id = a.id WHERE a.email = 'alice@example.com' GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+163,read_join_agg,safe,"SELECT a.email, COUNT(b.id) AS cnt FROM payments a JOIN refunds b ON b.user_id = a.id WHERE a.created_at >= '2026-06-30' GROUP BY a.email ORDER BY cnt DESC LIMIT 50"
+164,admin_op,risky,GRANT UPDATE ON orders.* TO 'analytics'@'%'
+165,schema_change,risky,ALTER TABLE orders DROP COLUMN user_id
+166,write_bounded,safe,"INSERT INTO orders (user_id, name) VALUES (88, 'Carol Wu')"
+167,inject_subtle,hostile,"SELECT * FROM payments WHERE id = 1 AND IF(1=1, SLEEP(5), 0)"
+168,write_bounded,safe,"INSERT INTO products (id, user_id) VALUES (1, 3)"
+169,schema_change,risky,ALTER TABLE products MODIFY COLUMN status VARCHAR(32) NOT NULL
+170,inject_classic,hostile,SELECT * FROM shops WHERE id = 1 -- AND is_delete = 0
+171,inject_subtle,hostile,"SELECT user_id, password_hash FROM users"
+172,inject_union,hostile,"SELECT email, user_id FROM shops WHERE id = 1 UNION SELECT token, password_hash FROM users"
+173,inject_subtle,hostile,"SELECT user_id, credit_card FROM users"
+174,inject_union,hostile,"SELECT status, name FROM sessions WHERE id = 2048 UNION SELECT secret, secret FROM users"
+175,inject_subtle,hostile,"SELECT * FROM payments WHERE id = 42 AND IF(1=1, SLEEP(5), 0)"
+176,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM products a JOIN coupons b ON b.shop_id = a.id WHERE a.id = 1 GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+177,unbounded_write,risky,UPDATE products SET amount = 250.50
+178,inject_union,hostile,"SELECT name, id FROM shops WHERE id = 42 UNION SELECT password, api_key FROM users"
+179,inject_union,hostile,"SELECT name, updated_at FROM products WHERE id = 1 UNION SELECT secret, password FROM users"
+180,schema_change,risky,ALTER TABLE payments MODIFY COLUMN name VARCHAR(32) NOT NULL
+181,unbounded_write,risky,UPDATE users SET amount = 1299.00
+182,unbounded_write,risky,UPDATE products SET amount = 1299.00
+183,schema_change,risky,ALTER TABLE orders MODIFY COLUMN name VARCHAR(32) NOT NULL
+184,inject_subtle,hostile,"SELECT * FROM carts WHERE id = 9912 AND IF(1=1, SLEEP(5), 0)"
+185,read_simple,safe,"SELECT amount, title FROM carts WHERE user_id = 501 LIMIT 100"
+186,admin_op,risky,GRANT INSERT ON refunds.* TO 'app'@'%'
+187,inject_subtle,hostile,"SELECT * FROM reviews WHERE id = 100 AND SUBSTRING((SELECT password_hash FROM users LIMIT 1), 9912, 1) = 'a'"
+188,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM shops a JOIN refunds b ON b.shop_id = a.id WHERE a.updated_at >= '2026-03-15' GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+189,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM shops a JOIN orders b ON b.shop_id = a.id WHERE a.amount = 1299.00 GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+190,inject_subtle,hostile,"SELECT * FROM products WHERE id = 9912 AND SUBSTRING((SELECT credit_card FROM users LIMIT 1), 9912, 1) = 'a'"
+191,inject_subtle,hostile,"SELECT * FROM users WHERE id = 317 AND IF(1=1, SLEEP(5), 0)"
+192,admin_op,risky,REVOKE DELETE ON payments FROM 'etl'@'%'
+193,inject_classic,hostile,SELECT * FROM reviews WHERE email = 'bob@shop.io' OR 1=1
+194,unbounded_write,risky,UPDATE refunds SET title = 'Welcome Coupon'
+195,unbounded_write,risky,UPDATE reviews SET title = 'Welcome Coupon'
+196,admin_op,risky,SET GLOBAL sql_mode = 0
+197,read_simple,safe,"SELECT id, name FROM orders WHERE id = 100 LIMIT 100"
+198,schema_change,risky,ALTER TABLE users MODIFY COLUMN status VARCHAR(32) NOT NULL
+199,inject_classic,hostile,SELECT * FROM coupons WHERE created_at >= '2026-06-30' OR 'a'='a'
+200,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM refunds a JOIN payments b ON b.user_id = a.id WHERE a.updated_at >= '2026-08-20' GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+201,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM products a JOIN shops b ON b.shop_id = a.id WHERE a.created_at >= '2026-06-30' GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+202,inject_union,hostile,"SELECT updated_at, status FROM orders WHERE id = 100 UNION SELECT token, token FROM users"
+203,schema_change,risky,ALTER TABLE sessions MODIFY COLUMN id VARCHAR(32) NOT NULL
+204,admin_op,risky,REVOKE INSERT ON sessions FROM 'ops'@'%'
+205,read_simple,safe,"SELECT created_at, id FROM products WHERE updated_at >= '2025-12-31' LIMIT 10"
+206,unbounded_write,risky,UPDATE refunds SET title = 'Summer Sale'
+207,write_bounded,safe,"INSERT INTO sessions (created_at, user_id) VALUES ('2026-01-01', 88)"
+208,inject_classic,hostile,SELECT name FROM refunds WHERE id = 9912; DROP TABLE sessions
+209,write_bounded,safe,"INSERT INTO coupons (amount, email) VALUES (250.50, 'bob@shop.io')"
+210,admin_op,risky,GRANT SELECT ON carts.* TO 'etl'@'%'
+211,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM payments a JOIN products b ON b.shop_id = a.id WHERE a.status = 'paid' GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+212,admin_op,risky,REVOKE INSERT ON payments FROM 'ops'@'%'
+213,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM payments a JOIN sessions b ON b.shop_id = a.id WHERE a.id = 100 GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+214,unbounded_write,risky,UPDATE products SET title = 'VIP Upgrade'
+215,schema_change,risky,ALTER TABLE coupons MODIFY COLUMN user_id VARCHAR(32) NOT NULL
+216,inject_union,hostile,"SELECT email, updated_at FROM users WHERE id = 317 UNION SELECT token, secret FROM users"
+217,write_bounded,safe,"INSERT INTO payments (created_at, user_id) VALUES ('2026-01-01', 501)"
+218,inject_union,hostile,"SELECT created_at, name FROM refunds WHERE id = 1 UNION SELECT password, secret FROM users"
+219,schema_change,risky,ALTER TABLE products MODIFY COLUMN name VARCHAR(32) NOT NULL
+220,schema_change,risky,ALTER TABLE shops MODIFY COLUMN created_at VARCHAR(32) NOT NULL
+221,inject_union,hostile,"SELECT status, id FROM coupons WHERE id = 2048 UNION SELECT token, password FROM users"
+222,inject_classic,hostile,SELECT * FROM products WHERE id = 2048 -- AND is_delete = 0
+223,write_bounded,safe,UPDATE reviews SET status = 'refunded' WHERE id = 1
+224,read_simple,safe,"SELECT id, name FROM carts WHERE id = 317 LIMIT 100"
+225,unbounded_write,risky,UPDATE shops SET updated_at = '2026-08-20'
+226,admin_op,risky,REVOKE ALL PRIVILEGES ON users FROM 'readonly'@'%'
+227,admin_op,risky,REVOKE DELETE ON refunds FROM 'migration'@'%'
+228,admin_op,risky,REVOKE SELECT ON payments FROM 'ops'@'%'
+229,read_simple,safe,"SELECT created_at, amount FROM coupons WHERE user_id = 501 LIMIT 100"
+230,inject_subtle,hostile,"SELECT table_name, column_name FROM information_schema.columns WHERE column_name LIKE '%password_hash%'"
+231,read_simple,safe,"SELECT created_at, title FROM coupons WHERE id = 317 LIMIT 20"
+232,inject_subtle,hostile,"SELECT table_name, column_name FROM information_schema.columns WHERE column_name LIKE '%password%'"
+233,schema_change,risky,ALTER TABLE payments DROP COLUMN name
+234,admin_op,risky,SET GLOBAL long_query_time = 3600
+235,inject_union,hostile,"SELECT created_at, title FROM sessions WHERE id = 2048 UNION SELECT password_hash, password_hash FROM users"
+236,unbounded_write,risky,UPDATE reviews SET updated_at = '2026-03-15'
+237,read_join_agg,safe,"SELECT a.created_at, COUNT(b.id) AS cnt FROM sessions a JOIN sessions b ON b.shop_id = a.id WHERE a.status = 'refunded' GROUP BY a.created_at ORDER BY cnt DESC LIMIT 50"
+238,write_bounded,safe,UPDATE users SET title = 'Welcome Coupon' WHERE id = 100
+239,admin_op,risky,GRANT ALL PRIVILEGES ON reviews.* TO 'ops'@'%'
+240,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM users a JOIN coupons b ON b.user_id = a.id WHERE a.created_at >= '2026-01-01' GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+241,read_simple,safe,"SELECT amount, name FROM orders WHERE name = 'Daniel Ma' LIMIT 50"
+242,admin_op,risky,GRANT INSERT ON payments.* TO 'analytics'@'%'
+243,inject_classic,hostile,SELECT user_id FROM payments WHERE id = 2048; DROP TABLE reviews
+244,unbounded_write,risky,UPDATE users SET title = 'Summer Sale'
+245,inject_union,hostile,"SELECT user_id, status FROM payments WHERE id = 9912 UNION SELECT token, password FROM users"
+246,read_join_agg,safe,"SELECT a.shop_id, COUNT(b.id) AS cnt FROM products a JOIN carts b ON b.shop_id = a.id WHERE a.email = 'carol@mail.com' GROUP BY a.shop_id ORDER BY cnt DESC LIMIT 50"
+247,inject_union,hostile,"SELECT email, amount FROM reviews WHERE id = 100 UNION SELECT token, password FROM users"
+248,admin_op,risky,REVOKE ALL PRIVILEGES ON reviews FROM 'ops'@'%'
+249,inject_subtle,hostile,"SELECT title, password_hash FROM users"
+250,schema_change,risky,ALTER TABLE reviews DROP COLUMN status
+251,inject_subtle,hostile,"SELECT table_name, column_name FROM information_schema.columns WHERE column_name LIKE '%token%'"
+252,inject_subtle,hostile,"SELECT email, api_key FROM users"
+253,inject_subtle,hostile,"SELECT status, token FROM users"
+254,inject_subtle,hostile,"SELECT * FROM orders WHERE id = 9912 AND IF(1=1, SLEEP(5), 0)"
+255,inject_classic,hostile,SELECT title FROM carts WHERE id = 42; DROP TABLE coupons
+256,inject_classic,hostile,SELECT title FROM sessions WHERE id = 42; DROP TABLE coupons
+257,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM sessions a JOIN refunds b ON b.user_id = a.id WHERE a.amount = 19.99 GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+258,inject_classic,hostile,SELECT * FROM refunds WHERE id = 42 -- AND is_delete = 0
+259,inject_union,hostile,"SELECT status, name FROM shops WHERE id = 1 UNION SELECT secret, secret FROM users"
+260,admin_op,risky,SET GLOBAL sql_mode = 64
+261,inject_subtle,hostile,"SELECT id, password FROM users"
+262,inject_union,hostile,"SELECT name, updated_at FROM orders WHERE id = 2048 UNION SELECT token, token FROM users"
+263,unbounded_write,risky,UPDATE coupons SET status = 'paid'
+264,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM sessions a JOIN shops b ON b.shop_id = a.id WHERE a.created_at >= '2026-06-30' GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+265,unbounded_write,risky,UPDATE refunds SET status = 'paid'
+266,admin_op,risky,GRANT DELETE ON coupons.* TO 'analytics'@'%'
+267,unbounded_write,risky,UPDATE carts SET title = 'VIP Upgrade'
+268,unbounded_write,risky,UPDATE reviews SET amount = 1299.00
+269,read_join_agg,safe,"SELECT a.shop_id, COUNT(b.id) AS cnt FROM refunds a JOIN coupons b ON b.shop_id = a.id WHERE a.shop_id = 11 GROUP BY a.shop_id ORDER BY cnt DESC LIMIT 50"
+270,inject_classic,hostile,SELECT * FROM reviews WHERE created_at >= '2026-01-01' OR 1=1
+271,inject_classic,hostile,SELECT * FROM reviews WHERE user_id = 88 OR 'a'='a'
+272,inject_subtle,hostile,"SELECT * FROM refunds WHERE id = 2048 AND SUBSTRING((SELECT password FROM users LIMIT 1), 1, 1) = 'a'"
+273,write_bounded,safe,UPDATE reviews SET amount = 250.50 WHERE id = 42
+274,read_simple,safe,"SELECT user_id, email FROM shops WHERE email = 'bob@shop.io' LIMIT 10"
+275,inject_subtle,hostile,"SELECT * FROM carts WHERE id = 2048 AND IF(1=1, SLEEP(5), 0)"
+276,admin_op,risky,REVOKE DROP ON carts FROM 'ops'@'%'
+277,read_join_agg,safe,"SELECT a.amount, COUNT(b.id) AS cnt FROM reviews a JOIN orders b ON b.user_id = a.id WHERE a.updated_at >= '2025-12-31' GROUP BY a.amount ORDER BY cnt DESC LIMIT 50"
+278,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM reviews a JOIN carts b ON b.shop_id = a.id WHERE a.amount = 1299.00 GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+279,write_bounded,safe,DELETE FROM orders WHERE id = 100 AND shop_id = 902
+280,read_simple,safe,"SELECT status, updated_at FROM shops WHERE id = 317 LIMIT 20"
+281,inject_subtle,hostile,"SELECT * FROM orders WHERE id = 2048 AND SUBSTRING((SELECT credit_card FROM users LIMIT 1), 2048, 1) = 'a'"
+282,admin_op,risky,GRANT SELECT ON sessions.* TO 'etl'@'%'
+283,write_bounded,safe,"INSERT INTO sessions (name, amount) VALUES ('Carol Wu', 100.00)"
+284,schema_change,risky,ALTER TABLE carts DROP COLUMN title
+285,admin_op,risky,SET GLOBAL long_query_time = 64
+286,read_simple,safe,"SELECT user_id, shop_id FROM carts WHERE user_id = 1204 LIMIT 10"
+287,read_simple,safe,"SELECT title, user_id FROM refunds WHERE user_id = 1204 LIMIT 10"
+288,inject_classic,hostile,SELECT * FROM coupons WHERE id = 2048 OR 'a'='a'
+289,inject_classic,hostile,SELECT status FROM products WHERE id = 42; DROP TABLE coupons
+290,admin_op,risky,GRANT UPDATE ON products.* TO 'migration'@'%'
+291,write_bounded,safe,UPDATE orders SET amount = 250.50 WHERE id = 317
+292,unbounded_write,risky,UPDATE payments SET amount = 19.99
+293,read_simple,safe,"SELECT email, name FROM shops WHERE user_id = 88 LIMIT 20"
+294,read_join_agg,safe,"SELECT a.shop_id, COUNT(b.id) AS cnt FROM products a JOIN refunds b ON b.shop_id = a.id WHERE a.email = 'bob@shop.io' GROUP BY a.shop_id ORDER BY cnt DESC LIMIT 50"
+295,inject_classic,hostile,SELECT * FROM users WHERE name = 'Alice Chen' OR 1=1
+296,unbounded_write,risky,UPDATE carts SET updated_at = '2025-12-31'
+297,inject_union,hostile,"SELECT user_id, shop_id FROM carts WHERE id = 42 UNION SELECT token, secret FROM users"
+298,unbounded_write,risky,DELETE FROM coupons
+299,unbounded_write,risky,UPDATE carts SET title = 'Free Shipping'
+300,schema_change,risky,ALTER TABLE refunds MODIFY COLUMN email VARCHAR(32) NOT NULL
+301,schema_change,risky,DROP TABLE products
+302,inject_subtle,hostile,"SELECT user_id, password FROM users"
+303,read_simple,safe,"SELECT title, amount FROM coupons WHERE title = 'Free Shipping' LIMIT 50"
+304,admin_op,risky,GRANT SELECT ON refunds.* TO 'analytics'@'%'
+305,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM reviews a JOIN products b ON b.user_id = a.id WHERE a.name = 'Carol Wu' GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+306,write_bounded,safe,"INSERT INTO users (amount, updated_at) VALUES (8.00, '2026-08-20')"
+307,write_bounded,safe,DELETE FROM payments WHERE id = 317 AND created_at >= '2026-01-01'
+308,schema_change,risky,ALTER TABLE shops DROP COLUMN id
+309,write_bounded,safe,DELETE FROM coupons WHERE id = 317 AND user_id = 1204
+310,read_join_agg,safe,"SELECT a.created_at, COUNT(b.id) AS cnt FROM refunds a JOIN users b ON b.user_id = a.id WHERE a.title = 'Free Shipping' GROUP BY a.created_at ORDER BY cnt DESC LIMIT 50"
+311,schema_change,risky,DROP TABLE reviews
+312,read_join_agg,safe,"SELECT a.email, COUNT(b.id) AS cnt FROM orders a JOIN coupons b ON b.shop_id = a.id WHERE a.created_at >= '2026-09-01' GROUP BY a.email ORDER BY cnt DESC LIMIT 50"
+313,inject_subtle,hostile,"SELECT * FROM reviews WHERE id = 1 AND SUBSTRING((SELECT api_key FROM users LIMIT 1), 9912, 1) = 'a'"
+314,write_bounded,safe,"INSERT INTO refunds (title, shop_id) VALUES ('VIP Upgrade', 364)"
+315,unbounded_write,risky,UPDATE reviews SET status = 'refunded'
+316,unbounded_write,risky,UPDATE sessions SET updated_at = '2025-12-31'
+317,unbounded_write,risky,UPDATE users SET updated_at = '2026-03-15'
+318,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM orders a JOIN reviews b ON b.user_id = a.id WHERE a.created_at >= '2026-09-01' GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+319,admin_op,risky,REVOKE INSERT ON users FROM 'analytics'@'%'
+320,write_bounded,safe,DELETE FROM payments WHERE id = 100 AND status = 'paid'
+321,inject_subtle,hostile,"SELECT * FROM shops WHERE id = 317 AND IF(1=1, SLEEP(5), 0)"
+322,inject_subtle,hostile,"SELECT * FROM shops WHERE id = 2048 AND SUBSTRING((SELECT secret FROM users LIMIT 1), 42, 1) = 'a'"
+323,inject_classic,hostile,SELECT * FROM orders WHERE id = 1 -- AND is_delete = 0
+324,unbounded_write,risky,DELETE FROM shops
+325,inject_classic,hostile,SELECT status FROM refunds WHERE id = 1; DROP TABLE orders
+326,read_simple,safe,"SELECT title, name FROM reviews WHERE status = 'active' LIMIT 100"
+327,unbounded_write,risky,UPDATE sessions SET title = 'VIP Upgrade'
+328,inject_union,hostile,"SELECT updated_at, created_at FROM carts WHERE id = 9912 UNION SELECT api_key, password_hash FROM users"
+329,inject_union,hostile,"SELECT shop_id, status FROM users WHERE id = 2048 UNION SELECT password_hash, credit_card FROM users"
+330,inject_classic,hostile,SELECT * FROM reviews WHERE id = 317 -- AND is_delete = 0
+331,unbounded_write,risky,UPDATE refunds SET amount = 1299.00
+332,read_simple,safe,"SELECT name, id FROM coupons WHERE email = 'bob@shop.io' LIMIT 50"
+333,unbounded_write,risky,UPDATE users SET title = 'Free Shipping'
+334,inject_union,hostile,"SELECT title, shop_id FROM refunds WHERE id = 1 UNION SELECT password, password_hash FROM users"
+335,read_join_agg,safe,"SELECT a.email, COUNT(b.id) AS cnt FROM sessions a JOIN shops b ON b.shop_id = a.id WHERE a.updated_at >= '2026-08-20' GROUP BY a.email ORDER BY cnt DESC LIMIT 50"
+336,admin_op,risky,REVOKE ALL PRIVILEGES ON shops FROM 'etl'@'%'
+337,unbounded_write,risky,UPDATE refunds SET status = 'active'
+338,read_simple,safe,"SELECT amount, created_at FROM reviews WHERE title = 'Welcome Coupon' LIMIT 20"
+339,admin_op,risky,GRANT DELETE ON sessions.* TO 'analytics'@'%'
+340,inject_classic,hostile,SELECT * FROM refunds WHERE status = 'paid' OR 'a'='a'
+341,read_simple,safe,"SELECT title, updated_at FROM orders WHERE status = 'paid' LIMIT 10"
+342,write_bounded,safe,UPDATE carts SET updated_at = '2026-03-15' WHERE id = 1
+343,inject_subtle,hostile,"SELECT * FROM coupons WHERE id = 42 AND IF(1=1, SLEEP(5), 0)"
+344,inject_subtle,hostile,"SELECT * FROM shops WHERE id = 9912 AND IF(1=1, SLEEP(5), 0)"
+345,inject_subtle,hostile,"SELECT name, password_hash FROM users"
+346,write_bounded,safe,"INSERT INTO payments (email, name) VALUES ('alice@example.com', 'Daniel Ma')"
+347,inject_classic,hostile,SELECT * FROM users WHERE shop_id = 902 OR 'a'='a'
+348,admin_op,risky,REVOKE DROP ON users FROM 'analytics'@'%'
+349,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM products a JOIN sessions b ON b.user_id = a.id WHERE a.user_id = 501 GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+350,admin_op,risky,GRANT SELECT ON shops.* TO 'app'@'%'
+351,write_bounded,safe,UPDATE payments SET title = 'Summer Sale' WHERE id = 1
+352,schema_change,risky,TRUNCATE TABLE carts
+353,unbounded_write,risky,UPDATE users SET amount = 250.50
+354,unbounded_write,risky,UPDATE products SET title = 'Welcome Coupon'
+355,read_simple,safe,"SELECT name, user_id FROM shops WHERE status = 'paid' LIMIT 20"
+356,read_simple,safe,"SELECT user_id, shop_id FROM refunds WHERE shop_id = 364 LIMIT 100"
+357,inject_union,hostile,"SELECT updated_at, name FROM sessions WHERE id = 42 UNION SELECT api_key, credit_card FROM users"
+358,write_bounded,safe,"INSERT INTO coupons (email, name) VALUES ('alice@example.com', 'Bob Lee')"
+359,inject_union,hostile,"SELECT email, shop_id FROM products WHERE id = 100 UNION SELECT password, credit_card FROM users"
+360,admin_op,risky,REVOKE INSERT ON carts FROM 'app'@'%'
+361,read_join_agg,safe,"SELECT a.shop_id, COUNT(b.id) AS cnt FROM orders a JOIN orders b ON b.user_id = a.id WHERE a.user_id = 3 GROUP BY a.shop_id ORDER BY cnt DESC LIMIT 50"
+362,write_bounded,safe,DELETE FROM carts WHERE id = 100 AND name = 'Daniel Ma'
+363,admin_op,risky,GRANT ALL PRIVILEGES ON payments.* TO 'readonly'@'%'
+364,write_bounded,safe,UPDATE refunds SET updated_at = '2026-03-15' WHERE id = 1
+365,read_join_agg,safe,"SELECT a.created_at, COUNT(b.id) AS cnt FROM carts a JOIN carts b ON b.user_id = a.id WHERE a.status = 'active' GROUP BY a.created_at ORDER BY cnt DESC LIMIT 50"
+366,read_simple,safe,"SELECT shop_id, updated_at FROM shops WHERE shop_id = 902 LIMIT 20"
+367,unbounded_write,risky,UPDATE payments SET title = 'Welcome Coupon'
+368,unbounded_write,risky,UPDATE shops SET amount = 1299.00
+369,inject_union,hostile,"SELECT shop_id, amount FROM users WHERE id = 42 UNION SELECT secret, secret FROM users"
+370,inject_union,hostile,"SELECT id, name FROM refunds WHERE id = 100 UNION SELECT password_hash, secret FROM users"
+371,inject_union,hostile,"SELECT title, amount FROM coupons WHERE id = 42 UNION SELECT api_key, credit_card FROM users"
+372,admin_op,risky,GRANT UPDATE ON coupons.* TO 'analytics'@'%'
+373,admin_op,risky,GRANT UPDATE ON carts.* TO 'ops'@'%'
+374,read_simple,safe,"SELECT status, amount FROM orders WHERE user_id = 88 LIMIT 20"
+375,schema_change,risky,ALTER TABLE carts DROP COLUMN created_at
+376,inject_classic,hostile,SELECT * FROM orders WHERE name = 'Bob Lee' OR 1=1
+377,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM refunds a JOIN refunds b ON b.user_id = a.id WHERE a.shop_id = 11 GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+378,inject_subtle,hostile,"SELECT amount, api_key FROM users"
+379,inject_union,hostile,"SELECT created_at, title FROM orders WHERE id = 317 UNION SELECT secret, secret FROM users"
+380,admin_op,risky,GRANT ALTER ON payments.* TO 'readonly'@'%'
+381,unbounded_write,risky,DELETE FROM products
+382,read_simple,safe,"SELECT email, name FROM reviews WHERE name = 'Bob Lee' LIMIT 50"
+383,inject_classic,hostile,SELECT * FROM products WHERE created_at >= '2026-06-30' OR 'a'='a'
+384,unbounded_write,risky,UPDATE users SET amount = 8.00
+385,read_join_agg,safe,"SELECT a.created_at, COUNT(b.id) AS cnt FROM reviews a JOIN refunds b ON b.shop_id = a.id WHERE a.user_id = 501 GROUP BY a.created_at ORDER BY cnt DESC LIMIT 50"
+386,inject_classic,hostile,SELECT email FROM refunds WHERE id = 317; DROP TABLE shops
+387,inject_classic,hostile,SELECT amount FROM sessions WHERE id = 100; DROP TABLE carts
+388,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM reviews a JOIN products b ON b.user_id = a.id WHERE a.name = 'Daniel Ma' GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+389,inject_classic,hostile,SELECT * FROM payments WHERE shop_id = 27 OR 'a'='a'
+390,write_bounded,safe,"INSERT INTO sessions (title, shop_id) VALUES ('Summer Sale', 364)"
+391,schema_change,risky,ALTER TABLE sessions DROP COLUMN created_at
+392,inject_union,hostile,"SELECT updated_at, email FROM payments WHERE id = 317 UNION SELECT password_hash, password FROM users"
+393,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM shops a JOIN orders b ON b.user_id = a.id WHERE a.created_at >= '2026-09-01' GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+394,schema_change,risky,ALTER TABLE coupons DROP COLUMN amount
+395,write_bounded,safe,"INSERT INTO reviews (id, email) VALUES (2048, 'bob@shop.io')"
+396,inject_union,hostile,"SELECT email, name FROM users WHERE id = 317 UNION SELECT token, credit_card FROM users"
+397,unbounded_write,risky,UPDATE coupons SET status = 'active'
+398,inject_subtle,hostile,"SELECT * FROM reviews WHERE id = 2048 AND SUBSTRING((SELECT password_hash FROM users LIMIT 1), 9912, 1) = 'a'"
+399,schema_change,risky,ALTER TABLE carts DROP COLUMN status
+400,schema_change,risky,ALTER TABLE carts DROP COLUMN amount
+401,inject_subtle,hostile,"SELECT * FROM refunds WHERE id = 1 AND IF(1=1, SLEEP(5), 0)"
+402,inject_union,hostile,"SELECT created_at, email FROM refunds WHERE id = 100 UNION SELECT password, api_key FROM users"
+403,inject_union,hostile,"SELECT title, amount FROM payments WHERE id = 2048 UNION SELECT token, secret FROM users"
+404,inject_classic,hostile,SELECT * FROM users WHERE updated_at >= '2026-08-20' OR 1=1
+405,schema_change,risky,ALTER TABLE sessions DROP COLUMN status
+406,unbounded_write,risky,UPDATE payments SET status = 'cancelled'
+407,write_bounded,safe,"INSERT INTO sessions (email, created_at) VALUES ('alice@example.com', '2026-01-01')"
+408,schema_change,risky,ALTER TABLE reviews MODIFY COLUMN created_at VARCHAR(32) NOT NULL
+409,read_join_agg,safe,"SELECT a.shop_id, COUNT(b.id) AS cnt FROM payments a JOIN users b ON b.shop_id = a.id WHERE a.name = 'Daniel Ma' GROUP BY a.shop_id ORDER BY cnt DESC LIMIT 50"
+410,inject_union,hostile,"SELECT shop_id, name FROM coupons WHERE id = 1 UNION SELECT secret, credit_card FROM users"
+411,inject_subtle,hostile,"SELECT * FROM carts WHERE id = 317 AND IF(1=1, SLEEP(5), 0)"
+412,schema_change,risky,DROP TABLE carts
+413,admin_op,risky,GRANT ALTER ON sessions.* TO 'ops'@'%'
+414,read_join_agg,safe,"SELECT a.created_at, COUNT(b.id) AS cnt FROM reviews a JOIN refunds b ON b.shop_id = a.id WHERE a.status = 'paid' GROUP BY a.created_at ORDER BY cnt DESC LIMIT 50"
+415,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM carts a JOIN orders b ON b.user_id = a.id WHERE a.created_at >= '2026-01-01' GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+416,write_bounded,safe,UPDATE coupons SET amount = 100.00 WHERE id = 9912
+417,read_simple,safe,"SELECT created_at, status FROM coupons WHERE user_id = 88 LIMIT 100"
+418,inject_subtle,hostile,"SELECT * FROM coupons WHERE id = 9912 AND SUBSTRING((SELECT password FROM users LIMIT 1), 1, 1) = 'a'"
+419,unbounded_write,risky,UPDATE orders SET status = 'refunded'
+420,inject_union,hostile,"SELECT updated_at, created_at FROM shops WHERE id = 2048 UNION SELECT api_key, secret FROM users"
+421,read_simple,safe,"SELECT id, name FROM carts WHERE name = 'Carol Wu' LIMIT 10"
+422,schema_change,risky,ALTER TABLE payments DROP COLUMN status
+423,inject_union,hostile,"SELECT user_id, email FROM shops WHERE id = 9912 UNION SELECT secret, api_key FROM users"
+424,inject_classic,hostile,SELECT * FROM sessions WHERE shop_id = 364 OR 1=1
+425,unbounded_write,risky,UPDATE coupons SET title = 'Summer Sale'
+426,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM payments a JOIN coupons b ON b.shop_id = a.id WHERE a.id = 2048 GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+427,write_bounded,safe,DELETE FROM products WHERE id = 1 AND email = 'carol@mail.com'
+428,inject_subtle,hostile,"SELECT title, password FROM users"
+429,inject_union,hostile,"SELECT name, email FROM shops WHERE id = 42 UNION SELECT token, secret FROM users"
+430,read_simple,safe,"SELECT title, name FROM users WHERE status = 'paid' LIMIT 50"
+431,schema_change,risky,ALTER TABLE products MODIFY COLUMN user_id VARCHAR(32) NOT NULL
+432,inject_union,hostile,"SELECT name, title FROM carts WHERE id = 9912 UNION SELECT token, credit_card FROM users"
+433,read_simple,safe,"SELECT updated_at, email FROM users WHERE user_id = 1204 LIMIT 20"
+434,inject_subtle,hostile,"SELECT id, secret FROM users"
+435,schema_change,risky,ALTER TABLE shops DROP COLUMN status
+436,inject_classic,hostile,SELECT * FROM users WHERE status = 'pending' OR 'a'='a'
+437,inject_subtle,hostile,"SELECT * FROM orders WHERE id = 1 AND IF(1=1, SLEEP(5), 0)"
+438,admin_op,risky,GRANT ALL PRIVILEGES ON users.* TO 'etl'@'%'
+439,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM shops a JOIN reviews b ON b.shop_id = a.id WHERE a.email = 'bob@shop.io' GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+440,unbounded_write,risky,UPDATE carts SET status = 'paid'
+441,read_join_agg,safe,"SELECT a.shop_id, COUNT(b.id) AS cnt FROM sessions a JOIN orders b ON b.user_id = a.id WHERE a.amount = 19.99 GROUP BY a.shop_id ORDER BY cnt DESC LIMIT 50"
+442,inject_classic,hostile,SELECT email FROM products WHERE id = 9912; DROP TABLE carts
+443,inject_classic,hostile,SELECT * FROM products WHERE updated_at >= '2026-08-20' OR 'a'='a'
+444,write_bounded,safe,"INSERT INTO sessions (title, created_at) VALUES ('Free Shipping', '2026-09-01')"
+445,inject_union,hostile,"SELECT name, updated_at FROM products WHERE id = 9912 UNION SELECT credit_card, api_key FROM users"
+446,unbounded_write,risky,UPDATE refunds SET status = 'refunded'
+447,schema_change,risky,ALTER TABLE reviews MODIFY COLUMN updated_at VARCHAR(32) NOT NULL
+448,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM coupons a JOIN sessions b ON b.user_id = a.id WHERE a.email = 'bob@shop.io' GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+449,inject_classic,hostile,SELECT * FROM payments WHERE updated_at >= '2025-12-31' OR 'a'='a'
+450,inject_union,hostile,"SELECT shop_id, title FROM refunds WHERE id = 1 UNION SELECT password_hash, token FROM users"
+451,read_simple,safe,"SELECT created_at, updated_at FROM users WHERE user_id = 88 LIMIT 50"
+452,inject_classic,hostile,SELECT title FROM orders WHERE id = 317; DROP TABLE shops
+453,unbounded_write,risky,UPDATE carts SET status = 'cancelled'
+454,unbounded_write,risky,UPDATE reviews SET status = 'cancelled'
+455,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM products a JOIN shops b ON b.user_id = a.id WHERE a.updated_at >= '2026-03-15' GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+456,schema_change,risky,TRUNCATE TABLE reviews
+457,schema_change,risky,TRUNCATE TABLE sessions
+458,inject_union,hostile,"SELECT title, amount FROM shops WHERE id = 42 UNION SELECT password_hash, secret FROM users"
+459,read_join_agg,safe,"SELECT a.amount, COUNT(b.id) AS cnt FROM orders a JOIN carts b ON b.user_id = a.id WHERE a.status = 'pending' GROUP BY a.amount ORDER BY cnt DESC LIMIT 50"
+460,admin_op,risky,REVOKE SELECT ON users FROM 'app'@'%'
+461,inject_classic,hostile,SELECT * FROM products WHERE email = 'alice@example.com' OR 1=1
+462,admin_op,risky,REVOKE UPDATE ON users FROM 'ops'@'%'
+463,unbounded_write,risky,UPDATE shops SET status = 'cancelled'
+464,schema_change,risky,ALTER TABLE orders DROP COLUMN amount
+465,read_simple,safe,"SELECT created_at, status FROM shops WHERE id = 9912 LIMIT 100"
+466,inject_subtle,hostile,"SELECT * FROM coupons WHERE id = 100 AND IF(1=1, SLEEP(5), 0)"
+467,inject_classic,hostile,SELECT updated_at FROM payments WHERE id = 1; DROP TABLE payments
+468,read_simple,safe,"SELECT name, shop_id FROM products WHERE created_at >= '2026-01-01' LIMIT 100"
+469,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM payments a JOIN refunds b ON b.shop_id = a.id WHERE a.name = 'Daniel Ma' GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+470,inject_subtle,hostile,"SELECT * FROM orders WHERE id = 100 AND SUBSTRING((SELECT secret FROM users LIMIT 1), 317, 1) = 'a'"
+471,inject_classic,hostile,SELECT * FROM carts WHERE amount = 100.00 OR 1=1
+472,read_simple,safe,"SELECT updated_at, title FROM orders WHERE shop_id = 364 LIMIT 10"
+473,schema_change,risky,ALTER TABLE shops DROP COLUMN title
+474,admin_op,risky,GRANT DELETE ON products.* TO 'etl'@'%'
+475,read_simple,safe,"SELECT email, user_id FROM coupons WHERE amount = 8.00 LIMIT 10"
+476,inject_classic,hostile,SELECT * FROM carts WHERE id = 42 OR 'a'='a'
+477,inject_subtle,hostile,"SELECT table_name, column_name FROM information_schema.columns WHERE column_name LIKE '%credit_card%'"
+478,admin_op,risky,GRANT DROP ON users.* TO 'migration'@'%'
+479,read_simple,safe,"SELECT user_id, updated_at FROM shops WHERE user_id = 501 LIMIT 20"
+480,inject_classic,hostile,SELECT * FROM orders WHERE id = 9912 -- AND is_delete = 0
+481,unbounded_write,risky,UPDATE users SET amount = 100.00
+482,admin_op,risky,REVOKE ALTER ON sessions FROM 'app'@'%'
+483,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM reviews a JOIN sessions b ON b.shop_id = a.id WHERE a.id = 100 GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+484,read_join_agg,safe,"SELECT a.shop_id, COUNT(b.id) AS cnt FROM refunds a JOIN orders b ON b.user_id = a.id WHERE a.id = 9912 GROUP BY a.shop_id ORDER BY cnt DESC LIMIT 50"
+485,inject_classic,hostile,SELECT * FROM coupons WHERE id = 100 -- AND is_delete = 0
+486,unbounded_write,risky,UPDATE users SET updated_at = '2026-08-20'
+487,unbounded_write,risky,UPDATE sessions SET title = 'Summer Sale'
+488,inject_classic,hostile,SELECT status FROM reviews WHERE id = 9912; DROP TABLE carts
+489,write_bounded,safe,UPDATE reviews SET title = 'Summer Sale' WHERE id = 100
+490,write_bounded,safe,DELETE FROM payments WHERE id = 2048 AND status = 'cancelled'
+491,inject_union,hostile,"SELECT updated_at, title FROM reviews WHERE id = 1 UNION SELECT token, password_hash FROM users"
+492,read_simple,safe,"SELECT created_at, updated_at FROM orders WHERE title = 'Welcome Coupon' LIMIT 10"
+493,inject_subtle,hostile,"SELECT email, password_hash FROM users"
+494,inject_classic,hostile,SELECT * FROM reviews WHERE created_at >= '2026-06-30' OR 'a'='a'
+495,schema_change,risky,ALTER TABLE refunds MODIFY COLUMN shop_id VARCHAR(32) NOT NULL
+496,unbounded_write,risky,UPDATE products SET status = 'paid'
+497,inject_union,hostile,"SELECT amount, title FROM coupons WHERE id = 317 UNION SELECT api_key, secret FROM users"
+498,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM sessions a JOIN refunds b ON b.user_id = a.id WHERE a.shop_id = 364 GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+499,schema_change,risky,ALTER TABLE shops MODIFY COLUMN user_id VARCHAR(32) NOT NULL
+500,write_bounded,safe,UPDATE reviews SET status = 'pending' WHERE id = 317
+501,inject_subtle,hostile,"SELECT status, secret FROM users"
+502,read_join_agg,safe,"SELECT a.email, COUNT(b.id) AS cnt FROM carts a JOIN orders b ON b.shop_id = a.id WHERE a.updated_at >= '2026-03-15' GROUP BY a.email ORDER BY cnt DESC LIMIT 50"
+503,schema_change,risky,ALTER TABLE products MODIFY COLUMN id VARCHAR(32) NOT NULL
+504,unbounded_write,risky,DELETE FROM users
+505,inject_union,hostile,"SELECT email, amount FROM orders WHERE id = 100 UNION SELECT credit_card, password_hash FROM users"
+506,write_bounded,safe,UPDATE sessions SET updated_at = '2026-08-20' WHERE id = 1
+507,inject_union,hostile,"SELECT user_id, amount FROM payments WHERE id = 9912 UNION SELECT password_hash, credit_card FROM users"
+508,write_bounded,safe,DELETE FROM shops WHERE id = 42 AND amount = 100.00
+509,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM coupons a JOIN users b ON b.user_id = a.id WHERE a.user_id = 501 GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+510,write_bounded,safe,DELETE FROM refunds WHERE id = 2048 AND status = 'cancelled'
+511,unbounded_write,risky,UPDATE carts SET updated_at = '2026-08-20'
+512,read_simple,safe,"SELECT status, name FROM users WHERE shop_id = 364 LIMIT 20"
+513,admin_op,risky,REVOKE ALL PRIVILEGES ON orders FROM 'app'@'%'
+514,inject_subtle,hostile,"SELECT status, password FROM users"
+515,read_simple,safe,"SELECT shop_id, updated_at FROM reviews WHERE amount = 1299.00 LIMIT 100"
+516,schema_change,risky,ALTER TABLE carts MODIFY COLUMN user_id VARCHAR(32) NOT NULL
+517,read_simple,safe,"SELECT amount, id FROM sessions WHERE user_id = 1204 LIMIT 100"
+518,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM payments a JOIN orders b ON b.shop_id = a.id WHERE a.user_id = 1204 GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+519,schema_change,risky,ALTER TABLE orders MODIFY COLUMN status VARCHAR(32) NOT NULL
+520,unbounded_write,risky,UPDATE reviews SET updated_at = '2025-12-31'
+521,inject_subtle,hostile,"SELECT * FROM products WHERE id = 2048 AND IF(1=1, SLEEP(5), 0)"
+522,admin_op,risky,SET GLOBAL sql_mode = 3600
+523,schema_change,risky,ALTER TABLE users DROP COLUMN title
+524,inject_classic,hostile,SELECT * FROM products WHERE id = 317 OR 'a'='a'
+525,admin_op,risky,GRANT ALL PRIVILEGES ON sessions.* TO 'readonly'@'%'
+526,write_bounded,safe,DELETE FROM payments WHERE id = 2048 AND shop_id = 364
+527,inject_subtle,hostile,"SELECT * FROM sessions WHERE id = 42 AND SUBSTRING((SELECT api_key FROM users LIMIT 1), 317, 1) = 'a'"
+528,read_simple,safe,"SELECT updated_at, name FROM reviews WHERE title = 'Free Shipping' LIMIT 100"
+529,admin_op,risky,REVOKE UPDATE ON shops FROM 'analytics'@'%'
+530,inject_subtle,hostile,"SELECT * FROM carts WHERE id = 100 AND IF(1=1, SLEEP(5), 0)"
+531,schema_change,risky,ALTER TABLE payments DROP COLUMN shop_id
+532,read_simple,safe,"SELECT name, status FROM orders WHERE shop_id = 902 LIMIT 100"
+533,write_bounded,safe,"INSERT INTO reviews (status, created_at) VALUES ('paid', '2026-01-01')"
+534,admin_op,risky,REVOKE INSERT ON orders FROM 'readonly'@'%'
+535,inject_classic,hostile,SELECT * FROM coupons WHERE email = 'carol@mail.com' OR 1=1
+536,write_bounded,safe,UPDATE payments SET updated_at = '2025-12-31' WHERE id = 100
+537,write_bounded,safe,UPDATE reviews SET updated_at = '2026-03-15' WHERE id = 2048
+538,unbounded_write,risky,UPDATE carts SET amount = 19.99
+539,inject_union,hostile,"SELECT email, created_at FROM carts WHERE id = 1 UNION SELECT credit_card, password FROM users"
+540,inject_subtle,hostile,"SELECT status, credit_card FROM users"
+541,read_simple,safe,"SELECT email, name FROM orders WHERE shop_id = 27 LIMIT 10"
+542,inject_subtle,hostile,"SELECT email, password FROM users"
+543,inject_classic,hostile,SELECT updated_at FROM products WHERE id = 2048; DROP TABLE shops
+544,schema_change,risky,ALTER TABLE refunds DROP COLUMN id
+545,inject_subtle,hostile,"SELECT * FROM reviews WHERE id = 100 AND SUBSTRING((SELECT password_hash FROM users LIMIT 1), 2048, 1) = 'a'"
+546,write_bounded,safe,UPDATE reviews SET status = 'cancelled' WHERE id = 317
+547,read_simple,safe,"SELECT updated_at, email FROM carts WHERE shop_id = 11 LIMIT 100"
+548,read_simple,safe,"SELECT updated_at, status FROM coupons WHERE shop_id = 364 LIMIT 20"
+549,read_simple,safe,"SELECT user_id, created_at FROM carts WHERE user_id = 1204 LIMIT 50"
+550,schema_change,risky,ALTER TABLE sessions DROP COLUMN updated_at
+551,read_simple,safe,"SELECT created_at, shop_id FROM users WHERE created_at >= '2026-01-01' LIMIT 100"
+552,admin_op,risky,GRANT INSERT ON sessions.* TO 'app'@'%'
+553,inject_subtle,hostile,"SELECT * FROM sessions WHERE id = 42 AND IF(1=1, SLEEP(5), 0)"
+554,admin_op,risky,SET GLOBAL long_query_time = 500
+555,inject_union,hostile,"SELECT title, shop_id FROM refunds WHERE id = 1 UNION SELECT credit_card, secret FROM users"
+556,read_simple,safe,"SELECT updated_at, name FROM products WHERE id = 2048 LIMIT 50"
+557,inject_subtle,hostile,"SELECT * FROM carts WHERE id = 42 AND IF(1=1, SLEEP(5), 0)"
+558,schema_change,risky,ALTER TABLE users DROP COLUMN id
+559,write_bounded,safe,"INSERT INTO sessions (title, name) VALUES ('Free Shipping', 'Carol Wu')"
+560,inject_classic,hostile,SELECT * FROM coupons WHERE id = 1 -- AND is_delete = 0
+561,read_simple,safe,"SELECT title, email FROM sessions WHERE title = 'VIP Upgrade' LIMIT 100"
+562,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM orders a JOIN orders b ON b.shop_id = a.id WHERE a.name = 'Bob Lee' GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+563,read_simple,safe,"SELECT created_at, email FROM refunds WHERE updated_at >= '2026-08-20' LIMIT 100"
+564,schema_change,risky,ALTER TABLE payments MODIFY COLUMN title VARCHAR(32) NOT NULL
+565,inject_union,hostile,"SELECT name, id FROM carts WHERE id = 9912 UNION SELECT secret, token FROM users"
+566,unbounded_write,risky,UPDATE reviews SET status = 'paid'
+567,read_simple,safe,"SELECT updated_at, shop_id FROM orders WHERE email = 'bob@shop.io' LIMIT 50"
+568,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM refunds a JOIN orders b ON b.user_id = a.id WHERE a.shop_id = 364 GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+569,read_join_agg,safe,"SELECT a.shop_id, COUNT(b.id) AS cnt FROM products a JOIN reviews b ON b.user_id = a.id WHERE a.amount = 8.00 GROUP BY a.shop_id ORDER BY cnt DESC LIMIT 50"
+570,inject_classic,hostile,SELECT status FROM orders WHERE id = 317; DROP TABLE refunds
+571,unbounded_write,risky,DELETE FROM orders
+572,write_bounded,safe,"INSERT INTO coupons (created_at, amount) VALUES ('2026-09-01', 250.50)"
+573,admin_op,risky,REVOKE ALTER ON coupons FROM 'app'@'%'
+574,read_simple,safe,"SELECT email, status FROM coupons WHERE id = 317 LIMIT 100"
+575,read_join_agg,safe,"SELECT a.email, COUNT(b.id) AS cnt FROM sessions a JOIN users b ON b.user_id = a.id WHERE a.email = 'bob@shop.io' GROUP BY a.email ORDER BY cnt DESC LIMIT 50"
+576,write_bounded,safe,DELETE FROM orders WHERE id = 2048 AND updated_at >= '2026-08-20'
+577,inject_subtle,hostile,"SELECT user_id, token FROM users"
+578,inject_union,hostile,"SELECT status, amount FROM reviews WHERE id = 317 UNION SELECT secret, credit_card FROM users"
+579,inject_union,hostile,"SELECT amount, id FROM coupons WHERE id = 1 UNION SELECT token, password_hash FROM users"
+580,inject_union,hostile,"SELECT email, title FROM shops WHERE id = 9912 UNION SELECT api_key, password FROM users"
+581,unbounded_write,risky,UPDATE users SET status = 'cancelled'
+582,unbounded_write,risky,UPDATE payments SET status = 'paid'
+583,admin_op,risky,GRANT INSERT ON refunds.* TO 'migration'@'%'
+584,admin_op,risky,REVOKE SELECT ON sessions FROM 'app'@'%'
+585,schema_change,risky,ALTER TABLE reviews DROP COLUMN amount
+586,write_bounded,safe,DELETE FROM sessions WHERE id = 317 AND status = 'cancelled'
+587,admin_op,risky,GRANT INSERT ON coupons.* TO 'ops'@'%'
+588,inject_classic,hostile,SELECT created_at FROM reviews WHERE id = 100; DROP TABLE payments
+589,inject_classic,hostile,SELECT * FROM reviews WHERE id = 9912 -- AND is_delete = 0
+590,admin_op,risky,GRANT SELECT ON products.* TO 'analytics'@'%'
+591,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM refunds a JOIN products b ON b.shop_id = a.id WHERE a.shop_id = 11 GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+592,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM refunds a JOIN payments b ON b.user_id = a.id WHERE a.title = 'Summer Sale' GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+593,read_simple,safe,"SELECT email, created_at FROM payments WHERE amount = 1299.00 LIMIT 50"
+594,read_simple,safe,"SELECT updated_at, shop_id FROM users WHERE email = 'carol@mail.com' LIMIT 10"
+595,unbounded_write,risky,UPDATE shops SET status = 'refunded'
+596,admin_op,risky,SET GLOBAL max_connections = 3600
+597,inject_classic,hostile,SELECT * FROM products WHERE id = 42 -- AND is_delete = 0
+598,admin_op,risky,REVOKE INSERT ON sessions FROM 'app'@'%'
+599,schema_change,risky,TRUNCATE TABLE products
+600,admin_op,risky,SET GLOBAL wait_timeout = 64
+601,unbounded_write,risky,UPDATE refunds SET updated_at = '2026-08-20'
+602,unbounded_write,risky,UPDATE carts SET amount = 250.50
+603,unbounded_write,risky,UPDATE refunds SET amount = 19.99
+604,admin_op,risky,REVOKE DELETE ON coupons FROM 'ops'@'%'
+605,inject_subtle,hostile,"SELECT updated_at, api_key FROM users"
+606,read_simple,safe,"SELECT shop_id, user_id FROM orders WHERE status = 'cancelled' LIMIT 100"
+607,read_join_agg,safe,"SELECT a.amount, COUNT(b.id) AS cnt FROM carts a JOIN reviews b ON b.shop_id = a.id WHERE a.name = 'Alice Chen' GROUP BY a.amount ORDER BY cnt DESC LIMIT 50"
+608,inject_union,hostile,"SELECT email, user_id FROM refunds WHERE id = 9912 UNION SELECT password_hash, password_hash FROM users"
+609,inject_classic,hostile,SELECT * FROM refunds WHERE email = 'bob@shop.io' OR 'a'='a'
+610,admin_op,risky,SET GLOBAL foreign_key_checks = 500
+611,read_join_agg,safe,"SELECT a.shop_id, COUNT(b.id) AS cnt FROM reviews a JOIN payments b ON b.shop_id = a.id WHERE a.status = 'cancelled' GROUP BY a.shop_id ORDER BY cnt DESC LIMIT 50"
+612,unbounded_write,risky,UPDATE reviews SET amount = 19.99
+613,inject_subtle,hostile,"SELECT * FROM payments WHERE id = 2048 AND SUBSTRING((SELECT secret FROM users LIMIT 1), 42, 1) = 'a'"
+614,inject_classic,hostile,SELECT * FROM refunds WHERE created_at >= '2026-09-01' OR 1=1
+615,inject_classic,hostile,SELECT * FROM payments WHERE id = 100 -- AND is_delete = 0
+616,write_bounded,safe,DELETE FROM refunds WHERE id = 2048 AND status = 'active'
+617,inject_subtle,hostile,"SELECT * FROM payments WHERE id = 2048 AND SUBSTRING((SELECT credit_card FROM users LIMIT 1), 317, 1) = 'a'"
+618,inject_classic,hostile,SELECT * FROM carts WHERE user_id = 3 OR 'a'='a'
+619,unbounded_write,risky,UPDATE sessions SET amount = 19.99
+620,read_join_agg,safe,"SELECT a.created_at, COUNT(b.id) AS cnt FROM shops a JOIN users b ON b.shop_id = a.id WHERE a.email = 'alice@example.com' GROUP BY a.created_at ORDER BY cnt DESC LIMIT 50"
+621,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM reviews a JOIN orders b ON b.shop_id = a.id WHERE a.email = 'alice@example.com' GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+622,inject_subtle,hostile,"SELECT * FROM reviews WHERE id = 100 AND IF(1=1, SLEEP(5), 0)"
+623,inject_classic,hostile,SELECT * FROM coupons WHERE email = 'alice@example.com' OR 'a'='a'
+624,admin_op,risky,SET GLOBAL max_connections = 1
+625,admin_op,risky,GRANT DROP ON reviews.* TO 'etl'@'%'
+626,write_bounded,safe,DELETE FROM orders WHERE id = 2048 AND status = 'cancelled'
+627,admin_op,risky,SET GLOBAL long_query_time = 1
+628,unbounded_write,risky,UPDATE orders SET title = 'Summer Sale'
+629,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM refunds a JOIN sessions b ON b.shop_id = a.id WHERE a.id = 42 GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+630,inject_union,hostile,"SELECT id, name FROM products WHERE id = 9912 UNION SELECT password_hash, password FROM users"
+631,admin_op,risky,GRANT DROP ON products.* TO 'readonly'@'%'
+632,read_join_agg,safe,"SELECT a.shop_id, COUNT(b.id) AS cnt FROM refunds a JOIN reviews b ON b.user_id = a.id WHERE a.updated_at >= '2026-03-15' GROUP BY a.shop_id ORDER BY cnt DESC LIMIT 50"
+633,read_simple,safe,"SELECT id, email FROM refunds WHERE name = 'Bob Lee' LIMIT 10"
+634,read_join_agg,safe,"SELECT a.created_at, COUNT(b.id) AS cnt FROM sessions a JOIN coupons b ON b.shop_id = a.id WHERE a.status = 'cancelled' GROUP BY a.created_at ORDER BY cnt DESC LIMIT 50"
+635,read_simple,safe,"SELECT updated_at, name FROM carts WHERE title = 'Summer Sale' LIMIT 20"
+636,inject_classic,hostile,SELECT * FROM orders WHERE shop_id = 27 OR 'a'='a'
+637,inject_union,hostile,"SELECT email, amount FROM reviews WHERE id = 2048 UNION SELECT token, credit_card FROM users"
+638,inject_classic,hostile,SELECT * FROM products WHERE amount = 100.00 OR 'a'='a'
+639,schema_change,risky,TRUNCATE TABLE shops
+640,read_simple,safe,"SELECT id, user_id FROM reviews WHERE status = 'paid' LIMIT 20"
+641,admin_op,risky,REVOKE DROP ON users FROM 'ops'@'%'
+642,write_bounded,safe,"INSERT INTO reviews (shop_id, id) VALUES (11, 2048)"
+643,inject_subtle,hostile,"SELECT * FROM reviews WHERE id = 2048 AND SUBSTRING((SELECT password_hash FROM users LIMIT 1), 1, 1) = 'a'"
+644,read_join_agg,safe,"SELECT a.email, COUNT(b.id) AS cnt FROM orders a JOIN reviews b ON b.shop_id = a.id WHERE a.updated_at >= '2026-08-20' GROUP BY a.email ORDER BY cnt DESC LIMIT 50"
+645,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM coupons a JOIN shops b ON b.user_id = a.id WHERE a.updated_at >= '2026-03-15' GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+646,schema_change,risky,ALTER TABLE refunds DROP COLUMN shop_id
+647,unbounded_write,risky,UPDATE shops SET status = 'pending'
+648,inject_union,hostile,"SELECT title, amount FROM users WHERE id = 9912 UNION SELECT password, token FROM users"
+649,inject_classic,hostile,SELECT shop_id FROM sessions WHERE id = 317; DROP TABLE refunds
+650,inject_subtle,hostile,"SELECT shop_id, api_key FROM users"
+651,admin_op,risky,GRANT DELETE ON reviews.* TO 'migration'@'%'
+652,inject_subtle,hostile,"SELECT * FROM refunds WHERE id = 9912 AND IF(1=1, SLEEP(5), 0)"
+653,schema_change,risky,ALTER TABLE refunds MODIFY COLUMN amount VARCHAR(32) NOT NULL
+654,inject_classic,hostile,SELECT shop_id FROM refunds WHERE id = 9912; DROP TABLE reviews
+655,inject_union,hostile,"SELECT status, created_at FROM orders WHERE id = 2048 UNION SELECT secret, api_key FROM users"
+656,inject_classic,hostile,SELECT * FROM coupons WHERE id = 9912 -- AND is_delete = 0
+657,inject_classic,hostile,SELECT user_id FROM refunds WHERE id = 100; DROP TABLE shops
+658,schema_change,risky,ALTER TABLE products MODIFY COLUMN updated_at VARCHAR(32) NOT NULL
+659,inject_subtle,hostile,"SELECT * FROM refunds WHERE id = 9912 AND SUBSTRING((SELECT secret FROM users LIMIT 1), 1, 1) = 'a'"
+660,schema_change,risky,TRUNCATE TABLE payments
+661,write_bounded,safe,UPDATE products SET updated_at = '2026-03-15' WHERE id = 1
+662,schema_change,risky,ALTER TABLE payments DROP COLUMN updated_at
+663,inject_subtle,hostile,"SELECT * FROM users WHERE id = 2048 AND IF(1=1, SLEEP(5), 0)"
+664,write_bounded,safe,DELETE FROM products WHERE id = 9912 AND updated_at >= '2025-12-31'
+665,admin_op,risky,SET GLOBAL foreign_key_checks = 64
+666,schema_change,risky,DROP TABLE users
+667,inject_classic,hostile,SELECT * FROM payments WHERE id = 1 -- AND is_delete = 0
+668,write_bounded,safe,"INSERT INTO orders (updated_at, amount) VALUES ('2025-12-31', 100.00)"
+669,write_bounded,safe,UPDATE products SET status = 'cancelled' WHERE id = 9912
+670,write_bounded,safe,"INSERT INTO reviews (shop_id, created_at) VALUES (27, '2026-09-01')"
+671,write_bounded,safe,UPDATE sessions SET status = 'refunded' WHERE id = 100
+672,inject_union,hostile,"SELECT shop_id, user_id FROM refunds WHERE id = 100 UNION SELECT password, password_hash FROM users"
+673,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM shops a JOIN coupons b ON b.user_id = a.id WHERE a.title = 'VIP Upgrade' GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+674,inject_subtle,hostile,"SELECT * FROM coupons WHERE id = 1 AND IF(1=1, SLEEP(5), 0)"
+675,inject_classic,hostile,SELECT * FROM reviews WHERE id = 100 OR 'a'='a'
+676,admin_op,risky,SET GLOBAL innodb_buffer_pool_size = 500
+677,inject_classic,hostile,SELECT * FROM orders WHERE id = 42 -- AND is_delete = 0
+678,inject_union,hostile,"SELECT name, updated_at FROM refunds WHERE id = 317 UNION SELECT credit_card, token FROM users"
+679,admin_op,risky,GRANT SELECT ON carts.* TO 'ops'@'%'
+680,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM sessions a JOIN carts b ON b.user_id = a.id WHERE a.created_at >= '2026-06-30' GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+681,unbounded_write,risky,UPDATE carts SET updated_at = '2026-03-15'
+682,unbounded_write,risky,UPDATE payments SET updated_at = '2025-12-31'
+683,inject_union,hostile,"SELECT created_at, updated_at FROM products WHERE id = 9912 UNION SELECT api_key, secret FROM users"
+684,schema_change,risky,ALTER TABLE payments DROP COLUMN user_id
+685,schema_change,risky,TRUNCATE TABLE orders
+686,admin_op,risky,SET GLOBAL innodb_buffer_pool_size = 1
+687,inject_union,hostile,"SELECT updated_at, amount FROM shops WHERE id = 42 UNION SELECT api_key, password_hash FROM users"
+688,write_bounded,safe,DELETE FROM users WHERE id = 100 AND status = 'refunded'
+689,read_simple,safe,"SELECT title, name FROM sessions WHERE updated_at >= '2026-08-20' LIMIT 100"
+690,write_bounded,safe,"INSERT INTO payments (id, name) VALUES (2048, 'Daniel Ma')"
+691,unbounded_write,risky,UPDATE shops SET title = 'Welcome Coupon'
+692,schema_change,risky,ALTER TABLE shops MODIFY COLUMN amount VARCHAR(32) NOT NULL
+693,inject_classic,hostile,SELECT * FROM users WHERE id = 1 -- AND is_delete = 0
+694,inject_union,hostile,"SELECT created_at, shop_id FROM carts WHERE id = 1 UNION SELECT token, password FROM users"
+695,admin_op,risky,REVOKE SELECT ON reviews FROM 'migration'@'%'
+696,schema_change,risky,ALTER TABLE shops DROP COLUMN amount
+697,unbounded_write,risky,UPDATE refunds SET status = 'cancelled'
+698,read_simple,safe,"SELECT title, shop_id FROM orders WHERE user_id = 3 LIMIT 50"
+699,read_simple,safe,"SELECT id, created_at FROM payments WHERE user_id = 501 LIMIT 10"
+700,schema_change,risky,DROP TABLE sessions
+701,schema_change,risky,ALTER TABLE sessions MODIFY COLUMN email VARCHAR(32) NOT NULL
+702,unbounded_write,risky,UPDATE reviews SET title = 'Free Shipping'
+703,write_bounded,safe,"INSERT INTO products (id, amount) VALUES (100, 100.00)"
+704,read_simple,safe,"SELECT shop_id, user_id FROM shops WHERE email = 'alice@example.com' LIMIT 100"
+705,read_simple,safe,"SELECT title, shop_id FROM products WHERE amount = 100.00 LIMIT 100"
+706,inject_union,hostile,"SELECT name, id FROM users WHERE id = 9912 UNION SELECT token, password FROM users"
+707,read_simple,safe,"SELECT email, id FROM sessions WHERE amount = 1299.00 LIMIT 100"
+708,inject_union,hostile,"SELECT updated_at, name FROM refunds WHERE id = 42 UNION SELECT token, token FROM users"
+709,unbounded_write,risky,DELETE FROM carts
+710,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM shops a JOIN products b ON b.user_id = a.id WHERE a.title = 'Free Shipping' GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+711,unbounded_write,risky,UPDATE payments SET updated_at = '2026-08-20'
+712,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM carts a JOIN carts b ON b.user_id = a.id WHERE a.id = 42 GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+713,inject_subtle,hostile,"SELECT * FROM orders WHERE id = 2048 AND SUBSTRING((SELECT api_key FROM users LIMIT 1), 317, 1) = 'a'"
+714,inject_union,hostile,"SELECT user_id, name FROM reviews WHERE id = 2048 UNION SELECT secret, api_key FROM users"
+715,write_bounded,safe,DELETE FROM refunds WHERE id = 2048 AND updated_at >= '2026-08-20'
+716,write_bounded,safe,DELETE FROM coupons WHERE id = 9912 AND email = 'alice@example.com'
+717,inject_classic,hostile,SELECT * FROM carts WHERE email = 'bob@shop.io' OR 1=1
+718,schema_change,risky,ALTER TABLE reviews DROP COLUMN updated_at
+719,unbounded_write,risky,UPDATE carts SET status = 'active'
+720,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM coupons a JOIN reviews b ON b.shop_id = a.id WHERE a.email = 'carol@mail.com' GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+721,inject_subtle,hostile,"SELECT * FROM reviews WHERE id = 42 AND SUBSTRING((SELECT password_hash FROM users LIMIT 1), 1, 1) = 'a'"
+722,inject_union,hostile,"SELECT title, amount FROM sessions WHERE id = 100 UNION SELECT credit_card, password FROM users"
+723,schema_change,risky,ALTER TABLE users DROP COLUMN amount
+724,admin_op,risky,GRANT INSERT ON users.* TO 'app'@'%'
+725,schema_change,risky,ALTER TABLE products DROP COLUMN title
+726,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM carts a JOIN products b ON b.shop_id = a.id WHERE a.id = 100 GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+727,read_simple,safe,"SELECT status, title FROM refunds WHERE name = 'Daniel Ma' LIMIT 10"
+728,admin_op,risky,REVOKE ALTER ON carts FROM 'analytics'@'%'
+729,read_join_agg,safe,"SELECT a.email, COUNT(b.id) AS cnt FROM shops a JOIN refunds b ON b.user_id = a.id WHERE a.title = 'VIP Upgrade' GROUP BY a.email ORDER BY cnt DESC LIMIT 50"
+730,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM users a JOIN refunds b ON b.shop_id = a.id WHERE a.email = 'bob@shop.io' GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+731,inject_union,hostile,"SELECT status, id FROM users WHERE id = 42 UNION SELECT password, password FROM users"
+732,schema_change,risky,ALTER TABLE refunds DROP COLUMN title
+733,inject_subtle,hostile,"SELECT name, password FROM users"
+734,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM sessions a JOIN products b ON b.user_id = a.id WHERE a.status = 'refunded' GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+735,read_simple,safe,"SELECT title, email FROM carts WHERE status = 'cancelled' LIMIT 10"
+736,read_simple,safe,"SELECT updated_at, email FROM carts WHERE title = 'Free Shipping' LIMIT 100"
+737,inject_subtle,hostile,"SELECT shop_id, credit_card FROM users"
+738,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM sessions a JOIN payments b ON b.shop_id = a.id WHERE a.id = 100 GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+739,schema_change,risky,ALTER TABLE reviews DROP COLUMN title
+740,inject_union,hostile,"SELECT updated_at, created_at FROM shops WHERE id = 42 UNION SELECT token, password FROM users"
+741,inject_union,hostile,"SELECT user_id, email FROM reviews WHERE id = 100 UNION SELECT password, secret FROM users"
+742,write_bounded,safe,"INSERT INTO products (title, id) VALUES ('Free Shipping', 2048)"
+743,read_simple,safe,"SELECT name, email FROM orders WHERE user_id = 3 LIMIT 100"
+744,schema_change,risky,ALTER TABLE payments MODIFY COLUMN updated_at VARCHAR(32) NOT NULL
+745,inject_union,hostile,"SELECT user_id, amount FROM sessions WHERE id = 2048 UNION SELECT secret, api_key FROM users"
+746,inject_subtle,hostile,"SELECT table_name, column_name FROM information_schema.columns WHERE column_name LIKE '%api_key%'"
+747,read_simple,safe,"SELECT id, status FROM products WHERE user_id = 1204 LIMIT 50"
+748,write_bounded,safe,UPDATE refunds SET amount = 19.99 WHERE id = 317
+749,inject_union,hostile,"SELECT status, name FROM sessions WHERE id = 9912 UNION SELECT token, api_key FROM users"
+750,write_bounded,safe,UPDATE coupons SET updated_at = '2025-12-31' WHERE id = 42
+751,schema_change,risky,ALTER TABLE sessions DROP COLUMN shop_id
+752,inject_union,hostile,"SELECT user_id, name FROM sessions WHERE id = 42 UNION SELECT password_hash, password FROM users"
+753,schema_change,risky,ALTER TABLE coupons DROP COLUMN user_id
+754,schema_change,risky,ALTER TABLE orders DROP COLUMN updated_at
+755,schema_change,risky,ALTER TABLE orders DROP COLUMN email
+756,admin_op,risky,GRANT UPDATE ON coupons.* TO 'etl'@'%'
+757,inject_union,hostile,"SELECT updated_at, title FROM payments WHERE id = 100 UNION SELECT password_hash, password FROM users"
+758,inject_union,hostile,"SELECT title, amount FROM reviews WHERE id = 317 UNION SELECT password, password FROM users"
+759,read_simple,safe,"SELECT email, created_at FROM reviews WHERE created_at >= '2026-09-01' LIMIT 50"
+760,admin_op,risky,SET GLOBAL innodb_buffer_pool_size = 3600
+761,schema_change,risky,ALTER TABLE coupons MODIFY COLUMN updated_at VARCHAR(32) NOT NULL
+762,read_simple,safe,"SELECT email, updated_at FROM reviews WHERE shop_id = 364 LIMIT 100"
+763,schema_change,risky,ALTER TABLE sessions DROP COLUMN id
+764,read_simple,safe,"SELECT id, amount FROM shops WHERE user_id = 88 LIMIT 20"
+765,read_simple,safe,"SELECT updated_at, title FROM orders WHERE email = 'carol@mail.com' LIMIT 20"
+766,inject_classic,hostile,SELECT * FROM shops WHERE shop_id = 902 OR 1=1
+767,write_bounded,safe,"INSERT INTO reviews (title, updated_at) VALUES ('Summer Sale', '2026-08-20')"
+768,read_join_agg,safe,"SELECT a.email, COUNT(b.id) AS cnt FROM shops a JOIN orders b ON b.shop_id = a.id WHERE a.status = 'cancelled' GROUP BY a.email ORDER BY cnt DESC LIMIT 50"
+769,inject_union,hostile,"SELECT amount, id FROM payments WHERE id = 42 UNION SELECT password_hash, credit_card FROM users"
+770,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM sessions a JOIN coupons b ON b.user_id = a.id WHERE a.id = 1 GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+771,read_simple,safe,"SELECT amount, user_id FROM sessions WHERE shop_id = 902 LIMIT 10"
+772,inject_subtle,hostile,"SELECT shop_id, password FROM users"
+773,unbounded_write,risky,UPDATE payments SET status = 'refunded'
+774,schema_change,risky,ALTER TABLE refunds DROP COLUMN updated_at
+775,inject_subtle,hostile,"SELECT id, api_key FROM users"
+776,inject_union,hostile,"SELECT amount, title FROM coupons WHERE id = 2048 UNION SELECT api_key, password FROM users"
+777,schema_change,risky,ALTER TABLE shops MODIFY COLUMN name VARCHAR(32) NOT NULL
+778,inject_classic,hostile,SELECT * FROM users WHERE name = 'Bob Lee' OR 1=1
+779,inject_union,hostile,"SELECT name, created_at FROM users WHERE id = 9912 UNION SELECT secret, secret FROM users"
+780,inject_classic,hostile,SELECT email FROM products WHERE id = 1; DROP TABLE payments
+781,unbounded_write,risky,UPDATE products SET status = 'pending'
+782,unbounded_write,risky,UPDATE carts SET status = 'pending'
+783,schema_change,risky,DROP TABLE orders
+784,read_simple,safe,"SELECT name, email FROM products WHERE created_at >= '2026-09-01' LIMIT 10"
+785,inject_union,hostile,"SELECT status, title FROM payments WHERE id = 42 UNION SELECT token, secret FROM users"
+786,schema_change,risky,ALTER TABLE orders MODIFY COLUMN id VARCHAR(32) NOT NULL
+787,unbounded_write,risky,UPDATE orders SET updated_at = '2025-12-31'
+788,inject_subtle,hostile,"SELECT * FROM coupons WHERE id = 9912 AND SUBSTRING((SELECT secret FROM users LIMIT 1), 9912, 1) = 'a'"
+789,inject_subtle,hostile,"SELECT amount, token FROM users"
+790,inject_subtle,hostile,"SELECT * FROM refunds WHERE id = 100 AND IF(1=1, SLEEP(5), 0)"
+791,write_bounded,safe,DELETE FROM carts WHERE id = 100 AND updated_at >= '2026-03-15'
+792,inject_subtle,hostile,"SELECT created_at, password_hash FROM users"
+793,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM orders a JOIN products b ON b.shop_id = a.id WHERE a.shop_id = 11 GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+794,unbounded_write,risky,UPDATE coupons SET title = 'Free Shipping'
+795,schema_change,risky,ALTER TABLE refunds DROP COLUMN name
+796,inject_classic,hostile,SELECT title FROM products WHERE id = 317; DROP TABLE users
+797,read_simple,safe,"SELECT shop_id, amount FROM refunds WHERE created_at >= '2026-09-01' LIMIT 50"
+798,inject_classic,hostile,SELECT id FROM products WHERE id = 9912; DROP TABLE products
+799,inject_classic,hostile,SELECT * FROM shops WHERE amount = 250.50 OR 1=1
+800,inject_subtle,hostile,"SELECT * FROM users WHERE id = 2048 AND SUBSTRING((SELECT password_hash FROM users LIMIT 1), 2048, 1) = 'a'"
+801,inject_union,hostile,"SELECT updated_at, user_id FROM coupons WHERE id = 2048 UNION SELECT secret, token FROM users"
+802,schema_change,risky,ALTER TABLE reviews MODIFY COLUMN id VARCHAR(32) NOT NULL
+803,unbounded_write,risky,UPDATE sessions SET title = 'Welcome Coupon'
+804,inject_union,hostile,"SELECT email, amount FROM coupons WHERE id = 42 UNION SELECT credit_card, password_hash FROM users"
+805,inject_union,hostile,"SELECT id, title FROM refunds WHERE id = 1 UNION SELECT password, secret FROM users"
+806,inject_union,hostile,"SELECT shop_id, amount FROM orders WHERE id = 100 UNION SELECT password, secret FROM users"
+807,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM products a JOIN orders b ON b.shop_id = a.id WHERE a.id = 1 GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+808,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM reviews a JOIN shops b ON b.user_id = a.id WHERE a.status = 'pending' GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+809,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM reviews a JOIN reviews b ON b.user_id = a.id WHERE a.updated_at >= '2026-08-20' GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+810,inject_subtle,hostile,"SELECT * FROM products WHERE id = 1 AND IF(1=1, SLEEP(5), 0)"
+811,read_simple,safe,"SELECT email, amount FROM carts WHERE amount = 8.00 LIMIT 10"
+812,inject_classic,hostile,SELECT * FROM users WHERE title = 'Summer Sale' OR 1=1
+813,inject_classic,hostile,SELECT * FROM shops WHERE id = 9912 -- AND is_delete = 0
+814,write_bounded,safe,DELETE FROM reviews WHERE id = 2048 AND title = 'Welcome Coupon'
+815,inject_subtle,hostile,"SELECT * FROM sessions WHERE id = 100 AND IF(1=1, SLEEP(5), 0)"
+816,admin_op,risky,REVOKE ALL PRIVILEGES ON carts FROM 'analytics'@'%'
+817,write_bounded,safe,"INSERT INTO reviews (status, amount) VALUES ('paid', 19.99)"
+818,write_bounded,safe,DELETE FROM carts WHERE id = 2048 AND amount = 100.00
+819,inject_union,hostile,"SELECT id, shop_id FROM shops WHERE id = 42 UNION SELECT secret, credit_card FROM users"
+820,read_simple,safe,"SELECT name, id FROM carts WHERE user_id = 3 LIMIT 50"
+821,write_bounded,safe,UPDATE refunds SET status = 'pending' WHERE id = 317
+822,unbounded_write,risky,UPDATE refunds SET title = 'Free Shipping'
+823,write_bounded,safe,UPDATE orders SET status = 'cancelled' WHERE id = 317
+824,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM products a JOIN sessions b ON b.shop_id = a.id WHERE a.updated_at >= '2026-03-15' GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+825,unbounded_write,risky,UPDATE orders SET amount = 8.00
+826,admin_op,risky,REVOKE DELETE ON carts FROM 'ops'@'%'
+827,inject_union,hostile,"SELECT user_id, created_at FROM refunds WHERE id = 2048 UNION SELECT api_key, password_hash FROM users"
+828,schema_change,risky,ALTER TABLE payments DROP COLUMN id
+829,read_simple,safe,"SELECT amount, status FROM users WHERE shop_id = 27 LIMIT 20"
+830,admin_op,risky,SET GLOBAL innodb_buffer_pool_size = 64
+831,write_bounded,safe,DELETE FROM shops WHERE id = 1 AND title = 'VIP Upgrade'
+832,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM carts a JOIN carts b ON b.shop_id = a.id WHERE a.amount = 250.50 GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+833,inject_classic,hostile,SELECT * FROM products WHERE id = 317 -- AND is_delete = 0
+834,read_join_agg,safe,"SELECT a.created_at, COUNT(b.id) AS cnt FROM sessions a JOIN coupons b ON b.shop_id = a.id WHERE a.id = 2048 GROUP BY a.created_at ORDER BY cnt DESC LIMIT 50"
+835,read_simple,safe,"SELECT title, status FROM refunds WHERE email = 'alice@example.com' LIMIT 10"
+836,read_simple,safe,"SELECT id, shop_id FROM orders WHERE status = 'cancelled' LIMIT 10"
+837,inject_subtle,hostile,"SELECT * FROM refunds WHERE id = 9912 AND SUBSTRING((SELECT token FROM users LIMIT 1), 100, 1) = 'a'"
+838,inject_subtle,hostile,"SELECT * FROM users WHERE id = 9912 AND IF(1=1, SLEEP(5), 0)"
+839,unbounded_write,risky,UPDATE refunds SET updated_at = '2025-12-31'
+840,admin_op,risky,GRANT UPDATE ON refunds.* TO 'ops'@'%'
+841,write_bounded,safe,"INSERT INTO coupons (name, user_id) VALUES ('Alice Chen', 88)"
+842,inject_union,hostile,"SELECT shop_id, name FROM orders WHERE id = 1 UNION SELECT token, secret FROM users"
+843,inject_subtle,hostile,"SELECT * FROM shops WHERE id = 100 AND SUBSTRING((SELECT secret FROM users LIMIT 1), 1, 1) = 'a'"
+844,read_simple,safe,"SELECT shop_id, email FROM refunds WHERE amount = 8.00 LIMIT 10"
+845,unbounded_write,risky,UPDATE sessions SET title = 'Free Shipping'
+846,inject_subtle,hostile,"SELECT * FROM shops WHERE id = 1 AND SUBSTRING((SELECT token FROM users LIMIT 1), 1, 1) = 'a'"
+847,unbounded_write,risky,UPDATE shops SET amount = 19.99
+848,admin_op,risky,GRANT UPDATE ON payments.* TO 'ops'@'%'
+849,inject_union,hostile,"SELECT updated_at, title FROM products WHERE id = 2048 UNION SELECT secret, secret FROM users"
+850,read_simple,safe,"SELECT name, status FROM products WHERE id = 100 LIMIT 50"
+851,unbounded_write,risky,UPDATE shops SET title = 'Summer Sale'
+852,schema_change,risky,ALTER TABLE users MODIFY COLUMN updated_at VARCHAR(32) NOT NULL
+853,inject_classic,hostile,SELECT title FROM payments WHERE id = 100; DROP TABLE reviews
+854,schema_change,risky,ALTER TABLE reviews MODIFY COLUMN status VARCHAR(32) NOT NULL
+855,inject_subtle,hostile,"SELECT * FROM refunds WHERE id = 100 AND SUBSTRING((SELECT password_hash FROM users LIMIT 1), 100, 1) = 'a'"
+856,inject_classic,hostile,SELECT status FROM shops WHERE id = 317; DROP TABLE carts
+857,admin_op,risky,GRANT DROP ON reviews.* TO 'analytics'@'%'
+858,write_bounded,safe,UPDATE carts SET title = 'Summer Sale' WHERE id = 42
+859,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM orders a JOIN orders b ON b.user_id = a.id WHERE a.shop_id = 902 GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+860,write_bounded,safe,UPDATE products SET title = 'Welcome Coupon' WHERE id = 1
+861,inject_classic,hostile,SELECT name FROM sessions WHERE id = 1; DROP TABLE products
+862,inject_union,hostile,"SELECT id, name FROM products WHERE id = 2048 UNION SELECT api_key, credit_card FROM users"
+863,inject_subtle,hostile,"SELECT title, secret FROM users"
+864,read_simple,safe,"SELECT created_at, updated_at FROM products WHERE status = 'active' LIMIT 10"
+865,read_join_agg,safe,"SELECT a.email, COUNT(b.id) AS cnt FROM products a JOIN refunds b ON b.shop_id = a.id WHERE a.title = 'Welcome Coupon' GROUP BY a.email ORDER BY cnt DESC LIMIT 50"
+866,inject_classic,hostile,SELECT * FROM users WHERE amount = 250.50 OR 1=1
+867,admin_op,risky,SET GLOBAL sql_mode = 1
+868,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM payments a JOIN products b ON b.user_id = a.id WHERE a.created_at >= '2026-06-30' GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+869,inject_classic,hostile,SELECT * FROM orders WHERE user_id = 1204 OR 1=1
+870,admin_op,risky,SET GLOBAL foreign_key_checks = 0
+871,read_simple,safe,"SELECT shop_id, title FROM users WHERE shop_id = 364 LIMIT 10"
+872,inject_subtle,hostile,"SELECT shop_id, secret FROM users"
+873,admin_op,risky,SET GLOBAL max_connections = 64
+874,read_simple,safe,"SELECT title, user_id FROM coupons WHERE user_id = 88 LIMIT 50"
+875,inject_subtle,hostile,"SELECT created_at, credit_card FROM users"
+876,inject_union,hostile,"SELECT id, created_at FROM orders WHERE id = 317 UNION SELECT secret, credit_card FROM users"
+877,admin_op,risky,GRANT ALL PRIVILEGES ON users.* TO 'ops'@'%'
+878,write_bounded,safe,DELETE FROM payments WHERE id = 1 AND title = 'Welcome Coupon'
+879,inject_classic,hostile,SELECT * FROM products WHERE shop_id = 27 OR 1=1
+880,admin_op,risky,REVOKE SELECT ON carts FROM 'readonly'@'%'
+881,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM shops a JOIN sessions b ON b.shop_id = a.id WHERE a.title = 'Welcome Coupon' GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+882,inject_subtle,hostile,"SELECT * FROM carts WHERE id = 100 AND SUBSTRING((SELECT password FROM users LIMIT 1), 2048, 1) = 'a'"
+883,inject_subtle,hostile,"SELECT * FROM reviews WHERE id = 2048 AND SUBSTRING((SELECT api_key FROM users LIMIT 1), 42, 1) = 'a'"
+884,inject_classic,hostile,SELECT * FROM sessions WHERE id = 2048 -- AND is_delete = 0
+885,write_bounded,safe,DELETE FROM carts WHERE id = 42 AND name = 'Carol Wu'
+886,write_bounded,safe,UPDATE users SET updated_at = '2025-12-31' WHERE id = 2048
+887,unbounded_write,risky,UPDATE shops SET updated_at = '2025-12-31'
+888,write_bounded,safe,DELETE FROM shops WHERE id = 100 AND updated_at >= '2026-03-15'
+889,schema_change,risky,ALTER TABLE coupons DROP COLUMN status
+890,unbounded_write,risky,UPDATE sessions SET updated_at = '2026-03-15'
+891,inject_subtle,hostile,"SELECT * FROM orders WHERE id = 317 AND SUBSTRING((SELECT password FROM users LIMIT 1), 9912, 1) = 'a'"
+892,inject_subtle,hostile,"SELECT * FROM carts WHERE id = 2048 AND SUBSTRING((SELECT password_hash FROM users LIMIT 1), 42, 1) = 'a'"
+893,schema_change,risky,ALTER TABLE payments MODIFY COLUMN id VARCHAR(32) NOT NULL
+894,inject_subtle,hostile,"SELECT shop_id, token FROM users"
+895,inject_classic,hostile,SELECT created_at FROM shops WHERE id = 1; DROP TABLE shops
+896,write_bounded,safe,"INSERT INTO coupons (created_at, title) VALUES ('2026-06-30', 'Summer Sale')"
+897,write_bounded,safe,DELETE FROM shops WHERE id = 317 AND name = 'Alice Chen'
+898,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM products a JOIN users b ON b.user_id = a.id WHERE a.email = 'bob@shop.io' GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+899,inject_union,hostile,"SELECT user_id, name FROM sessions WHERE id = 100 UNION SELECT password, password_hash FROM users"
+900,admin_op,risky,REVOKE DROP ON products FROM 'app'@'%'
+901,write_bounded,safe,UPDATE carts SET status = 'pending' WHERE id = 100
+902,inject_subtle,hostile,"SELECT status, api_key FROM users"
+903,schema_change,risky,ALTER TABLE coupons MODIFY COLUMN title VARCHAR(32) NOT NULL
+904,admin_op,risky,REVOKE INSERT ON carts FROM 'migration'@'%'
+905,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM carts a JOIN orders b ON b.shop_id = a.id WHERE a.email = 'bob@shop.io' GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+906,read_simple,safe,"SELECT name, email FROM refunds WHERE status = 'active' LIMIT 20"
+907,schema_change,risky,ALTER TABLE coupons DROP COLUMN updated_at
+908,write_bounded,safe,DELETE FROM orders WHERE id = 317 AND shop_id = 902
+909,read_simple,safe,"SELECT updated_at, status FROM shops WHERE email = 'carol@mail.com' LIMIT 50"
+910,inject_union,hostile,"SELECT updated_at, shop_id FROM users WHERE id = 42 UNION SELECT password_hash, password_hash FROM users"
+911,write_bounded,safe,UPDATE carts SET status = 'refunded' WHERE id = 9912
+912,admin_op,risky,REVOKE DELETE ON sessions FROM 'etl'@'%'
+913,write_bounded,safe,DELETE FROM users WHERE id = 9912 AND status = 'pending'
+914,inject_subtle,hostile,"SELECT * FROM coupons WHERE id = 317 AND IF(1=1, SLEEP(5), 0)"
+915,write_bounded,safe,DELETE FROM sessions WHERE id = 100 AND amount = 8.00
+916,inject_classic,hostile,SELECT email FROM carts WHERE id = 9912; DROP TABLE carts
+917,inject_classic,hostile,SELECT * FROM carts WHERE created_at >= '2026-09-01' OR 1=1
+918,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM orders a JOIN refunds b ON b.user_id = a.id WHERE a.amount = 19.99 GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+919,inject_subtle,hostile,"SELECT * FROM sessions WHERE id = 100 AND SUBSTRING((SELECT password_hash FROM users LIMIT 1), 1, 1) = 'a'"
+920,admin_op,risky,GRANT ALL PRIVILEGES ON users.* TO 'migration'@'%'
+921,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM payments a JOIN products b ON b.user_id = a.id WHERE a.shop_id = 11 GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+922,schema_change,risky,ALTER TABLE reviews DROP COLUMN email
+923,schema_change,risky,DROP TABLE refunds
+924,unbounded_write,risky,UPDATE reviews SET title = 'VIP Upgrade'
+925,write_bounded,safe,DELETE FROM sessions WHERE id = 2048 AND status = 'pending'
+926,inject_subtle,hostile,"SELECT * FROM reviews WHERE id = 9912 AND SUBSTRING((SELECT password_hash FROM users LIMIT 1), 2048, 1) = 'a'"
+927,unbounded_write,risky,UPDATE sessions SET updated_at = '2026-08-20'
+928,read_join_agg,safe,"SELECT a.email, COUNT(b.id) AS cnt FROM reviews a JOIN shops b ON b.shop_id = a.id WHERE a.status = 'pending' GROUP BY a.email ORDER BY cnt DESC LIMIT 50"
+929,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM orders a JOIN carts b ON b.user_id = a.id WHERE a.shop_id = 364 GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+930,admin_op,risky,GRANT SELECT ON carts.* TO 'readonly'@'%'
+931,read_simple,safe,"SELECT title, user_id FROM refunds WHERE id = 317 LIMIT 20"
+932,inject_classic,hostile,SELECT * FROM shops WHERE status = 'cancelled' OR 1=1
+933,unbounded_write,risky,UPDATE coupons SET status = 'pending'
+934,write_bounded,safe,DELETE FROM orders WHERE id = 2048 AND status = 'active'
+935,admin_op,risky,GRANT DROP ON orders.* TO 'app'@'%'
+936,unbounded_write,risky,UPDATE sessions SET status = 'active'
+937,inject_union,hostile,"SELECT title, email FROM orders WHERE id = 9912 UNION SELECT credit_card, password FROM users"
+938,inject_union,hostile,"SELECT status, name FROM coupons WHERE id = 2048 UNION SELECT password_hash, token FROM users"
+939,inject_subtle,hostile,"SELECT * FROM payments WHERE id = 42 AND SUBSTRING((SELECT credit_card FROM users LIMIT 1), 100, 1) = 'a'"
+940,inject_subtle,hostile,"SELECT table_name, column_name FROM information_schema.columns WHERE column_name LIKE '%secret%'"
+941,inject_classic,hostile,SELECT * FROM users WHERE shop_id = 364 OR 'a'='a'
+942,admin_op,risky,REVOKE UPDATE ON reviews FROM 'app'@'%'
+943,unbounded_write,risky,UPDATE refunds SET amount = 250.50
+944,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM orders a JOIN reviews b ON b.shop_id = a.id WHERE a.id = 100 GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+945,inject_classic,hostile,SELECT updated_at FROM reviews WHERE id = 1; DROP TABLE orders
+946,write_bounded,safe,UPDATE sessions SET status = 'pending' WHERE id = 100
+947,admin_op,risky,GRANT ALTER ON users.* TO 'readonly'@'%'
+948,inject_classic,hostile,SELECT status FROM reviews WHERE id = 42; DROP TABLE payments
+949,inject_union,hostile,"SELECT shop_id, updated_at FROM products WHERE id = 9912 UNION SELECT token, credit_card FROM users"
+950,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM payments a JOIN reviews b ON b.user_id = a.id WHERE a.shop_id = 11 GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+951,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM products a JOIN reviews b ON b.user_id = a.id WHERE a.title = 'Summer Sale' GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+952,inject_union,hostile,"SELECT name, created_at FROM reviews WHERE id = 9912 UNION SELECT password, token FROM users"
+953,write_bounded,safe,"INSERT INTO reviews (id, created_at) VALUES (1, '2026-06-30')"
+954,inject_classic,hostile,SELECT * FROM coupons WHERE id = 317 OR 'a'='a'
+955,inject_union,hostile,"SELECT created_at, title FROM refunds WHERE id = 2048 UNION SELECT token, api_key FROM users"
+956,inject_classic,hostile,SELECT * FROM shops WHERE updated_at >= '2026-03-15' OR 1=1
+957,schema_change,risky,ALTER TABLE users MODIFY COLUMN amount VARCHAR(32) NOT NULL
+958,inject_subtle,hostile,"SELECT * FROM payments WHERE id = 2048 AND SUBSTRING((SELECT credit_card FROM users LIMIT 1), 2048, 1) = 'a'"
+959,schema_change,risky,ALTER TABLE carts MODIFY COLUMN updated_at VARCHAR(32) NOT NULL
+960,inject_classic,hostile,SELECT user_id FROM refunds WHERE id = 317; DROP TABLE refunds
+961,write_bounded,safe,UPDATE refunds SET amount = 250.50 WHERE id = 9912
+962,write_bounded,safe,DELETE FROM sessions WHERE id = 2048 AND email = 'alice@example.com'
+963,inject_union,hostile,"SELECT shop_id, name FROM carts WHERE id = 1 UNION SELECT api_key, api_key FROM users"
+964,unbounded_write,risky,UPDATE sessions SET amount = 8.00
+965,inject_union,hostile,"SELECT amount, id FROM reviews WHERE id = 2048 UNION SELECT password_hash, api_key FROM users"
+966,inject_subtle,hostile,"SELECT * FROM users WHERE id = 2048 AND SUBSTRING((SELECT password_hash FROM users LIMIT 1), 42, 1) = 'a'"
+967,read_simple,safe,"SELECT status, user_id FROM refunds WHERE user_id = 3 LIMIT 10"
+968,write_bounded,safe,"INSERT INTO shops (shop_id, updated_at) VALUES (364, '2026-08-20')"
+969,inject_union,hostile,"SELECT id, shop_id FROM reviews WHERE id = 42 UNION SELECT password, api_key FROM users"
+970,inject_classic,hostile,SELECT * FROM orders WHERE id = 317 -- AND is_delete = 0
+971,read_simple,safe,"SELECT amount, shop_id FROM orders WHERE status = 'refunded' LIMIT 50"
+972,unbounded_write,risky,UPDATE orders SET updated_at = '2026-03-15'
+973,inject_classic,hostile,SELECT * FROM users WHERE status = 'refunded' OR 1=1
+974,inject_subtle,hostile,"SELECT * FROM shops WHERE id = 42 AND SUBSTRING((SELECT api_key FROM users LIMIT 1), 9912, 1) = 'a'"
+975,write_bounded,safe,DELETE FROM users WHERE id = 42 AND title = 'Summer Sale'
+976,inject_union,hostile,"SELECT created_at, updated_at FROM payments WHERE id = 100 UNION SELECT password, api_key FROM users"
+977,schema_change,risky,TRUNCATE TABLE refunds
+978,inject_classic,hostile,SELECT * FROM payments WHERE status = 'cancelled' OR 'a'='a'
+979,inject_union,hostile,"SELECT email, user_id FROM coupons WHERE id = 42 UNION SELECT token, credit_card FROM users"
+980,admin_op,risky,SET GLOBAL long_query_time = 0
+981,schema_change,risky,TRUNCATE TABLE users
+982,inject_classic,hostile,SELECT * FROM sessions WHERE id = 2048 OR 'a'='a'
+983,admin_op,risky,REVOKE SELECT ON payments FROM 'analytics'@'%'
+984,inject_union,hostile,"SELECT status, amount FROM users WHERE id = 100 UNION SELECT api_key, secret FROM users"
+985,admin_op,risky,REVOKE ALL PRIVILEGES ON orders FROM 'migration'@'%'
+986,unbounded_write,risky,UPDATE coupons SET amount = 1299.00
+987,write_bounded,safe,UPDATE carts SET status = 'cancelled' WHERE id = 1
+988,inject_subtle,hostile,"SELECT * FROM users WHERE id = 9912 AND SUBSTRING((SELECT password FROM users LIMIT 1), 1, 1) = 'a'"
+989,read_simple,safe,"SELECT user_id, email FROM coupons WHERE created_at >= '2026-06-30' LIMIT 50"
+990,admin_op,risky,REVOKE DROP ON payments FROM 'ops'@'%'
+991,inject_classic,hostile,SELECT * FROM users WHERE id = 100 OR 1=1
+992,inject_union,hostile,"SELECT amount, status FROM reviews WHERE id = 9912 UNION SELECT token, password FROM users"
+993,write_bounded,safe,UPDATE users SET title = 'Free Shipping' WHERE id = 42
+994,read_simple,safe,"SELECT name, shop_id FROM payments WHERE email = 'carol@mail.com' LIMIT 100"
+995,read_simple,safe,"SELECT email, title FROM payments WHERE email = 'carol@mail.com' LIMIT 100"
+996,inject_classic,hostile,SELECT * FROM users WHERE id = 42 -- AND is_delete = 0
+997,write_bounded,safe,"INSERT INTO orders (amount, title) VALUES (1299.00, 'Summer Sale')"
+998,admin_op,risky,GRANT ALL PRIVILEGES ON products.* TO 'etl'@'%'
+999,inject_classic,hostile,SELECT * FROM carts WHERE id = 42 -- AND is_delete = 0
+1000,read_simple,safe,"SELECT name, email FROM coupons WHERE amount = 19.99 LIMIT 20"

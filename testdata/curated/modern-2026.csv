@@ -1,0 +1,22 @@
+id,family,class,sql,note
+1,json_sqli,hostile,SELECT * FROM users WHERE data->>'$.role' = 'admin' OR 1=1,Claroty:JSON路径+恒真
+2,json_sqli,hostile,"SELECT * FROM t WHERE JSON_EXTRACT(payload,'$.id') = 1 UNION SELECT password_hash FROM users",JSON_EXTRACT裹UNION
+3,json_sqli,hostile,SELECT * FROM t WHERE prefs->'$.x' = CAST('{}' AS JSON) OR SLEEP(5),JSON比较+时间盲注
+4,json_sqli,hostile,"SELECT JSON_EXTRACT(cred,'$.api_key') FROM shops",JSON函数拖密钥
+5,json_sqli,hostile,"SELECT * FROM t WHERE id=1 AND JSON_CONTAINS(data,'1','$.x') UNION SELECT token FROM users",JSON_CONTAINS绕过
+6,json_sqli,hostile,"SELECT * FROM t WHERE data @> '{""admin"":true}'::jsonb OR 1=1",Postgres jsonb @>恒真
+7,json_sqli,hostile,SELECT * FROM t WHERE id=1;SELECT json_agg(password) FROM users,Postgres json_agg拖列
+8,json_legit,safe,"SELECT id, meta->>'status' FROM orders WHERE meta->>'status' = 'paid' AND id = 5",正常JSON查询
+9,json_legit,safe,SELECT data->>'$.name' FROM profiles WHERE user_id = 42,正常JSON取字段
+10,json_legit,safe,"UPDATE settings SET config = JSON_SET(config,'$.theme','dark') WHERE user_id = 7",正常JSON更新
+11,orm_inject,hostile,SELECT * FROM users WHERE name = 'x' OR '1'='1' /* HQL concat */,HQL字符串拼接
+12,orm_inject,hostile,SELECT u FROM User u WHERE u.name = '' OR 1=1 --',HQL恒真绕过
+13,orm_inject,hostile,SELECT * FROM users WHERE id = 1 UNION SELECT password FROM users -- .raw(),ORM raw()注入点
+14,graphql_sqli,hostile,"SELECT * FROM users WHERE id IN (1,2) UNION SELECT api_key,secret FROM shops",GraphQL嵌套解析生成动态SQL
+15,graphql_sqli,hostile,SELECT * FROM posts WHERE author_id = (SELECT id FROM users WHERE name='a' OR SLEEP(3)),GraphQL参数下渗时间盲注
+16,second_order,hostile,INSERT INTO users (name) VALUES ('admin''--'),"二阶注入:此条因含--/'被当一阶拦下,非真防住;真正的二阶存入时干净,无状态过滤器结构上测不了"
+17,second_order,hostile,UPDATE profile SET bio = ''; DROP TABLE sessions--' WHERE id = 1,"二阶注入:此条因含--/'被当一阶拦下,非真防住;真正的二阶存入时干净,无状态过滤器结构上测不了"
+18,patt_postgres,hostile,SELECT * FROM t WHERE id = 1; SELECT current_setting('is_superuser'),PATT:PG权限探测
+19,patt_postgres,hostile,SELECT * FROM t WHERE id = 1 OR 1=1; COPY (SELECT '') TO PROGRAM 'id',PATT:PG COPY命令执行
+20,patt_sqlite,hostile,SELECT * FROM t WHERE id = 1 UNION SELECT sql FROM sqlite_master,PATT:SQLite读库结构
+21,patt_mysql,hostile,"SELECT * FROM t WHERE id = 1 PROCEDURE ANALYSE(EXTRACTVALUE(1,CONCAT(0x3a,version())),1)",PATT:MySQL PROCEDURE ANALYSE
