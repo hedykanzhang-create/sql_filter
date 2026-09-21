@@ -12,7 +12,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 	"time"
 
@@ -81,40 +80,16 @@ func buildClient(offline bool, model string, debug bool) (*jev.Client, error) {
 	if offline {
 		return nil, nil
 	}
-	key := resolveKey()
+	key := jev.ResolveKey()
 	if key == "" {
 		return nil, fmt.Errorf(
 			"未找到 API key：设置环境变量 OPENROUTER_API_KEY，或写入 %s（或加 -offline 只跑本地规则）",
-			keyFilePath())
+			jev.KeyFilePath())
 	}
 	c := jev.New(key)
 	c.Model = model
 	c.Debug = debug
 	return c, nil
-}
-
-// resolveKey 按优先级找 API key：先环境变量，再配置文件。
-//
-// 加配置文件兜底，是因为通过别的程序（比如另一个 AI 工具）调用本命令时，
-// 它起的往往是非交互 shell，根本不 source ~/.zshrc，环境变量就丢了。
-// 把 key 落到一个固定文件，谁调都读得到，不依赖 shell 配置。
-func resolveKey() string {
-	if k := strings.TrimSpace(os.Getenv("OPENROUTER_API_KEY")); k != "" {
-		return k
-	}
-	if b, err := os.ReadFile(keyFilePath()); err == nil {
-		return strings.TrimSpace(string(b))
-	}
-	return ""
-}
-
-// keyFilePath 返回 key 文件路径：~/.config/sql_filter/key。
-func keyFilePath() string {
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return ".config/sql_filter/key"
-	}
-	return filepath.Join(home, ".config", "sql_filter", "key")
 }
 
 // collectInput 优先取命令行参数，没有就按行读标准输入（空行与 -- 注释行跳过）。

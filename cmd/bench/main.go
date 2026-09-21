@@ -84,9 +84,9 @@ func main() {
 
 	var client *jev.Client
 	if !*offline {
-		key := os.Getenv("OPENROUTER_API_KEY")
+		key := jev.ResolveKey()
 		if key == "" {
-			fatal(fmt.Errorf("未设置 OPENROUTER_API_KEY（或加 -offline）"))
+			fatal(fmt.Errorf("未找到 API key：设置 OPENROUTER_API_KEY 或写入 %s（或加 -offline）", jev.KeyFilePath()))
 		}
 		client = jev.New(key)
 	}
