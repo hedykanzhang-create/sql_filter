@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/channelwill/sql_filter/internal/corpus"
+	"github.com/hedykanzhang-create/sql_filter/internal/corpus"
 )
 
 func main() {

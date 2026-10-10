@@ -21,7 +21,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/channelwill/sql_filter/internal/corpus"
+	"github.com/hedykanzhang-create/sql_filter/internal/corpus"
 )
 
 const seclistsBase = "https://raw.githubusercontent.com/danielmiessler/SecLists/master/Fuzzing/Databases/"

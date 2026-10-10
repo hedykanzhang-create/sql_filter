@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/channelwill/sql_filter/internal/jev"
+	"github.com/hedykanzhang-create/sql_filter/internal/jev"
 )
 
 func TestStaticRules(t *testing.T) {

@@ -15,8 +15,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/channelwill/sql_filter/internal/filter"
-	"github.com/channelwill/sql_filter/internal/jev"
+	"github.com/hedykanzhang-create/sql_filter/internal/filter"
+	"github.com/hedykanzhang-create/sql_filter/internal/jev"
 )
 
 func main() {

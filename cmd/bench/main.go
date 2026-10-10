@@ -14,9 +14,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/channelwill/sql_filter/internal/corpus"
-	"github.com/channelwill/sql_filter/internal/filter"
-	"github.com/channelwill/sql_filter/internal/jev"
+	"github.com/hedykanzhang-create/sql_filter/internal/corpus"
+	"github.com/hedykanzhang-create/sql_filter/internal/filter"
+	"github.com/hedykanzhang-create/sql_filter/internal/jev"
 )
 
 // Verdict 是「过滤器判得对不对」，由语料的 Class 和过滤器的 Decision 对账得出。
